@@ -1,0 +1,16 @@
+{
+	"name": "broker",
+	"url": "https://github.com/fal-works/broker/",
+	"license": "MIT",
+	"tags": ["game"],
+	"description": "Utility for game development.",
+	"version": "0.0.1",
+	"classPath": "src/",
+	"releasenote": "Initial release. Everything may change in future.",
+	"contributors": [
+		"fal-works"
+	],
+	"dependencies": {
+		"banker": "0.2.0"
+	}
+}
