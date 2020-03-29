@@ -1,22 +1,34 @@
 package integration;
 
 class ActorArmy {
-	public final player: h2d.Object;
-	public final bullets = Actor.createAosoa(64, 32);
+	public final agents: ActorGroup;
+	public final bullets: ActorGroup;
 
-	public function new(?parent: h2d.Object) {
-		player = new h2d.Bitmap(hxd.Res.player.toTile(), parent);
-		player.x = 100;
-		player.y = 100;
+	public function new(
+		maxAgentCount: Int,
+		agentBatch: h2d.SpriteBatch,
+		maxBulletCount: Int,
+		bulletBatch: h2d.SpriteBatch
+	) {
+		this.agents = ActorGroup.create(
+			this,
+			maxAgentCount,
+			agentBatch
+		);
+		this.bullets = ActorGroup.create(
+			this,
+			maxBulletCount,
+			bulletBatch
+		);
 	}
 
 	public function update() {
-		bullets.update();
+		this.agents.aosoa.moveByGamepad();
+		this.bullets.aosoa.update();
 	}
 
-	@:access(h2d.SpriteBatch)
 	public function synchronize() {
-		bullets.synchronize();
-		bullets.updateSprite();
+		this.agents.synchronize();
+		this.bullets.synchronize();
 	}
 }

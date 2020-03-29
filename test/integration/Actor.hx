@@ -1,5 +1,6 @@
 package integration;
 
+import h2d.SpriteBatch;
 import banker.vector.WritableVector as Vec;
 
 class Actor implements banker.aosoa.Structure {
@@ -16,6 +17,12 @@ class Actor implements banker.aosoa.Structure {
 
 	@:banker.chunkLevel
 	var disusedCount: Int = 0;
+
+	@:banker.chunkLevel
+	final batch: SpriteBatch = ActorTools.batch;
+
+	@:banker.chunkLevel
+	final army: ActorArmy = ActorTools.army;
 
 	@:banker.useEntity
 	static function use(
@@ -63,14 +70,36 @@ class Actor implements banker.aosoa.Structure {
 		}
 	}
 
+	static function moveByGamepad(
+		x: Vec<Float>,
+		y: Vec<Float>,
+		vx: Vec<Float>,
+		vy: Vec<Float>,
+		i: Int,
+		army: ActorArmy
+	): Void {
+		final stick = integration.global.Gamepad.stick;
+		final dx = stick.x;
+		final dy = stick.y;
+		final nextX = x[i] + dx;
+		final nextY = y[i] + dy;
+		x[i] = nextX;
+		y[i] = nextY;
+		vx[i] = dx;
+		vy[i] = dx;
+
+		if (integration.global.Gamepad.buttons.A.isPressed)
+			army.bullets.aosoa.use(nextX, nextY, 10, Math.random() * 2 * Math.PI);
+	}
+
 	function onSynchronize() {
 		final disusedSprites = this.disusedSprites;
 		for (i in 0...this.disusedCount) disusedSprites[i].kill();
 		this.disusedCount = 0;
 
 		final usedSprites = this.usedSprites;
-		for (i in 0...this.usedCount)
-			ActorRenderer.batch.add(usedSprites[i]);
+		final batch = this.batch;
+		for (i in 0...this.usedCount) batch.add(usedSprites[i]);
 		this.usedCount = 0;
 	}
 
@@ -93,10 +122,28 @@ class Actor implements banker.aosoa.Structure {
 	var vy: Float = 0;
 }
 
+@:allow(integration.Actor)
 class ActorTools {
-	public static function spriteVectorFactory(chunkCapacity: Int): Vec<Sprite>
-		return new Vec<Sprite>(chunkCapacity);
+	public static var batch: h2d.SpriteBatch;
+	public static var army: ActorArmy;
 
-	public static function spriteFactory(): Sprite
-		return new Sprite(ActorRenderer.tile);
+	public static function spriteVectorFactory(chunkCapacity: Int): Vec<Sprite> {
+		return new Vec<Sprite>(chunkCapacity);
+	}
+
+	public static function spriteFactory(): Sprite {
+		return new Sprite(ActorTools.batch.tile);
+	}
+
+	public static function createAosoa(army: ActorArmy, chunkCapacity: Int, chunkCount: Int, batch: h2d.SpriteBatch) {
+		ActorTools.army = army;
+		ActorTools.batch = batch;
+
+		final aosoa = Actor.createAosoa(chunkCapacity, chunkCount);
+
+		@:nullSafety(Off) ActorTools.army = cast null;
+		@:nullSafety(Off) ActorTools.batch = cast null;
+
+		return aosoa;
+	}
 }

@@ -13,8 +13,16 @@ class Main extends hxd.App {
 		hxd.Res.initEmbed();
 		broker.heaps.HeapsKeyTools.initialize();
 
-		ActorRenderer.initialize(s2d);
-		army = new ActorArmy(s2d);
+		final playerBatch = new h2d.SpriteBatch(hxd.Res.player.toTile(), s2d);
+		final playerBulletBatch = new h2d.SpriteBatch(hxd.Res.player_bullet.toTile(), s2d);
+
+		army = new ActorArmy(
+			1,
+			playerBatch,
+			1024,
+			playerBulletBatch
+		);
+		army.agents.aosoa.use(200, 200, 0, 0);
 
 		debug("initialized.");
 	}
@@ -23,17 +31,6 @@ class Main extends hxd.App {
 		Gamepad.update();
 
 		army.update();
-
-		final player = army.player;
-		final bullets = army.bullets;
-
-		player.x += Gamepad.stick.x;
-		player.y += Gamepad.stick.y;
-
-		if (Gamepad.buttons.A.isPressed) {
-			bullets.use(player.x, player.y, 10, Math.random() * 2 * Math.PI);
-		}
-
 		army.synchronize();
 	}
 }
