@@ -107,10 +107,12 @@ class Actor implements banker.aosoa.Structure {
 	static function updateSprite(
 		sprite: Sprite,
 		x: Float,
-		y: Float
+		y: Float,
+		halfTileWidth: Float,
+		halfTileHeight: Float
 	): Void {
-		sprite.x = x;
-		sprite.y = y;
+		sprite.x = x - halfTileWidth;
+		sprite.y = y - halfTileHeight;
 	}
 
 	@:banker.factory(ActorInitializer.spriteFactory)
