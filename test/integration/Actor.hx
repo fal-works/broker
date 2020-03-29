@@ -3,6 +3,7 @@ package integration;
 import h2d.SpriteBatch;
 import banker.vector.WritableVector as Vec;
 
+@:banker.doNotDefineAosoa
 class Actor implements banker.aosoa.Structure {
 	@:banker.chunkLevelFinal
 	@:banker.chunkLevelFactory(ActorTools.spriteVectorFactory)
@@ -139,7 +140,7 @@ class ActorTools {
 		ActorTools.army = army;
 		ActorTools.batch = batch;
 
-		final aosoa = Actor.createAosoa(chunkCapacity, chunkCount);
+		final aosoa = new ActorAosoa(chunkCapacity, chunkCount);
 
 		@:nullSafety(Off) ActorTools.army = cast null;
 		@:nullSafety(Off) ActorTools.batch = cast null;

@@ -10,16 +10,8 @@ class ActorArmy {
 		maxBulletCount: Int,
 		bulletBatch: h2d.SpriteBatch
 	) {
-		this.agents = ActorGroup.create(
-			this,
-			maxAgentCount,
-			agentBatch
-		);
-		this.bullets = ActorGroup.create(
-			this,
-			maxBulletCount,
-			bulletBatch
-		);
+		this.agents = new ActorGroup(this, maxAgentCount, agentBatch);
+		this.bullets = new ActorGroup(this, maxBulletCount, bulletBatch);
 	}
 
 	public function update() {
