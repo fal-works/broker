@@ -6,24 +6,24 @@ import banker.vector.WritableVector as Vec;
 @:banker.doNotDefineAosoa
 class Actor implements banker.aosoa.Structure {
 	@:banker.chunkLevelFinal
-	@:banker.chunkLevelFactory(ActorTools.spriteVectorFactory)
+	@:banker.chunkLevelFactory(ActorInitializer.spriteVectorFactory)
 	var usedSprites: Vec<Sprite>;
 
 	@:banker.chunkLevel
 	var usedCount: Int = 0;
 
 	@:banker.chunkLevelFinal
-	@:banker.chunkLevelFactory(ActorTools.spriteVectorFactory)
+	@:banker.chunkLevelFactory(ActorInitializer.spriteVectorFactory)
 	var disusedSprites: Vec<Sprite>;
 
 	@:banker.chunkLevel
 	var disusedCount: Int = 0;
 
 	@:banker.chunkLevel
-	final batch: SpriteBatch = ActorTools.batch;
+	final batch: SpriteBatch = ActorInitializer.batch;
 
 	@:banker.chunkLevel
-	final army: ActorArmy = ActorTools.army;
+	final army: ActorArmy = ActorInitializer.army;
 
 	@:banker.useEntity
 	static function use(
@@ -113,7 +113,7 @@ class Actor implements banker.aosoa.Structure {
 		sprite.y = y;
 	}
 
-	@:banker.factory(ActorTools.spriteFactory)
+	@:banker.factory(ActorInitializer.spriteFactory)
 	@:banker.swap
 	var sprite: Sprite;
 
@@ -123,28 +123,33 @@ class Actor implements banker.aosoa.Structure {
 	var vy: Float = 0;
 }
 
-@:allow(integration.Actor)
-class ActorTools {
-	public static var batch: h2d.SpriteBatch;
+/**
+	Stores values and functions used when creating an AoSoA of `Actor`.
+**/
+class ActorInitializer {
+	/**
+		Value used in initialization of `ActorChunk`.
+		Should be set every time an AoSoA of `Actor` is created.
+	**/
 	public static var army: ActorArmy;
 
+	/**
+		Value used in initialization of `ActorChunk`.
+		Should be set every time an AoSoA of `Actor` is created.
+	**/
+	public static var batch: h2d.SpriteBatch;
+
+	/**
+		Factory function used in initialization of `ActorChunk`.
+	**/
 	public static function spriteVectorFactory(chunkCapacity: Int): Vec<Sprite> {
 		return new Vec<Sprite>(chunkCapacity);
 	}
 
+	/**
+		Factory function used in initialization of `Actor` entities.
+	**/
 	public static function spriteFactory(): Sprite {
-		return new Sprite(ActorTools.batch.tile);
-	}
-
-	public static function createAosoa(army: ActorArmy, chunkCapacity: Int, chunkCount: Int, batch: h2d.SpriteBatch) {
-		ActorTools.army = army;
-		ActorTools.batch = batch;
-
-		final aosoa = new ActorAosoa(chunkCapacity, chunkCount);
-
-		@:nullSafety(Off) ActorTools.army = cast null;
-		@:nullSafety(Off) ActorTools.batch = cast null;
-
-		return aosoa;
+		return new Sprite(batch.tile);
 	}
 }

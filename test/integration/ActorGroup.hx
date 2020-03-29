@@ -2,6 +2,9 @@ package integration;
 
 import banker.common.MathTools.minInt;
 
+/**
+	Wrapper of `ActorAosoa`.
+**/
 class ActorGroup {
 	public static var defaultChunkCapacity = 64;
 
@@ -11,7 +14,7 @@ class ActorGroup {
 		final chunkCapacity = minInt(defaultChunkCapacity, maxEntityCount);
 		final chunkCount = Math.ceil(maxEntityCount / chunkCapacity);
 
-		this.aosoa = Actor.ActorTools.createAosoa(army, chunkCapacity, chunkCount, batch);
+		this.aosoa = ActorAosoa.create(army, chunkCapacity, chunkCount, batch);
 	}
 
 	public function synchronize() {
