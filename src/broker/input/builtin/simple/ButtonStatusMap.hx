@@ -3,7 +3,7 @@ package broker.input.builtin.simple;
 import banker.finite.interfaces.FiniteKeysMap as KeysMap;
 import banker.vector.Vector;
 import broker.input.ButtonStatus;
-import broker.heaps.HeapsKeyTools;
+import broker.input.heaps.HeapsKeyTools;
 
 /**
 	Mapping between values of `broker.input.builtin.simple.Button`

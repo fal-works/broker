@@ -11,7 +11,7 @@ class Main extends hxd.App {
 
 	override function init() {
 		hxd.Res.initEmbed();
-		broker.heaps.HeapsKeyTools.initialize();
+		broker.input.heaps.HeapsKeyTools.initialize();
 
 		final playerBatch = new h2d.SpriteBatch(hxd.Res.player.toTile(), s2d);
 		final playerBulletBatch = new h2d.SpriteBatch(hxd.Res.player_bullet.toTile(), s2d);

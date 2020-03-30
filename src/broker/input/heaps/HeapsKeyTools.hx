@@ -1,4 +1,4 @@
-package broker.heaps;
+package broker.input.heaps;
 
 #if heaps
 using banker.type_extension.MapExtension;
