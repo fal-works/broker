@@ -22,7 +22,7 @@ class Main extends hxd.App {
 			1024,
 			playerBulletBatch
 		);
-		army.agents.aosoa.use(200, 200, 0, 0);
+		army.agents.aosoa.emit(200, 200, 0, 0);
 
 		debug("initialized.");
 	}

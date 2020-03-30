@@ -18,13 +18,13 @@ class ActorAosoa {
 		batch: h2d.SpriteBatch
 	) {
 		ActorInitializer.army = army;
-		ActorInitializer.batch = batch;
+		BasicEntityInitializer.batch = batch;
 
 		final aosoa = new ActorAosoa(chunkCapacity, chunkCount);
 
 		@:nullSafety(Off) {
 			ActorInitializer.army = cast null;
-			ActorInitializer.batch = cast null;
+			BasicEntityInitializer.batch = cast null;
 		}
 
 		return aosoa;
