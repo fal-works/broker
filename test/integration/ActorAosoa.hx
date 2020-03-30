@@ -1,13 +1,14 @@
 package integration;
 
 import broker.entity.heaps.BasicEntityInitializer;
+import broker.entity.heaps.BasicAosoa;
 import integration.Actor.ActorInitializer;
 
 /**
 	AoSoA of `Actor`.
 **/
 @:build(banker.aosoa.macro.Builder.aosoaFromChunk(integration.Actor.ActorChunk))
-class ActorAosoa {
+class ActorAosoa implements BasicAosoa {
 	/**
 		Creates an `ActorAosoa` instance.
 		Use this instead of `new()`.

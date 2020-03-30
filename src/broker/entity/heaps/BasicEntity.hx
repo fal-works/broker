@@ -4,7 +4,7 @@ package broker.entity.heaps;
 /**
 	Basic entity class using `SpriteBatch` of heaps.
 **/
-class BasicEntity implements banker.aosoa.Structure {
+class BasicEntity extends broker.entity.BasicEntity implements banker.aosoa.Structure {
 	/**
 		Vector for storing sprites that have been used after the last synchronization.
 	**/
@@ -125,25 +125,5 @@ class BasicEntity implements banker.aosoa.Structure {
 	@:banker_factory(broker.entity.heaps.BasicEntityInitializer.spriteFactory)
 	@:banker_swap
 	var sprite: h2d.SpriteBatch.BatchElement;
-
-	/**
-		X-component of the position.
-	**/
-	var x: Float = 0;
-
-	/**
-		Y-component of the position.
-	**/
-	var y: Float = 0;
-
-	/**
-		X-component of the velocity.
-	**/
-	var vx: Float = 0;
-
-	/**
-		Y-component of the velocity.
-	**/
-	var vy: Float = 0;
 }
 #end
