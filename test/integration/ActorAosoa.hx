@@ -1,11 +1,12 @@
 package integration;
 
+import broker.entity.heaps.BasicEntityInitializer;
 import integration.Actor.ActorInitializer;
 
 /**
 	AoSoA of `Actor`.
 **/
-@:build(banker.aosoa.macro.Builder.aosoaFrom(integration.Actor))
+@:build(banker.aosoa.macro.Builder.aosoaFromChunk(integration.Actor.ActorChunk))
 class ActorAosoa {
 	/**
 		Creates an `ActorAosoa` instance.

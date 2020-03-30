@@ -1,21 +1,25 @@
 package integration;
 
 import banker.vector.WritableVector as Vec;
+import broker.entity.heaps.BasicEntity;
+import h2d.SpriteBatch.BatchElement;
 
-@:banker.doNotDefineAosoa
+@:build(banker.aosoa.macro.Builder.chunkFromStructure(integration.Actor))
+class ActorChunk {}
+
 class Actor extends BasicEntity {
-	@:banker.chunkLevel
+	@:banker_chunkLevel
 	final army: ActorArmy = ActorInitializer.army;
 
 	static function update(
-		sprite: Sprite,
+		sprite: BatchElement,
 		x: Vec<Float>,
 		y: Vec<Float>,
 		vx: Float,
 		vy: Float,
 		i: Int,
 		disuse: Bool,
-		disusedSprites: Vec<Sprite>,
+		disusedSprites: Vec<BatchElement>,
 		disusedCount: Int
 	): Void {
 		final nextX = x[i] + vx;
@@ -49,7 +53,7 @@ class Actor extends BasicEntity {
 		vy[i] = dx;
 
 		if (integration.global.Gamepad.buttons.A.isPressed)
-			army.bullets.aosoa.emit(nextX, nextY, 10, Math.random() * 2 * Math.PI);
+			army.newBullet(nextX, nextY, 10, Math.random() * 2 * Math.PI);
 	}
 }
 
