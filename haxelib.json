@@ -11,6 +11,6 @@
 		"fal-works"
 	],
 	"dependencies": {
-		"banker": "0.2.0"
+		"banker": "0.3.0"
 	}
 }
