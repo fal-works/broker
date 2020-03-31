@@ -1,6 +1,8 @@
 package broker.entity.heaps;
 
 #if heaps
+import sneaker.exception.Exception;
+
 /**
 	Values and functions used when creating an AoSoA of `Entity`.
 **/
@@ -10,7 +12,8 @@ class BasicEntityInitializer {
 		Should be set before an AoSoA is created.
 	**/
 	@:nullSafety(Off)
-	public static var batch: h2d.SpriteBatch;
+	@:isVar
+	public static var batch(get, set): h2d.SpriteBatch = null;
 
 	/**
 		Factory function used in initialization of chunks.
@@ -25,5 +28,15 @@ class BasicEntityInitializer {
 	public static function spriteFactory(): h2d.SpriteBatch.BatchElement {
 		return new h2d.SpriteBatch.BatchElement(batch.tile);
 	}
+
+	static inline function get_batch() {
+		if (batch == null) {
+			final message = "Cannot create AoSoA instance. Required to be set: broker.entity.heaps.BasicEntityInitializer.batch";
+			throw new Exception(message);
+		}
+		return batch;
+	}
+
+	static inline function set_batch(newBatch) return batch = newBatch;
 }
 #end
