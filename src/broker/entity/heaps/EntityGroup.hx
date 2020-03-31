@@ -4,7 +4,7 @@ package broker.entity.heaps;
 import broker.entity.heaps.BasicAosoa;
 
 /**
-	Wrapper of any AoSoA class.
+	Wrapper for any descendant class of `broker.entity.heaps.BasicAosoa`.
 **/
 	#if !broker_generic_disable
 	@:generic

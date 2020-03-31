@@ -3,7 +3,7 @@ package broker.entity;
 import broker.entity.BasicAosoa;
 
 /**
-	Wrapper of any AoSoA class.
+	Base class for wrapping any AoSoA class.
 **/
 #if !broker_generic_disable
 @:generic
