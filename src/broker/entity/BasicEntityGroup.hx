@@ -8,7 +8,7 @@ import broker.entity.BasicAosoa;
 #if !broker_generic_disable
 @:generic
 #end
-class EntityGroup<T:BasicAosoa> {
+class BasicEntityGroup<T:BasicAosoa> {
 	public final aosoa: T;
 
 	public function new(aosoa: T)

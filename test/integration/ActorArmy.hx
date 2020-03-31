@@ -1,10 +1,8 @@
 package integration;
 
-import broker.entity.heaps.EntityGroup;
-
 class ActorArmy {
-	public final agents: EntityGroup<ActorAosoa>;
-	public final bullets: EntityGroup<ActorAosoa>;
+	public final agents: ActorGroup;
+	public final bullets: ActorGroup;
 
 	public function new(
 		maxAgentCount: Int,
@@ -25,14 +23,14 @@ class ActorArmy {
 			agentBatch,
 			fireCallback
 		);
-		this.agents = new EntityGroup(agentAosoa, agentBatch.tile);
+		this.agents = new ActorGroup(agentAosoa, agentBatch.tile);
 
 		final bulletAosoa: ActorAosoa = ActorAosoaBuilder.create(
 			maxBulletCount,
 			bulletBatch,
 			fireCallback
 		);
-		this.bullets = new EntityGroup(bulletAosoa, bulletBatch.tile);
+		this.bullets = new ActorGroup(bulletAosoa, bulletBatch.tile);
 	}
 
 	public function update() {

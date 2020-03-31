@@ -9,7 +9,7 @@ import broker.entity.heaps.BasicAosoa;
 	#if !broker_generic_disable
 	@:generic
 	#end
-class EntityGroup<T:BasicAosoa> extends broker.entity.EntityGroup<T> {
+class BasicEntityGroup<T:BasicAosoa> extends broker.entity.BasicEntityGroup<T> {
 	public final halfTileWidth: Float;
 	public final halfTileHeight: Float;
 
