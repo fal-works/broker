@@ -14,19 +14,19 @@ class ActorAosoa implements BasicAosoa {
 		Use this instead of `new()`.
 	**/
 	public static function create(
-		army: ActorArmy,
 		chunkCapacity: Int,
 		chunkCount: Int,
-		batch: h2d.SpriteBatch
+		batch: h2d.SpriteBatch,
+		fireCallback: FireCallback
 	) {
-		ActorInitializer.army = army;
 		BasicEntityInitializer.batch = batch;
+		ActorInitializer.fire = fireCallback;
 
 		final aosoa = new ActorAosoa(chunkCapacity, chunkCount);
 
 		@:nullSafety(Off) {
-			ActorInitializer.army = cast null;
 			BasicEntityInitializer.batch = cast null;
+			ActorInitializer.fire = cast null;
 		}
 
 		return aosoa;

@@ -10,8 +10,16 @@ class ActorArmy {
 		maxBulletCount: Int,
 		bulletBatch: h2d.SpriteBatch
 	) {
-		this.agents = new ActorGroup(this, maxAgentCount, agentBatch);
-		this.bullets = new ActorGroup(this, maxBulletCount, bulletBatch);
+		// TODO: optimize
+		final fireCallback = (
+			x,
+			y,
+			speed,
+			direction
+		) -> this.bullets.emit(x, y, speed, direction);
+
+		this.agents = new ActorGroup(maxAgentCount, agentBatch, fireCallback);
+		this.bullets = new ActorGroup(maxBulletCount, bulletBatch, fireCallback);
 	}
 
 	public function update() {

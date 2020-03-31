@@ -9,7 +9,7 @@ class ActorChunk {}
 
 class Actor extends BasicEntity {
 	@:banker_chunkLevel
-	final army: ActorArmy = ActorInitializer.army;
+	final fire: FireCallback = ActorInitializer.fire;
 
 	static function update(
 		sprite: BatchElement,
@@ -40,7 +40,7 @@ class Actor extends BasicEntity {
 		vx: Vec<Float>,
 		vy: Vec<Float>,
 		i: Int,
-		army: ActorArmy
+		fire: FireCallback
 	): Void {
 		final stick = integration.global.Gamepad.stick;
 		final dx = stick.x;
@@ -53,7 +53,7 @@ class Actor extends BasicEntity {
 		vy[i] = dx;
 
 		if (integration.global.Gamepad.buttons.A.isPressed)
-			army.newBullet(nextX, nextY, 10, Math.random() * 2 * Math.PI);
+			fire(nextX, nextY, 10, Math.random() * 2 * Math.PI);
 	}
 }
 
@@ -65,5 +65,5 @@ class ActorInitializer {
 		Value used in initialization of `ActorChunk`.
 		Should be set every time an AoSoA of `Actor` is created.
 	**/
-	public static var army: ActorArmy;
+	public static var fire: FireCallback;
 }
