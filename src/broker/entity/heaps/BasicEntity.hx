@@ -3,6 +3,8 @@ package broker.entity.heaps;
 #if heaps
 /**
 	Basic entity class using `SpriteBatch` of heaps.
+
+	Set `BasicEntityInitializer.batch` before creating an AoSoA instance.
 **/
 class BasicEntity extends broker.entity.BasicEntity implements banker.aosoa.Structure {
 	/**

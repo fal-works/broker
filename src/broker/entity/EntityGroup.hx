@@ -14,12 +14,15 @@ class EntityGroup<T: BasicAosoa> {
 	public function new(aosoa: T)
 		this.aosoa = aosoa;
 
+	/**
+		Reflects changes after the last synchronization.
+	**/
 	public function synchronize(): Void
 		this.aosoa.synchronize();
 
-	public function updatePosition(): Void
-		this.aosoa.updatePosition();
-
+	/**
+		Uses a new available entity and sets initial position/velocity.
+	**/
 	public inline function emit(
 		initialX: Float,
 		initialY: Float,
@@ -28,4 +31,10 @@ class EntityGroup<T: BasicAosoa> {
 	): Void {
 		this.aosoa.emit(initialX, initialY, speed, direction);
 	}
+
+	/**
+		Updates position of all entities in use.
+	**/
+	public function updatePosition(): Void
+		this.aosoa.updatePosition();
 }

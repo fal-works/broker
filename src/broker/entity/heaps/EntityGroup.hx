@@ -20,6 +20,9 @@ class EntityGroup<T: BasicAosoa> extends broker.entity.EntityGroup<T> {
 		this.halfTileHeight = tile.height / 2;
 	}
 
+	/**
+		Reflects changes after the last synchronization.
+	**/
 	override public function synchronize() {
 		final aosoa = this.aosoa;
 		aosoa.synchronize();
