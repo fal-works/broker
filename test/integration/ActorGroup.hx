@@ -16,7 +16,12 @@ class ActorGroup extends EntityGroup<ActorAosoa> {
 	) {
 		final chunkCapacity = minInt(defaultChunkCapacity, maxEntityCount);
 		final chunkCount = Math.ceil(maxEntityCount / chunkCapacity);
-		final aosoa = ActorAosoa.create(chunkCapacity, chunkCount, batch, fireCallback);
+
+		final aosoa = ActorAosoaBuilder.create(
+			() -> new ActorAosoa(chunkCapacity, chunkCount),
+			batch,
+			fireCallback
+		);
 
 		super(aosoa, batch.tile);
 	}
