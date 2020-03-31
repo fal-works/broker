@@ -13,11 +13,11 @@ class EntityGroup<T: BasicAosoa> extends broker.entity.EntityGroup<T> {
 	public final halfTileWidth: Float;
 	public final halfTileHeight: Float;
 
-	public function new(aosoa: T, batch: h2d.SpriteBatch) {
+	public function new(aosoa: T, tile: h2d.Tile) {
 		super(aosoa);
 
-		this.halfTileWidth = batch.tile.width / 2;
-		this.halfTileHeight = batch.tile.height / 2;
+		this.halfTileWidth = tile.width / 2;
+		this.halfTileHeight = tile.height / 2;
 	}
 
 	override public function synchronize() {
