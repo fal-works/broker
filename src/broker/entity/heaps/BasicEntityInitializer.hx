@@ -4,12 +4,13 @@ package broker.entity.heaps;
 import sneaker.exception.Exception;
 
 /**
-	Values and functions used when creating an AoSoA of `Entity`.
+	Values and functions used when creating an AoSoA instance
+	from any descendant class of `broker.entity.heaps.BasicEntity`.
 **/
 class BasicEntityInitializer {
 	/**
 		`h2d.SpriteBatch` value used in initialization of chunks.
-		Should be set before an AoSoA is created.
+		Should be set before an AoSoA instance is created.
 	**/
 	@:nullSafety(Off)
 	@:isVar
