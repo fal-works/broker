@@ -10,7 +10,6 @@ class ActorGroup extends EntityGroup<ActorAosoa> {
 	public static var defaultChunkCapacity = 64;
 
 	public function new(
-		aosoaConstructor: (chunkCapacity: Int, chunkCount: Int) -> ActorAosoa,
 		maxEntityCount: Int,
 		batch: h2d.SpriteBatch,
 		fireCallback: FireCallback
@@ -18,8 +17,9 @@ class ActorGroup extends EntityGroup<ActorAosoa> {
 		final chunkCapacity = minInt(defaultChunkCapacity, maxEntityCount);
 		final chunkCount = Math.ceil(maxEntityCount / chunkCapacity);
 
-		final aosoa = ActorAosoaBuilder.create(
-			aosoaConstructor.bind(chunkCapacity, chunkCount),
+		final aosoa: ActorAosoa = ActorAosoaBuilder.create(
+			chunkCapacity,
+			chunkCount,
 			batch,
 			fireCallback
 		);
