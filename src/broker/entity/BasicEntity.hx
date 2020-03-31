@@ -3,7 +3,7 @@ package broker.entity;
 /**
 	Basic entity that has position and velocity.
 **/
-class BasicEntity {
+class BasicEntity implements banker.aosoa.Structure {
 	/**
 		X-component of the position.
 	**/

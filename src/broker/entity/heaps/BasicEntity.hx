@@ -6,7 +6,7 @@ package broker.entity.heaps;
 
 	Set `BasicEntityInitializer.batch` before creating an AoSoA instance.
 **/
-class BasicEntity extends broker.entity.BasicEntity implements banker.aosoa.Structure {
+class BasicEntity extends broker.entity.BasicEntity {
 	/**
 		Vector for storing sprites that have been used after the last synchronization.
 	**/
