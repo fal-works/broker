@@ -24,7 +24,12 @@ class ActorArmy {
 		this.bullets.synchronize();
 	}
 
-	public inline function newBullet(x: Float, y: Float, speed: Float, direction: Float): Void {
+	public inline function newBullet(
+		x: Float,
+		y: Float,
+		speed: Float,
+		direction: Float
+	): Void {
 		this.bullets.aosoa.emit(x, y, speed, direction);
 	}
 }

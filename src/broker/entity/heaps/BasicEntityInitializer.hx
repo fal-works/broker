@@ -20,7 +20,9 @@ class BasicEntityInitializer {
 	/**
 		Factory function used in initialization of chunks.
 	**/
-	public static function spriteVectorFactory(chunkCapacity: Int): banker.vector.WritableVector<h2d.SpriteBatch.BatchElement> {
+	public static function spriteVectorFactory(
+		chunkCapacity: Int
+	): banker.vector.WritableVector<h2d.SpriteBatch.BatchElement> {
 		return new banker.vector.WritableVector<h2d.SpriteBatch.BatchElement>(chunkCapacity);
 	}
 

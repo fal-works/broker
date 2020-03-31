@@ -13,7 +13,7 @@ using broker.input.builtin.simple.StickExtension;
 #if !broker_generic_disable
 @:generic
 #end
-class ShmupGamepad<S: Stick> extends Gamepad<Button, ButtonStatusMap, S> {
+class ShmupGamepad<S:Stick> extends Gamepad<Button, ButtonStatusMap, S> {
 	/** @see `new()` **/
 	final defaultSpeed: Float;
 
@@ -61,7 +61,8 @@ class ShmupGamepad<S: Stick> extends Gamepad<Button, ButtonStatusMap, S> {
 		final moving = stick.reflect(buttons);
 
 		if (moving) {
-			final speed = if (this.speedChange.isPressed) this.alternativeSpeed else this.defaultSpeed;
+			final speed = if (this.speedChange.isPressed) this.alternativeSpeed else
+				this.defaultSpeed;
 			stick.multiplyDistance(speed);
 		}
 	}

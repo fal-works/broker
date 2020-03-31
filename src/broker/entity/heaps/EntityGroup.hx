@@ -6,10 +6,10 @@ import broker.entity.heaps.BasicAosoa;
 /**
 	Wrapper of any AoSoA class.
 **/
-#if !broker_generic_disable
-@:generic
-#end
-class EntityGroup<T: BasicAosoa> extends broker.entity.EntityGroup<T> {
+	#if !broker_generic_disable
+	@:generic
+	#end
+class EntityGroup<T:BasicAosoa> extends broker.entity.EntityGroup<T> {
 	public final halfTileWidth: Float;
 	public final halfTileHeight: Float;
 

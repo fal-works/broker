@@ -8,7 +8,13 @@ import integration.Settings;
 class Gamepad {
 	public static final buttons = ButtonStatusMap.createFromHeapsKeyCodeMap(Settings.keyCodeMap);
 	public static final stick = new Stick();
-	static final gamepadUnit = new ShmupGamepad(buttons, stick, X, Settings.highSpeed, Settings.lowSpeed);
+	static final gamepadUnit = new ShmupGamepad(
+		buttons,
+		stick,
+		X,
+		Settings.highSpeed,
+		Settings.lowSpeed
+	);
 
 	public static inline function update(): Void
 		gamepadUnit.update();
