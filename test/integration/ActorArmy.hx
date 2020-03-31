@@ -18,8 +18,8 @@ class ActorArmy {
 			direction
 		) -> this.bullets.emit(x, y, speed, direction);
 
-		this.agents = new ActorGroup(maxAgentCount, agentBatch, fireCallback);
-		this.bullets = new ActorGroup(maxBulletCount, bulletBatch, fireCallback);
+		this.agents = new ActorGroup((chunkCapacity, chunkCount) -> new ActorAosoa(chunkCapacity, chunkCapacity), maxAgentCount, agentBatch, fireCallback);
+		this.bullets = new ActorGroup((chunkCapacity, chunkCount) -> new ActorAosoa(chunkCapacity, chunkCapacity), maxBulletCount, bulletBatch, fireCallback);
 	}
 
 	public function update() {
