@@ -2,6 +2,7 @@ package broker.entity.heaps;
 
 #if heaps
 import sneaker.exception.Exception;
+import sneaker.types.Maybe;
 
 /**
 	Values and functions used when creating an AoSoA instance
@@ -30,14 +31,23 @@ class BasicEntityInitializer {
 		return new h2d.SpriteBatch.BatchElement(batch.tile);
 	}
 
-	static inline function get_batch() {
-		if (batch == null) {
-			final message = "Cannot create AoSoA instance. Required to be set: broker.entity.heaps.BasicEntityInitializer.batch";
-			throw new Exception(message);
-		}
-		return batch;
-	}
+	/**
+		Internal value of `batch`.
+	**/
+	static var savedBatch: Maybe<h2d.SpriteBatch> = Maybe.from(null);
 
-	static inline function set_batch(newBatch) return batch = newBatch;
+	static final throwBatchNotSet = () -> {
+		var message = "Cannot create AoSoA instance. Required to be set:";
+		message += "\nbroker.entity.heaps.BasicEntityInitializer.batch";
+		throw new Exception(message);
+	};
+
+	static inline function get_batch()
+		return savedBatch.orElse(throwBatchNotSet);
+
+	static inline function set_batch(newBatch: h2d.SpriteBatch) {
+		savedBatch = newBatch;
+		return newBatch;
+	}
 }
 #end
