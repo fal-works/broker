@@ -1,5 +1,7 @@
 package integration;
 
+import integration.actor.*;
+
 class ActorArmy {
 	public final agents: ActorGroup;
 	public final bullets: ActorGroup;
@@ -18,14 +20,14 @@ class ActorArmy {
 			direction
 		) -> this.bullets.emit(x, y, speed, direction);
 
-		final agentAosoa: ActorAosoa = ActorAosoaBuilder.create(
+		final agentAosoa: PlayerAosoa = ActorAosoaBuilder.create(
 			maxAgentCount,
 			agentBatch,
 			fireCallback
 		);
 		this.agents = new ActorGroup(agentAosoa, agentBatch.tile);
 
-		final bulletAosoa: ActorAosoa = ActorAosoaBuilder.create(
+		final bulletAosoa: NonPlayerAosoa = ActorAosoaBuilder.create(
 			maxBulletCount,
 			bulletBatch,
 			fireCallback
@@ -34,7 +36,7 @@ class ActorArmy {
 	}
 
 	public function update() {
-		this.agents.aosoa.moveByGamepad();
+		this.agents.aosoa.update();
 		this.bullets.aosoa.update();
 	}
 

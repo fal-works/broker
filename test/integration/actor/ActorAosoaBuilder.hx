@@ -1,4 +1,4 @@
-package integration;
+package integration.actor;
 
 import banker.common.MathTools.minInt;
 
