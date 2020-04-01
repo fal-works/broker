@@ -122,7 +122,10 @@ class BasicEntity extends broker.entity.BasicEntity {
 	}
 
 	/**
-		`BatchElement` associated to the entity.
+		`BatchElement` instance associated to the entity.
+
+		*Note: We're using the name "sprite" for `SpriteBatch.BatchElement` instances
+		and it's not related to the deprecated type `h2d.Sprite`*.
 	**/
 	@:nullSafety(Off)
 	@:banker_externalFactory()
