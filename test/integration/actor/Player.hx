@@ -1,7 +1,7 @@
 package integration.actor;
 
 import banker.vector.WritableVector as Vec;
-import h2d.SpriteBatch.BatchElement;
+import integration.global.Gamepad;
 
 class Player extends Actor {
 	static function update(
@@ -12,7 +12,7 @@ class Player extends Actor {
 		i: Int,
 		fire: FireCallback
 	): Void {
-		final stick = integration.global.Gamepad.stick;
+		final stick = Gamepad.stick;
 		final dx = stick.x;
 		final dy = stick.y;
 		final nextX = x[i] + dx;
@@ -22,7 +22,7 @@ class Player extends Actor {
 		vx[i] = dx;
 		vy[i] = dx;
 
-		if (integration.global.Gamepad.buttons.A.isPressed)
+		if (Gamepad.buttons.A.isPressed)
 			fire(nextX, nextY, 10, Math.random() * 2 * Math.PI);
 	}
 }
