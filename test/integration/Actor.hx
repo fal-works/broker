@@ -4,7 +4,7 @@ import banker.vector.WritableVector as Vec;
 import broker.entity.heaps.BasicEntity;
 import h2d.SpriteBatch.BatchElement;
 
-@:build(banker.aosoa.macro.Builder.chunkFromStructure(integration.Actor))
+@:build(banker.aosoa.Chunk.fromStructure(integration.Actor))
 class ActorChunk {}
 
 class Actor extends BasicEntity {
