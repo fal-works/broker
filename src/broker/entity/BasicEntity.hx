@@ -1,7 +1,8 @@
 package broker.entity;
 
 /**
-	Basic entity that has position and velocity.
+	Basic entity with position and velocity.
+	Implements `banker.aosoa.Structure`.
 **/
 @:banker_verified
 class BasicEntity implements banker.aosoa.Structure {

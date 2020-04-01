@@ -4,12 +4,9 @@ import banker.vector.WritableVector as Vec;
 import broker.entity.heaps.BasicEntity;
 import h2d.SpriteBatch.BatchElement;
 
-@:build(banker.aosoa.Chunk.fromStructure(integration.Actor))
-class ActorChunk {}
-
 class Actor extends BasicEntity {
-	@:banker_chunkLevel
-	final fire: FireCallback = ActorInitializer.fire;
+	@:banker_chunkLevelFinal
+	var fire: FireCallback;
 
 	static function update(
 		sprite: BatchElement,
@@ -57,13 +54,5 @@ class Actor extends BasicEntity {
 	}
 }
 
-/**
-	Stores values and functions used when creating an AoSoA of `Actor`.
-**/
-class ActorInitializer {
-	/**
-		Value used in initialization of `ActorChunk`.
-		Should be set every time an AoSoA of `Actor` is created.
-	**/
-	public static var fire: FireCallback;
-}
+@:build(banker.aosoa.Chunk.fromStructure(integration.Actor))
+class ActorChunk {}

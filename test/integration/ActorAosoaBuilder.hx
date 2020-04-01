@@ -1,35 +1,30 @@
 package integration;
 
 import banker.common.MathTools.minInt;
-import banker.aosoa.interfaces.AosoaConstructible;
-import broker.entity.heaps.BasicEntityInitializer;
-import integration.Actor.ActorInitializer;
 
 class ActorAosoaBuilder {
 	public static var defaultChunkCapacity = 64;
 
 	/**
 		Creates an `ActorAosoa` instance.
-		Use this instead of `new()`.
 	**/
-	@:generic
-	public static function create<T: ActorAosoa & AosoaConstructible>(
+	public static function create(
 		maxEntityCount: Int,
 		batch: h2d.SpriteBatch,
 		fireCallback: FireCallback
-	): T {
+	): ActorAosoa {
 		final chunkCapacity = minInt(defaultChunkCapacity, maxEntityCount);
 		final chunkCount = Math.ceil(maxEntityCount / chunkCapacity);
 
-		BasicEntityInitializer.batch = batch;
-		ActorInitializer.fire = fireCallback;
-
-		final aosoa = new T(chunkCapacity, chunkCount);
-
-		@:nullSafety(Off) {
-			BasicEntityInitializer.batch = cast null;
-			ActorInitializer.fire = cast null;
-		}
+		final tile = batch.tile;
+		final spriteFactory = () -> new h2d.SpriteBatch.BatchElement(tile);
+		final aosoa = new ActorAosoa(
+			chunkCapacity,
+			chunkCount,
+			batch,
+			spriteFactory,
+			fireCallback
+		);
 
 		return aosoa;
 	}

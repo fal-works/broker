@@ -3,8 +3,7 @@ package broker.entity.heaps;
 #if heaps
 /**
 	Basic entity class using `SpriteBatch` of heaps.
-
-	Set `BasicEntityInitializer.batch` before creating an AoSoA instance.
+	Implements `banker.aosoa.Structure`.
 **/
 @:banker_verified
 class BasicEntity extends broker.entity.BasicEntity {
@@ -39,8 +38,9 @@ class BasicEntity extends broker.entity.BasicEntity {
 	/**
 		`SpriteBatch` instance responsible for this entity.
 	**/
-	@:banker_chunkLevel
-	final batch: h2d.SpriteBatch = broker.entity.heaps.BasicEntityInitializer.batch;
+	@:nullSafety(Off)
+	@:banker_chunkLevelFinal
+	var batch: h2d.SpriteBatch;
 
 	/**
 		Uses a new available entity and sets initial position and velocity.
@@ -125,7 +125,7 @@ class BasicEntity extends broker.entity.BasicEntity {
 		`BatchElement` associated to the entity.
 	**/
 	@:nullSafety(Off)
-	@:banker_factory(broker.entity.heaps.BasicEntityInitializer.spriteFactory)
+	@:banker_externalFactory()
 	@:banker_swap
 	var sprite: h2d.SpriteBatch.BatchElement;
 }
