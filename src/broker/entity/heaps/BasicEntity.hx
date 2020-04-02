@@ -113,12 +113,10 @@ class BasicEntity extends broker.entity.BasicEntity {
 	static function updateSprite(
 		sprite: h2d.SpriteBatch.BatchElement,
 		x: Float,
-		y: Float,
-		halfTileWidth: Float,
-		halfTileHeight: Float
+		y: Float
 	): Void {
-		sprite.x = x - halfTileWidth;
-		sprite.y = y - halfTileHeight;
+		sprite.x = x;
+		sprite.y = y;
 	}
 
 	/**

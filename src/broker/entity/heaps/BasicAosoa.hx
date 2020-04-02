@@ -10,5 +10,5 @@ interface BasicAosoa extends broker.entity.BasicAosoa {
 	/**
 		Reflects position to sprite.
 	**/
-	function updateSprite(halfTileWidth: Float, halfTileHeight: Float): Void;
+	function updateSprite(): Void;
 }

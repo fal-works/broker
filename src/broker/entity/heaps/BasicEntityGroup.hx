@@ -10,14 +10,8 @@ import broker.entity.heaps.BasicAosoa;
 	@:generic
 	#end
 class BasicEntityGroup<T:BasicAosoa> extends broker.entity.BasicEntityGroup<T> {
-	public final halfTileWidth: Float;
-	public final halfTileHeight: Float;
-
 	public function new(aosoa: T, tile: h2d.Tile) {
 		super(aosoa);
-
-		this.halfTileWidth = tile.width / 2;
-		this.halfTileHeight = tile.height / 2;
 	}
 
 	/**
@@ -26,7 +20,7 @@ class BasicEntityGroup<T:BasicAosoa> extends broker.entity.BasicEntityGroup<T> {
 	override public function synchronize() {
 		final aosoa = this.aosoa;
 		aosoa.synchronize();
-		aosoa.updateSprite(this.halfTileWidth, this.halfTileHeight);
+		aosoa.updateSprite();
 	}
 }
 #end

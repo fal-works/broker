@@ -13,9 +13,12 @@ class Main extends hxd.App {
 		hxd.Res.initEmbed();
 		broker.input.heaps.HeapsKeyTools.initialize();
 
-		final playerBatch = new h2d.SpriteBatch(hxd.Res.player.toTile(), s2d);
+		final playerTile = hxd.Res.player.toTile().center();
+		final playerBatch = new h2d.SpriteBatch(playerTile, s2d);
+
+		final playerBulletTile = hxd.Res.player_bullet.toTile().center();
 		final playerBulletBatch = new h2d.SpriteBatch(
-			hxd.Res.player_bullet.toTile(),
+			playerBulletTile,
 			s2d
 		);
 
