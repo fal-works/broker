@@ -4,10 +4,11 @@ import broker.input.Stick;
 import broker.input.builtin.simple.Button;
 import broker.input.builtin.simple.ButtonStatusMap;
 
-using broker.input.builtin.simple.StickExtension;
-
 /**
-	An extended `Gamepad` suited for classic 2D shoot'em up games.
+	An extended `Gamepad` (using `broker.input.builtin.simple.Button`)
+	that is able to switch the moving speed (i.e. `this.stick.distance`)
+	according to the status of a specific button provided when instantiating,
+	thus suited for classic 2D shoot'em up games.
 **/
 #if !broker_generic_disable
 @:generic
@@ -46,23 +47,14 @@ class ShmupGamepad<S:Stick> extends Gamepad<S> {
 	}
 
 	/**
-		Updates status of all `buttons` and reflects them to `stick`.
-	**/
-	override public function update(): Void {
-		super.update();
-		this.updateStick();
-	}
-
-	/**
 		Called in `update()`.
-		Updates `this.stick` by reflecting the status of buttons.
+		Updates `this.stick` by reflecting the status of
+		cross direction buttons and the speed change button.
+		@return `true` if any direction button is pressed.
 	**/
 	@:access(broker.input.Stick)
-	override function updateStick() {
-		final stick = this.stick;
-		final buttons = this.buttons;
-
-		final moving = stick.reflect(buttons);
+	override function updateStick(): Bool {
+		final moving = super.updateStick();
 
 		if (moving) {
 			final speed = if (this.speedChange.isPressed)
@@ -70,7 +62,9 @@ class ShmupGamepad<S:Stick> extends Gamepad<S> {
 			else
 				this.defaultSpeed;
 
-			stick.multiplyDistance(speed);
+			this.stick.multiplyDistance(speed);
 		}
+
+		return moving;
 	}
 }

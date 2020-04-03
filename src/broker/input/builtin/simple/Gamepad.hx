@@ -5,7 +5,7 @@ import broker.input.Stick;
 import broker.input.builtin.simple.Button;
 import broker.input.builtin.simple.ButtonStatusMap;
 
-using broker.input.builtin.simple.StickExtension;
+using broker.input.StickExtension;
 
 /**
 	A simple virtual gamepad using `broker.input.builtin.simple.Button`.
@@ -19,10 +19,7 @@ class Gamepad<S:Stick> extends GamepadBase<Button, ButtonStatusMap, S> {
 		@param buttons Mapping between buttons and their status.
 		@param stick Any `Stick` object.
 	**/
-	public function new(
-		buttons: ButtonStatusMap,
-		stick: S
-	) {
+	public function new(buttons: ButtonStatusMap, stick: S) {
 		super(buttons, stick);
 	}
 
@@ -37,8 +34,16 @@ class Gamepad<S:Stick> extends GamepadBase<Button, ButtonStatusMap, S> {
 	/**
 		Called in `update()`.
 		Updates `this.stick` by reflecting the status of buttons.
+		@return `true` if any direction button is pressed.
 	**/
 	@:access(broker.input.Stick)
-	function updateStick()
-		this.stick.reflect(this.buttons);
+	function updateStick(): Bool {
+		final buttons = this.buttons;
+		return this.stick.reflect(
+			buttons.LEFT,
+			buttons.UP,
+			buttons.RIGHT,
+			buttons.DOWN
+		);
+	}
 }

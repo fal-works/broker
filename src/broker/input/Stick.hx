@@ -3,6 +3,7 @@ package broker.input;
 /**
 	A virtual analog stick.
 **/
+@:using(broker.input.StickExtension)
 class Stick {
 	static inline function hypotenuse(x: Float, y: Float)
 		return Math.sqrt(x * x + y * y);

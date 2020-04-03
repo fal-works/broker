@@ -1,21 +1,20 @@
-package broker.input.builtin.simple;
-
-import broker.input.Stick;
+package broker.input;
 
 class StickExtension {
 	/**
 		Reflects the status of direction buttons to `this` stick.
-		The stick displacement is normalized. Assuming that the `sensitivity` is `1.0`,
-		the distance is always `1.0` if any direction button is pressed (otherwise `0.0`).
+		The stick displacement is normalized. `this.distance` is set to `this.sensitivity`
+		if any direction button is pressed (otherwise it's set to `0.0`).
 		@return `true` if any direction button is pressed.
 	**/
 	@:access(broker.input.Stick)
-	public static function reflect(_this: Stick, buttons: ButtonStatusMap): Bool {
-		final left = buttons.LEFT;
-		final up = buttons.UP;
-		final right = buttons.RIGHT;
-		final down = buttons.DOWN;
-
+	public static function reflect(
+		_this: Stick,
+		left: ButtonStatus,
+		up: ButtonStatus,
+		right: ButtonStatus,
+		down: ButtonStatus
+	): Bool {
 		final x = if (left.isPressed) {
 			if (right.isPressed) {
 				if (left.pressedFrameCount <= right.pressedFrameCount) -1.0; else 1.0;
