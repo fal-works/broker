@@ -25,4 +25,18 @@ class BasicEntity implements banker.aosoa.Structure {
 		Y-component of the velocity.
 	**/
 	var vy: Float = 0;
+
+	/**
+		Updates position by adding current velocity.
+	**/
+	static function updatePosition(
+		x: banker.vector.WritableVector<Float>,
+		y: banker.vector.WritableVector<Float>,
+		vx: Float,
+		vy: Float,
+		i: Int
+	): Void {
+		x[i] += vx;
+		y[i] += vy;
+	}
 }

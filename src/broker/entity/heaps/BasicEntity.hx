@@ -73,20 +73,6 @@ class BasicEntity extends broker.entity.BasicEntity {
 	}
 
 	/**
-		Updates position by adding current velocity.
-	**/
-	static function updatePosition(
-		x: banker.vector.WritableVector<Float>,
-		y: banker.vector.WritableVector<Float>,
-		vx: Float,
-		vy: Float,
-		i: Int
-	): Void {
-		x[i] += vx;
-		y[i] += vy;
-	}
-
-	/**
 		Reflects `usedSprites` and `disusedSprites` to the `SpriteBatch`.
 		Then logically clears `usedSprites` and `disusedSprites`.
 	**/
