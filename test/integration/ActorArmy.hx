@@ -25,14 +25,14 @@ class ActorArmy {
 			agentBatch,
 			fireCallback
 		);
-		this.agents = new ActorGroup(agentAosoa, agentBatch.tile);
+		this.agents = new ActorGroup(agentAosoa);
 
 		final bulletAosoa: NonPlayerAosoa = ActorAosoaBuilder.create(
 			maxBulletCount,
 			bulletBatch,
 			fireCallback
 		);
-		this.bullets = new ActorGroup(bulletAosoa, bulletBatch.tile);
+		this.bullets = new ActorGroup(bulletAosoa);
 	}
 
 	public function update() {

@@ -91,7 +91,9 @@ class BasicEntity extends broker.entity.BasicEntity {
 		Reflects `usedSprites` and `disusedSprites` to the `SpriteBatch`.
 		Then logically clears `usedSprites` and `disusedSprites`.
 	**/
-	function onSynchronize() {
+	@:banker_chunkLevel
+	@:banker_onSynchronize
+	function synchronizeBatch() {
 		final batch = this.batch;
 
 		final disusedSprites = this.disusedSprites;
@@ -110,7 +112,8 @@ class BasicEntity extends broker.entity.BasicEntity {
 	/**
 		Reflects position to sprite.
 	**/
-	static function updateSprite(
+	@:banker_onCompleteSynchronize
+	static function synchronizeSprite(
 		sprite: h2d.SpriteBatch.BatchElement,
 		x: Float,
 		y: Float

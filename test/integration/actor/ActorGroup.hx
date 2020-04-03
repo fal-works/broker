@@ -1,3 +1,3 @@
 package integration.actor;
 
-typedef ActorGroup = broker.entity.heaps.BasicEntityGroup<ActorAosoa>;
+typedef ActorGroup = broker.entity.BasicEntityGroup<ActorAosoa>;
