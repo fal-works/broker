@@ -10,8 +10,8 @@ import broker.input.heaps.HeapsKeyTools;
 	and their corresponding status.
 **/
 @:build(banker.finite.FiniteKeys.from(Button))
-@:banker.verified
-@:banker.finite.final
+@:banker_verified
+@:banker_finite_final
 class ButtonStatusMap implements KeysMap<Button, ButtonStatus> {
 	/**
 		@param getButtonChecker Function that returns a button checker, which is
