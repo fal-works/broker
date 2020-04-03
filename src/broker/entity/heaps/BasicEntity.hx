@@ -43,6 +43,69 @@ class BasicEntity extends broker.entity.BasicEntity {
 	var batch: h2d.SpriteBatch;
 
 	/**
+		Reflects `usedSprites` and `disusedSprites` to the `SpriteBatch`.
+		Then logically clears `usedSprites` and `disusedSprites`.
+	**/
+	@:banker_chunkLevel
+	@:banker_onSynchronize
+	function synchronizeBatch() {
+		final batch = this.batch;
+
+		final disusedSprites = this.disusedSprites;
+		for (i in 0...this.disusedCount) {
+			@:privateAccess batch.delete(disusedSprites[i]);
+		}
+		this.disusedCount = 0;
+
+		final usedSprites = this.usedSprites;
+		for (i in 0...this.usedCount) {
+			batch.add(usedSprites[i]);
+		}
+		this.usedCount = 0;
+	}
+
+	/**
+		`BatchElement` instance associated to the entity.
+
+		*Note: We're using the name "sprite" for `SpriteBatch.BatchElement` instances
+		and it's not related to the deprecated type `h2d.Sprite`*.
+	**/
+	@:nullSafety(Off)
+	@:banker_externalFactory()
+	@:banker_swap
+	var sprite: h2d.SpriteBatch.BatchElement;
+
+	/**
+		Uses a new available entity and sets initial position and velocity.
+		@param initialX
+		@param initialY
+		@param initialVx
+		@param initialVy
+	**/
+	@:banker_useEntity
+	static function use(
+		sprite: h2d.SpriteBatch.BatchElement,
+		x: banker.vector.WritableVector<Float>,
+		y: banker.vector.WritableVector<Float>,
+		vx: banker.vector.WritableVector<Float>,
+		vy: banker.vector.WritableVector<Float>,
+		i: Int,
+		usedSprites: banker.vector.WritableVector<h2d.SpriteBatch.BatchElement>,
+		usedCount: Int,
+		initialX: Float,
+		initialY: Float,
+		initialVx: Float,
+		initialVy: Float
+	): Void {
+		x[i] = initialX;
+		y[i] = initialY;
+		vx[i] = initialVx;
+		vy[i] = initialVy;
+		usedSprites[usedCount] = sprite;
+		++usedCount;
+	}
+
+	/**
 		Uses a new available entity and sets initial position and velocity.
 		@param initialX
 		@param initialY
@@ -73,28 +136,6 @@ class BasicEntity extends broker.entity.BasicEntity {
 	}
 
 	/**
-		Reflects `usedSprites` and `disusedSprites` to the `SpriteBatch`.
-		Then logically clears `usedSprites` and `disusedSprites`.
-	**/
-	@:banker_chunkLevel
-	@:banker_onSynchronize
-	function synchronizeBatch() {
-		final batch = this.batch;
-
-		final disusedSprites = this.disusedSprites;
-		for (i in 0...this.disusedCount) {
-			@:privateAccess batch.delete(disusedSprites[i]);
-		}
-		this.disusedCount = 0;
-
-		final usedSprites = this.usedSprites;
-		for (i in 0...this.usedCount) {
-			batch.add(usedSprites[i]);
-		}
-		this.usedCount = 0;
-	}
-
-	/**
 		Reflects position to sprite.
 	**/
 	@:banker_onCompleteSynchronize
@@ -106,16 +147,5 @@ class BasicEntity extends broker.entity.BasicEntity {
 		sprite.x = x;
 		sprite.y = y;
 	}
-
-	/**
-		`BatchElement` instance associated to the entity.
-
-		*Note: We're using the name "sprite" for `SpriteBatch.BatchElement` instances
-		and it's not related to the deprecated type `h2d.Sprite`*.
-	**/
-	@:nullSafety(Off)
-	@:banker_externalFactory()
-	@:banker_swap
-	var sprite: h2d.SpriteBatch.BatchElement;
 }
 #end
