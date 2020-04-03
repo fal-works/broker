@@ -36,8 +36,8 @@ class ActorArmy {
 	}
 
 	public function update() {
-		this.agents.aosoa.update();
-		this.bullets.aosoa.update();
+		this.agents.update();
+		this.bullets.update();
 	}
 
 	public function synchronize() {
