@@ -76,7 +76,6 @@ class BasicEntity extends broker.entity.BasicEntity {
 		Updates position by adding current velocity.
 	**/
 	static function updatePosition(
-		sprite: h2d.SpriteBatch.BatchElement,
 		x: banker.vector.WritableVector<Float>,
 		y: banker.vector.WritableVector<Float>,
 		vx: Float,
