@@ -10,12 +10,12 @@ class ButtonStatus {
 	public var isPressed = false;
 
 	/**
-		`true` if the buttan has been pressed in the most recent frame;
+		`true` if the buttan has been pressed in the most recent frame.
 	**/
 	public var isJustPressed = false;
 
 	/**
-		`true` if the buttan has been released in the most recent frame;
+		`true` if the buttan has been released in the most recent frame.
 	**/
 	public var isJustReleased = false;
 
@@ -31,12 +31,11 @@ class ButtonStatus {
 	final buttonIsDown: () -> Bool;
 
 	/**
-		@param buttonIsDown Function for checking if the button should be considered pressed.
-		Used internally in `update()`.
+		@param buttonIsDown Function internally used in `update()`
+		for checking if the button should be considered pressed.
 	**/
-	public function new(buttonIsDown: () -> Bool) {
+	public function new(buttonIsDown: () -> Bool)
 		this.buttonIsDown = buttonIsDown;
-	}
 
 	/**
 		Updates all status of the button.
