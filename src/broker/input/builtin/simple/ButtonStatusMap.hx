@@ -1,18 +1,18 @@
 package broker.input.builtin.simple;
 
-import banker.finite.interfaces.FiniteKeysMap as KeysMap;
 import banker.vector.Vector;
 import broker.input.ButtonStatus;
 import broker.input.heaps.HeapsKeyTools;
+import broker.input.interfaces.GenericButtonStatusMap;
 
 /**
-	Mapping between values of `broker.input.builtin.simple.Button`
-	and their corresponding status.
+	Mapping from values of `broker.input.builtin.simple.Button`
+	to their corresponding status.
 **/
 @:build(banker.finite.FiniteKeys.from(Button))
 @:banker_verified
 @:banker_finite_final
-class ButtonStatusMap implements KeysMap<Button, ButtonStatus> {
+class ButtonStatusMap implements GenericButtonStatusMap<Button> {
 	/**
 		@param getButtonChecker Function that returns a button checker, which is
 		another function that returns `true` if `button` should be considered pressed.

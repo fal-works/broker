@@ -1,6 +1,6 @@
 package broker.input;
 
-import banker.finite.interfaces.FiniteKeysMap;
+import broker.input.interfaces.GenericButtonStatusMap;
 
 /**
 	A virtual gamepad object consisting of `buttons` and `stick`.
@@ -8,7 +8,7 @@ import banker.finite.interfaces.FiniteKeysMap;
 #if !broker_generic_disable
 @:generic
 #end
-class Gamepad<B, M:FiniteKeysMap<B, ButtonStatus>, S:Stick> {
+class Gamepad<B, M:GenericButtonStatusMap<B>, S:Stick> {
 	public final buttons: M;
 	public final stick: S;
 
