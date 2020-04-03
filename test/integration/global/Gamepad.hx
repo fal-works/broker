@@ -2,7 +2,7 @@ package integration.global;
 
 import broker.input.Stick;
 import broker.input.builtin.simple.ButtonStatusMap;
-import broker.input.builtin.ShmupGamepad;
+import broker.input.builtin.simple.ShmupGamepad;
 import integration.Settings;
 
 class Gamepad {

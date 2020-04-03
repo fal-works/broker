@@ -1,6 +1,5 @@
-package broker.input.builtin;
+package broker.input.builtin.simple;
 
-import broker.input.Gamepad;
 import broker.input.Stick;
 import broker.input.builtin.simple.Button;
 import broker.input.builtin.simple.ButtonStatusMap;
@@ -8,12 +7,12 @@ import broker.input.builtin.simple.ButtonStatusMap;
 using broker.input.builtin.simple.StickExtension;
 
 /**
-	An extended `Gamepad` suited for general/classic 2D shoot'em up games.
+	An extended `Gamepad` suited for classic 2D shoot'em up games.
 **/
 #if !broker_generic_disable
 @:generic
 #end
-class ShmupGamepad<S:Stick> extends Gamepad<Button, ButtonStatusMap, S> {
+class ShmupGamepad<S:Stick> extends Gamepad<S> {
 	/** @see `new()` **/
 	final defaultSpeed: Float;
 
@@ -26,6 +25,8 @@ class ShmupGamepad<S:Stick> extends Gamepad<Button, ButtonStatusMap, S> {
 	final speedChange: ButtonStatus;
 
 	/**
+		@param buttons Mapping between buttons and their status.
+		@param stick Any `Stick` object.
 		@param speedChangeButton The button for changing the moving speed.
 		@param defaultSpeed Used when the speed changing button is not pressed.
 		@param alternativeSpeed Used when the speed changing button is pressed.
@@ -44,6 +45,9 @@ class ShmupGamepad<S:Stick> extends Gamepad<Button, ButtonStatusMap, S> {
 		this.alternativeSpeed = alternativeSpeed;
 	}
 
+	/**
+		Updates status of all `buttons` and reflects them to `stick`.
+	**/
 	override public function update(): Void {
 		super.update();
 		this.updateStick();
@@ -54,15 +58,18 @@ class ShmupGamepad<S:Stick> extends Gamepad<Button, ButtonStatusMap, S> {
 		Updates `this.stick` by reflecting the status of buttons.
 	**/
 	@:access(broker.input.Stick)
-	function updateStick() {
+	override function updateStick() {
 		final stick = this.stick;
 		final buttons = this.buttons;
 
 		final moving = stick.reflect(buttons);
 
 		if (moving) {
-			final speed = if (this.speedChange.isPressed) this.alternativeSpeed else
+			final speed = if (this.speedChange.isPressed)
+				this.alternativeSpeed
+			else
 				this.defaultSpeed;
+
 			stick.multiplyDistance(speed);
 		}
 	}

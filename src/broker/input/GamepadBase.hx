@@ -1,14 +1,16 @@
 package broker.input;
 
+import broker.input.interfaces.Gamepad;
 import broker.input.interfaces.GenericButtonStatusMap;
 
 /**
-	A virtual gamepad object consisting of `buttons` and `stick`.
+	Base class that implements `broker.input.interfaces.Gamepad`.
+	Should be extended for updating `stick` as well as `buttons`.
 **/
 #if !broker_generic_disable
 @:generic
 #end
-class Gamepad<B, M:GenericButtonStatusMap<B>, S:Stick> {
+class GamepadBase<B, M:GenericButtonStatusMap<B>, S:Stick> implements Gamepad<B, M, S> {
 	public final buttons: M;
 	public final stick: S;
 
