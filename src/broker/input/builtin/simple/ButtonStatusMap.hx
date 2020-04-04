@@ -11,7 +11,7 @@ import broker.input.interfaces.GenericButtonStatusMap;
 **/
 @:build(banker.finite.FiniteKeys.from(Button))
 @:banker_verified
-@:banker_finite_final
+@:banker_final
 class ButtonStatusMap implements GenericButtonStatusMap<Button> {
 	/**
 		@param getButtonChecker Function that returns a button checker, which is
