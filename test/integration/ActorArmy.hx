@@ -3,8 +3,8 @@ package integration;
 import integration.actor.*;
 
 class ActorArmy {
-	public final agents: ActorGroup;
-	public final bullets: ActorGroup;
+	public final agents: ActorAosoa;
+	public final bullets: ActorAosoa;
 
 	public function new(
 		maxAgentCount: Int,
@@ -25,14 +25,14 @@ class ActorArmy {
 			agentBatch,
 			fireCallback
 		);
-		this.agents = new ActorGroup(agentAosoa);
+		this.agents = agentAosoa;
 
 		final bulletAosoa: NonPlayerAosoa = ActorAosoaBuilder.create(
 			maxBulletCount,
 			bulletBatch,
 			fireCallback
 		);
-		this.bullets = new ActorGroup(bulletAosoa);
+		this.bullets = bulletAosoa;
 	}
 
 	public function update() {
@@ -51,6 +51,6 @@ class ActorArmy {
 		speed: Float,
 		direction: Float
 	): Void {
-		this.bullets.aosoa.emit(x, y, speed, direction);
+		this.bullets.emit(x, y, speed, direction);
 	}
 }

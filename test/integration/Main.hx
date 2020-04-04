@@ -23,7 +23,7 @@ class Main extends hxd.App {
 		);
 
 		army = new ActorArmy(1, playerBatch, 1024, playerBulletBatch);
-		army.agents.aosoa.emit(200, 200, 0, 0);
+		army.agents.use(200, 200, 0, 0);
 
 		debug("initialized.");
 	}

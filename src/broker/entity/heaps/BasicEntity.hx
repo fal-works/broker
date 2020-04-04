@@ -76,6 +76,19 @@ class BasicEntity extends broker.entity.BasicEntity {
 	var sprite: h2d.SpriteBatch.BatchElement;
 
 	/**
+		Reflects position to sprite.
+	**/
+	@:banker_onCompleteSynchronize
+	static function synchronizeSprite(
+		sprite: h2d.SpriteBatch.BatchElement,
+		x: Float,
+		y: Float
+	): Void {
+		sprite.x = x;
+		sprite.y = y;
+	}
+
+	/**
 		Uses a new available entity and sets initial position and velocity.
 		@param initialX
 		@param initialY
@@ -133,19 +146,6 @@ class BasicEntity extends broker.entity.BasicEntity {
 		vy[i] = speed * Math.sin(direction);
 		usedSprites[usedCount] = sprite;
 		++usedCount;
-	}
-
-	/**
-		Reflects position to sprite.
-	**/
-	@:banker_onCompleteSynchronize
-	static function synchronizeSprite(
-		sprite: h2d.SpriteBatch.BatchElement,
-		x: Float,
-		y: Float
-	): Void {
-		sprite.x = x;
-		sprite.y = y;
 	}
 }
 #end

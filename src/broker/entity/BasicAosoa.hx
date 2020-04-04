@@ -10,6 +10,16 @@ interface BasicAosoa extends banker.aosoa.interfaces.Aosoa {
 	/**
 		Uses a new available entity and sets initial position/velocity.
 	**/
+	function use(
+		initialX: Float,
+		initialY: Float,
+		initialVx: Float,
+		initialVy: Float
+	): Void;
+
+	/**
+		Uses a new available entity and sets initial position/velocity.
+	**/
 	function emit(
 		initialX: Float,
 		initialY: Float,
