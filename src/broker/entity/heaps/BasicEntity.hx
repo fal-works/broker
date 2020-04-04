@@ -8,11 +8,21 @@ package broker.entity.heaps;
 @:banker_verified
 class BasicEntity extends broker.entity.BasicEntity {
 	/**
+		Factory function used in initialization of chunks.
+	**/
+	@:hidden
+	static function spriteVectorFactory(
+		chunkCapacity: Int
+	): banker.vector.WritableVector<h2d.SpriteBatch.BatchElement> {
+		return new banker.vector.WritableVector<h2d.SpriteBatch.BatchElement>(chunkCapacity);
+	}
+
+	/**
 		Vector for storing sprites that have been used after the last synchronization.
 	**/
 	@:nullSafety(Off)
 	@:banker_chunkLevelFinal
-	@:banker_chunkLevelFactory(broker.entity.heaps.BasicEntityInitializer.spriteVectorFactory)
+	@:banker_chunkLevelFactory(broker.entity.heaps.BasicEntity.spriteVectorFactory)
 	var usedSprites: banker.vector.WritableVector<h2d.SpriteBatch.BatchElement>;
 
 	/**
@@ -26,7 +36,7 @@ class BasicEntity extends broker.entity.BasicEntity {
 	**/
 	@:nullSafety(Off)
 	@:banker_chunkLevelFinal
-	@:banker_chunkLevelFactory(broker.entity.heaps.BasicEntityInitializer.spriteVectorFactory)
+	@:banker_chunkLevelFactory(broker.entity.heaps.BasicEntity.spriteVectorFactory)
 	var disusedSprites: banker.vector.WritableVector<h2d.SpriteBatch.BatchElement>;
 
 	/**
@@ -71,7 +81,7 @@ class BasicEntity extends broker.entity.BasicEntity {
 		and it's not related to the deprecated type `h2d.Sprite`*.
 	**/
 	@:nullSafety(Off)
-	@:banker_externalFactory()
+	@:banker_externalFactory
 	@:banker_swap
 	var sprite: h2d.SpriteBatch.BatchElement;
 
