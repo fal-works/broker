@@ -4,13 +4,14 @@ import broker.input.Stick;
 import broker.input.builtin.simple.ButtonStatusMap;
 import broker.input.builtin.simple.ShmupGamepad;
 import broker.input.heaps.HeapsInputTools;
+import broker.input.heaps.HeapsPadMultitap;
 import integration.Settings;
 
 class Gamepad {
 	public static final buttons = ButtonStatusMap.create(HeapsInputTools.createButtonChecker(
 		Settings.keyCodeMap,
 		Settings.buttonCodeMap,
-		0
+		HeapsPadMultitap.ports[0]
 	));
 	public static final stick = new Stick();
 	static final gamepadUnit = new ShmupGamepad(
