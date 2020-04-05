@@ -3,7 +3,7 @@ package broker.input.interfaces;
 /**
 	A virtual gamepad object consisting of `buttons` and `stick`.
 **/
-interface Gamepad<B, M:GenericButtonStatusMap<B>, S:Stick> {
+interface Gamepad<B, M:GenericButtonStatusMap<B>> {
 	/**
 		Mapping from virtual buttons to their corresponding status.
 	**/
@@ -12,7 +12,7 @@ interface Gamepad<B, M:GenericButtonStatusMap<B>, S:Stick> {
 	/**
 		A virtual analog stick.
 	**/
-	final stick: S;
+	final stick: Stick;
 
 	/**
 		Updates the status of `this` gamepad.

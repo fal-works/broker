@@ -7,12 +7,13 @@
 --macro nullSafety("broker", Strict)
 -main Main
 
+-lib sneaker
 -lib banker
 -lib heaps
 -lib hldx
 # -lib hlsdl
 
 -D sneaker_log_level=500
-# -D sneaker_macro_log_level=500
+-D sneaker_macro_log_level=500
 
 -D resourcespath="test/res"

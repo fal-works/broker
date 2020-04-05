@@ -61,7 +61,7 @@ class HeapsPadMultitap {
 
 	static final portIsEmpty = (port: HeapsPadPort) -> port.get() == HeapsPadTools.dummyPad;
 
-	static function createPorts(capacity: Int) {
+	static function createPorts(capacity: Int): Vector<HeapsPadPort> {
 		return Vector.createPopulated(
 			capacity,
 			() -> HeapsPadPort.fromValue(HeapsPadTools.dummyPad)

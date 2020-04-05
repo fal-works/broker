@@ -38,7 +38,7 @@ class Stick {
 	/**
 		Updates all values of `this` according to `x` and `y`.
 	**/
-	inline function setCartesian(x: Float, y: Float): Void {
+	public inline function setCartesian(x: Float, y: Float): Void {
 		final sensitivity = this.sensitivity;
 		syncPolar(this.x = sensitivity * x, this.y = sensitivity * y);
 	}
@@ -46,14 +46,21 @@ class Stick {
 	/**
 		Updates all values of `this` according to `distance` and `angle`.
 	**/
-	inline function setPolar(distance: Float, angle: Float): Void {
-		syncCartesian(this.sensitivity * distance, this.angle = angle);
+	public inline function setPolar(distance: Float, angle: Float): Void {
+		syncCartesian(this.distance = this.sensitivity * distance, this.angle = angle);
+	}
+
+	/**
+		Sets the displacement distance of `this` to `value`.
+	**/
+	public inline function setDistance(value: Float): Void {
+		this.setPolar(value, this.angle);
 	}
 
 	/**
 		Multiplies the displacement distance of `this` by `factor`.
 	**/
-	inline function multiplyDistance(factor: Float): Void {
+	public inline function multiplyDistance(factor: Float): Void {
 		this.x *= factor;
 		this.y *= factor;
 		this.distance *= factor;
@@ -62,7 +69,7 @@ class Stick {
 	/**
 		Resets all values of `this` (including `sensitivity`).
 	**/
-	inline function reset(): Void {
+	public inline function reset(): Void {
 		this.x = 0;
 		this.y = 0;
 		this.distance = 0;

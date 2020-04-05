@@ -1,5 +1,7 @@
 package broker.input;
 
+import broker.input.heaps.HeapsPadPort;
+
 class StickExtension {
 	/**
 		Reflects the status of direction buttons to `this` stick.

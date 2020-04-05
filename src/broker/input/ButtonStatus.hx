@@ -7,6 +7,8 @@ package broker.input;
 	so that it can be updated by `update()` without passing any additional argument.
 **/
 class ButtonStatus {
+	public static final updateCallback = (status: ButtonStatus) -> status.update();
+
 	/**
 		`true` if the buttons is currently pressed.
 	**/

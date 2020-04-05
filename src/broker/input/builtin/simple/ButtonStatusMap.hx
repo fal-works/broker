@@ -28,6 +28,14 @@ class ButtonStatusMap implements GenericButtonStatusMap<Button> {
 	}
 
 	/**
+		Reflects the status of `this` direction buttons to `stick`.
+		The stick displacement is normalized with `this.sensitivity`.
+		@return `true` if any direction button is pressed.
+	**/
+	public inline function reflectToStick(stick: Stick): Bool
+		return stick.reflect(this.D_LEFT, this.D_UP, this.D_RIGHT, this.D_DOWN);
+
+	/**
 		Internal null object for `getButtonCheckerFunction`.
 	**/
 	static final getButtonCheckerDummy = function(button: Button): () -> Bool {

@@ -1,7 +1,5 @@
 package integration;
 
-import integration.global.Gamepad;
-
 class Main extends hxd.App {
 	static function main() {
 		new Main();
@@ -30,7 +28,7 @@ class Main extends hxd.App {
 	}
 
 	override function update(dt: Float) {
-		Gamepad.update();
+		Global.gamepad.update();
 
 		army.update();
 		army.synchronize();

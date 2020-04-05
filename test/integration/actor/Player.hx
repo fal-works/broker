@@ -1,7 +1,7 @@
 package integration.actor;
 
 import banker.vector.WritableVector as Vec;
-import integration.global.Gamepad;
+import integration.Global;
 
 class Player extends Actor {
 	static function update(
@@ -12,7 +12,7 @@ class Player extends Actor {
 		i: Int,
 		fire: FireCallback
 	): Void {
-		final stick = Gamepad.stick;
+		final stick = Global.gamepad.stick;
 		final dx = stick.x;
 		final dy = stick.y;
 		final nextX = x[i] + dx;
@@ -22,7 +22,7 @@ class Player extends Actor {
 		vx[i] = dx;
 		vy[i] = dx;
 
-		if (Gamepad.buttons.A.isPressed)
+		if ((Global.gamepad.buttons).A.isPressed)
 			fire(nextX, nextY, 10, Math.random() * 2 * Math.PI);
 	}
 }
