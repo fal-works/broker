@@ -40,10 +40,10 @@ class Gamepad<S:Stick> extends GamepadBase<Button, ButtonStatusMap, S> {
 	function updateStick(): Bool {
 		final buttons = this.buttons;
 		return this.stick.reflect(
-			buttons.LEFT,
-			buttons.UP,
-			buttons.RIGHT,
-			buttons.DOWN
+			buttons.D_LEFT,
+			buttons.D_UP,
+			buttons.D_RIGHT,
+			buttons.D_DOWN
 		);
 	}
 }

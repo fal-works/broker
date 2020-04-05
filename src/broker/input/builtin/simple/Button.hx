@@ -18,14 +18,14 @@ enum abstract Button(Int) {
 	var Y;
 
 	/** Virtual left direction button. **/
-	var LEFT;
+	var D_LEFT;
 
 	/** Virtual up direction button. **/
-	var UP;
+	var D_UP;
 
 	/** Virtual right direction button. **/
-	var RIGHT;
+	var D_RIGHT;
 
 	/** Virtual down direction button. **/
-	var DOWN;
+	var D_DOWN;
 }
