@@ -47,11 +47,12 @@ class HeapsPadTools {
 		Usage:
 
 		```
-		final generateChecker = createButtonCheckerGenerator(anyButtonCodeMap);
+		final generateChecker = createButtonCheckerGenerator(anyPort, anyButtonCodeMap);
 		final checkerX = generateChecker(buttonX);
 		final xIsDown = checkerX(); // true if buttonX is down
 		```
 
+		@param buttonCodeMap Mapping from virtual buttons to button codes used in `hxd.Pad`.
 		@return Function that generates another function for checking if a given `button` is down.
 	**/
 	public static inline function createButtonCheckerGenerator<T>(
