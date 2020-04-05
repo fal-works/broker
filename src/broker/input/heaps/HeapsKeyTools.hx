@@ -47,7 +47,7 @@ class HeapsKeyTools {
 		final xIsDown = checkerX(); // true if buttonX is down
 		```
 
-		@return Function that generates another function for checking if the given `button` is down.
+		@return Function that generates another function for checking if a given `button` is down.
 	**/
 	public static inline function createButtonCheckerGenerator<T>(
 		keyCodeMap: Map<T, Array<Int>>

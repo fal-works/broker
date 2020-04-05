@@ -32,27 +32,6 @@ class ButtonStatusMap implements GenericButtonStatusMap<Button> {
 		return statusMap;
 	}
 
-	#if heaps
-	/**
-		@param keyCodeMap Mapping between Buttons and key codes in `hxd.Key`.
-		@return New `ButtonStatusMap` instance.
-	**/
-	public static function createFromHeapsCodeMap(
-		keyCodeMap: Map<Button, Array<Int>>,
-		padPort: HeapsPadPort,
-		padButtonCodeMap: Map<Button, Array<Int>>
-	): ButtonStatusMap {
-		final getButtonChecker = function(button: Button) {
-			final keyCodes = keyCodeMap.getOr(button, []);
-			final keyCodesChecker = HeapsKeyTools.createKeyCodesChecker(keyCodes);
-			final padButtonCodes = padButtonCodeMap.getOr(button, []);
-			final padButtonCodesChecker = HeapsPadTools.createButtonCodesChecker(padPort, padButtonCodes);
-			return () -> keyCodesChecker() || padButtonCodesChecker();
-		};
-		return create(getButtonChecker);
-	}
-	#end
-
 	/**
 		Internal null object for `getButtonCheckerFunction`.
 	**/

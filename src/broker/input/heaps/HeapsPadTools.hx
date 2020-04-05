@@ -1,6 +1,8 @@
 package broker.input.heaps;
 
 #if heaps
+using banker.type_extension.MapExtension;
+
 import hxd.Pad;
 import banker.vector.Vector;
 import banker.vector.VectorReference;
@@ -40,5 +42,26 @@ class HeapsPadTools {
 		final buttonCodes = Vector.fromArrayCopy(buttonCodeArray);
 		return anyButtonIsDown.bind(port, buttonCodes);
 	};
+
+	/**
+		Usage:
+
+		```
+		final generateChecker = createButtonCheckerGenerator(anyButtonCodeMap);
+		final checkerX = generateChecker(buttonX);
+		final xIsDown = checkerX(); // true if buttonX is down
+		```
+
+		@return Function that generates another function for checking if a given `button` is down.
+	**/
+	public static inline function createButtonCheckerGenerator<T>(
+		port: HeapsPadPort,
+		buttonCodeMap: Map<T, Array<Int>>
+	): (button: T) -> (() -> Bool) {
+		return function(button: T) {
+			final buttonCodeArray = buttonCodeMap.getOr(button, []);
+			return createButtonCodesChecker(port, buttonCodeArray);
+		};
+	}
 }
 #end
