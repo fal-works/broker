@@ -1,58 +1,35 @@
 package integration;
 
-import broker.input.Stick;
-import broker.input.builtin.simple.Button;
-import broker.input.builtin.simple.ButtonStatusMap;
-import broker.input.GamepadBase;
-import broker.input.heaps.HeapsInputTools;
 import broker.input.heaps.HeapsPadMultitap;
-import broker.input.heaps.HeapsPadPort;
-import integration.Settings;
 
 class Global {
-	public static var gamepad(default, null) = createGamepad(
-		Settings.keyCodeMap,
-		Settings.buttonCodeMap,
-		HeapsPadMultitap.ports[0],
-		X,
-		0.1
-	);
+	public static final defaultGamepadBuilder: GamepadBuilder = {
+		keyCodeMap: [
+			A => [hxd.Key.Z],
+			B => [hxd.Key.X],
+			X => [hxd.Key.SHIFT],
+			Y => [hxd.Key.ESCAPE],
+			D_LEFT => [hxd.Key.LEFT],
+			D_UP => [hxd.Key.UP],
+			D_RIGHT => [hxd.Key.RIGHT],
+			D_DOWN => [hxd.Key.DOWN]
+		],
+		padButtonCodeMap: [
+			A => [hxd.Pad.DEFAULT_CONFIG.A],
+			B => [hxd.Pad.DEFAULT_CONFIG.B],
+			X => [hxd.Pad.DEFAULT_CONFIG.X],
+			Y => [hxd.Pad.DEFAULT_CONFIG.Y],
+			D_LEFT => [hxd.Pad.DEFAULT_CONFIG.dpadLeft],
+			D_UP => [hxd.Pad.DEFAULT_CONFIG.dpadUp],
+			D_RIGHT => [hxd.Pad.DEFAULT_CONFIG.dpadRight],
+			D_DOWN => [hxd.Pad.DEFAULT_CONFIG.dpadDown]
+		],
+		heapsPadPort: HeapsPadMultitap.ports[0],
+		analogStickThreshold: 0.1,
+		speedChangeButton: X,
+		defaultSpeed: 9,
+		alternativeSpeed: 3
+	};
 
-	static function createGamepad(
-		keyCodeMap: Map<Button, Array<Int>>,
-		padButtonCodeMap: Map<Button, Array<Int>>,
-		padPort: HeapsPadPort,
-		speedChangeButton: Button,
-		analogStickThreshold: Float
-	) {
-		final getButtonChecker = HeapsInputTools.createButtonCheckerGenerator(
-			keyCodeMap,
-			padButtonCodeMap,
-			padPort
-		);
-		final buttons = ButtonStatusMap.create(getButtonChecker);
-
-		final stick = new Stick();
-
-		final speedChangeButton = buttons.get(speedChangeButton);
-
-		return new GamepadBase<Button, ButtonStatusMap>(
-			buttons,
-			stick,
-			gamepad -> {
-				final speed = if (speedChangeButton.isPressed)
-					Settings.lowSpeed
-				else
-					Settings.highSpeed;
-
-				padPort.updateStickFromLeftAnalog(stick);
-				if (stick.distance > analogStickThreshold) {
-					stick.setDistance(speed);
-				} else {
-					buttons.reflectToStick(stick);
-					stick.multiplyDistance(speed);
-				}
-			}
-		);
-	}
+	public static var gamepad(default, null) = defaultGamepadBuilder.build();
 }

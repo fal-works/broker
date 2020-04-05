@@ -9,20 +9,17 @@ import broker.input.interfaces.GenericButtonStatusMap;
 #if !broker_generic_disable
 @:generic
 #end
-class GamepadBase<B, M:GenericButtonStatusMap<B>> implements Gamepad<B, M> {
+class GamepadBase<B, M:GenericButtonStatusMap<B>, S: Stick> implements Gamepad<B, M, S> {
 	public final buttons: M;
-	public final stick: Stick;
-	final updater: Gamepad<B, M> -> Void;
+	public final stick: S;
 
 	/**
 		@param buttons Mapping between buttons and their status.
 		@param stick Any `Stick` object.
-		@param updater Function to be run every time after updating `buttons` in `this.update()`.
 	**/
-	public function new(buttons: M, stick: Stick, updater: Gamepad<B, M> -> Void) {
+	public function new(buttons: M, stick: S) {
 		this.buttons = buttons;
 		this.stick = stick;
-		this.updater = updater;
 	}
 
 	/**
@@ -30,6 +27,5 @@ class GamepadBase<B, M:GenericButtonStatusMap<B>> implements Gamepad<B, M> {
 	**/
 	public function update(): Void {
 		this.buttons.forEachValue(ButtonStatus.updateCallback);
-		this.updater(this);
 	}
 }
