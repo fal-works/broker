@@ -1,7 +1,10 @@
 package broker.input;
 
 /**
-	Status of a specific gamepad button.
+	Status of a specific virtual gamepad button.
+
+	Also stores a checker function (`buttonIsDown()` passed when instantiating)
+	so that it can be updated by `update()` without passing any additional argument.
 **/
 class ButtonStatus {
 	/**

@@ -8,13 +8,18 @@ import broker.input.heaps.HeapsPadMultitap;
 import integration.Settings;
 
 class Gamepad {
-	public static final buttons = ButtonStatusMap.create(HeapsInputTools.createButtonChecker(
-		Settings.keyCodeMap,
-		Settings.buttonCodeMap,
-		HeapsPadMultitap.ports[0]
-	));
+	public static final buttons = {
+		final getButtonChecker = HeapsInputTools.createButtonCheckerGenerator(
+			Settings.keyCodeMap,
+			Settings.buttonCodeMap,
+			HeapsPadMultitap.ports[0]
+		);
+		ButtonStatusMap.create(getButtonChecker);
+	}
+
 	public static final stick = new Stick();
-	static final gamepadUnit = new ShmupGamepad(
+
+	public static var gamepad(default, null) = new ShmupGamepad(
 		buttons,
 		stick,
 		X,
@@ -23,5 +28,5 @@ class Gamepad {
 	);
 
 	public static inline function update(): Void
-		gamepadUnit.update();
+		gamepad.update();
 }

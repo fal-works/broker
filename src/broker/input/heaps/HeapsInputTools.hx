@@ -11,7 +11,7 @@ class HeapsInputTools {
 		@param padPort Any element of `HeapsPadMultitap.ports`.
 		@return Function that generates another function for checking if a given `button` is down.
 	**/
-	public static inline function createButtonChecker<T>(
+	public static inline function createButtonCheckerGenerator<T>(
 		keyCodeMap: Map<T, Array<Int>>,
 		padButtonCodeMap: Map<T, Array<Int>>,
 		padPort: HeapsPadPort

@@ -1,12 +1,7 @@
 package broker.input.builtin.simple;
 
-using banker.type_extension.MapExtension;
-
 import banker.vector.Vector;
 import broker.input.ButtonStatus;
-import broker.input.heaps.HeapsKeyTools;
-import broker.input.heaps.HeapsPadTools;
-import broker.input.heaps.HeapsPadPort;
 import broker.input.interfaces.GenericButtonStatusMap;
 
 /**
