@@ -48,16 +48,14 @@ class GamepadBuilder {
 
 		final stick = new Stick();
 
-		return new Gamepad(
-			buttons,
-			stick,
-			{
-				heapsPadPort: heapsPadPort,
-				analogStickThreshold: analogStickThreshold,
-				speedChangeButtonStatus: buttons.get(speedChangeButton),
-				defaultSpeed: defaultSpeed,
-				alternativeSpeed: alternativeSpeed
-			}
-		);
+		final parameters: GamepadParameters = {
+			heapsPadPort: heapsPadPort,
+			analogStickThreshold: analogStickThreshold,
+			speedChangeButtonStatus: buttons.get(speedChangeButton),
+			defaultSpeed: defaultSpeed,
+			alternativeSpeed: alternativeSpeed
+		};
+
+		return new Gamepad(buttons, stick, parameters);
 	}
 }

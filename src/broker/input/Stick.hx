@@ -47,7 +47,10 @@ class Stick {
 		Updates all values of `this` according to `distance` and `angle`.
 	**/
 	public inline function setPolar(distance: Float, angle: Float): Void {
-		syncCartesian(this.distance = this.sensitivity * distance, this.angle = angle);
+		syncCartesian(
+			this.distance = this.sensitivity * distance,
+			this.angle = angle
+		);
 	}
 
 	/**

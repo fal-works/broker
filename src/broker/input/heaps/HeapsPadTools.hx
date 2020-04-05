@@ -24,7 +24,10 @@ class HeapsPadTools {
 	/**
 		@return `true` if any button in `buttonCodes` is down.
 	**/
-	public static function anyButtonIsDown(port: HeapsPadPort, buttonCodes: VectorReference<Int>): Bool {
+	public static function anyButtonIsDown(
+		port: HeapsPadPort,
+		buttonCodes: VectorReference<Int>
+	): Bool {
 		final buttons = port.get().buttons;
 		for (i in 0...buttonCodes.length) {
 			if (buttons[buttonCodes[i]]) return true;

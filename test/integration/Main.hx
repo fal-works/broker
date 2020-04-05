@@ -16,10 +16,7 @@ class Main extends hxd.App {
 		final playerBatch = new h2d.SpriteBatch(playerTile, s2d);
 
 		final playerBulletTile = h2d.Tile.fromColor(0xFFFFFF, 32, 32).center();
-		final playerBulletBatch = new h2d.SpriteBatch(
-			playerBulletTile,
-			s2d
-		);
+		final playerBulletBatch = new h2d.SpriteBatch(playerBulletTile, s2d);
 
 		army = new ActorArmy(1, playerBatch, 1024, playerBulletBatch);
 		army.agents.use(200, 200, 0, 0);

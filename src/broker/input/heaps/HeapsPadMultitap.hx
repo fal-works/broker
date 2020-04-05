@@ -28,7 +28,10 @@ class HeapsPadMultitap {
 		Function called when a new physical gamepad is disconnected.
 		Can be replaced with any custom function.
 	**/
-	public static var onDisconnect = function(pad: hxd.Pad, portIndex: Int) return;
+	public static var onDisconnect = function(
+			pad: hxd.Pad,
+			portIndex: Int
+	) return;
 
 	/**
 		Callback function for connecting a new physical gamepad to any available port.
@@ -40,10 +43,8 @@ class HeapsPadMultitap {
 			return;
 		}
 		info('Gamepad connected. Port index: $index');
-
 		ports[index].set(pad);
 		onConnect(pad, index);
-
 		pad.onDisconnect = function() {
 			onDisconnect(pad, index);
 			ports[index].set(HeapsPadTools.dummyPad);
@@ -53,13 +54,15 @@ class HeapsPadMultitap {
 
 	/**
 		@param capacity The number of ports (`ports.length`), i.e. the max number of
-		  physical gamepads that can be managed by `HeapsPadMultitap`.
+			physical gamepads that can be managed by `HeapsPadMultitap`.
 	**/
 	public static function resetPorts(capacity: Int) {
 		ports = createPorts(capacity);
 	}
 
-	static final portIsEmpty = (port: HeapsPadPort) -> port.get() == HeapsPadTools.dummyPad;
+	static final portIsEmpty = (
+		port: HeapsPadPort
+	) -> port.get() == HeapsPadTools.dummyPad;
 
 	static function createPorts(capacity: Int): Vector<HeapsPadPort> {
 		return Vector.createPopulated(
