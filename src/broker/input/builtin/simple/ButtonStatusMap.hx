@@ -1,8 +1,12 @@
 package broker.input.builtin.simple;
 
+using banker.type_extension.MapExtension;
+
 import banker.vector.Vector;
 import broker.input.ButtonStatus;
 import broker.input.heaps.HeapsKeyTools;
+import broker.input.heaps.HeapsPadTools;
+import broker.input.heaps.HeapsPadSocket;
 import broker.input.interfaces.GenericButtonStatusMap;
 
 /**
@@ -33,10 +37,18 @@ class ButtonStatusMap implements GenericButtonStatusMap<Button> {
 		@param keyCodeMap Mapping between Buttons and key codes in `hxd.Key`.
 		@return New `ButtonStatusMap` instance.
 	**/
-	public static function createFromHeapsKeyCodeMap(
-		keyCodeMap: Map<Button, Array<Int>>
+	public static function createFromHeapsCodeMap(
+		keyCodeMap: Map<Button, Array<Int>>,
+		padSocket: HeapsPadSocket,
+		padButtonCodeMap: Map<Button, Array<Int>>
 	): ButtonStatusMap {
-		final getButtonChecker = HeapsKeyTools.createButtonCheckerGenerator(keyCodeMap);
+		final getButtonChecker = function(button: Button) {
+			final keyCodes = keyCodeMap.getOr(button, []);
+			final keyCodesChecker = HeapsKeyTools.createKeyCodesChecker(keyCodes);
+			final padButtonCodes = padButtonCodeMap.getOr(button, []);
+			final padButtonCodesChecker = HeapsPadTools.createButtonCodesChecker(padSocket, padButtonCodes);
+			return () -> keyCodesChecker() || padButtonCodesChecker();
+		};
 		return create(getButtonChecker);
 	}
 	#end
