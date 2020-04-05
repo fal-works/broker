@@ -7,10 +7,16 @@ import banker.vector.VectorReference;
 
 @:access(broker.input.heaps.HeapsPadMultitap)
 class HeapsPadTools {
+	/**
+		Null object for `hxd.Pad`.
+	**/
 	public static final dummyPad = Pad.createDummy();
 
+	/**
+		Registers an event listener so that every new `hxd.Pad` is connected to `HeapsPadMultitap`.
+	**/
 	public static function initialize() {
-		Pad.wait(HeapsPadMultitap.onNewPad);
+		Pad.wait(HeapsPadMultitap.connect);
 	}
 
 	/**
@@ -34,6 +40,5 @@ class HeapsPadTools {
 		final buttonCodes = Vector.fromArrayCopy(buttonCodeArray);
 		return anyButtonIsDown.bind(port, buttonCodes);
 	};
-
 }
 #end
