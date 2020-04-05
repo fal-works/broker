@@ -1,5 +1,7 @@
 package broker.input.builtin.simple;
 
+import broker.input.GamepadBase;
+
 class Dummy {
 	/**
 		Null object for `ButtonStatusMap`.
@@ -9,5 +11,8 @@ class Dummy {
 	/**
 		Null object for `Gamepad`.
 	**/
-	public static final dummyGamepad = new Gamepad(dummyButtonStatusMap, new Stick());
+	public static final dummyGamepad = new GamepadBase<Button, ButtonStatusMap, Stick>(
+		dummyButtonStatusMap,
+		new Stick()
+	);
 }
