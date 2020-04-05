@@ -6,7 +6,7 @@ import banker.vector.Vector;
 import broker.input.ButtonStatus;
 import broker.input.heaps.HeapsKeyTools;
 import broker.input.heaps.HeapsPadTools;
-import broker.input.heaps.HeapsPadSocket;
+import broker.input.heaps.HeapsPadPort;
 import broker.input.interfaces.GenericButtonStatusMap;
 
 /**
@@ -39,14 +39,14 @@ class ButtonStatusMap implements GenericButtonStatusMap<Button> {
 	**/
 	public static function createFromHeapsCodeMap(
 		keyCodeMap: Map<Button, Array<Int>>,
-		padSocket: HeapsPadSocket,
+		padPort: HeapsPadPort,
 		padButtonCodeMap: Map<Button, Array<Int>>
 	): ButtonStatusMap {
 		final getButtonChecker = function(button: Button) {
 			final keyCodes = keyCodeMap.getOr(button, []);
 			final keyCodesChecker = HeapsKeyTools.createKeyCodesChecker(keyCodes);
 			final padButtonCodes = padButtonCodeMap.getOr(button, []);
-			final padButtonCodesChecker = HeapsPadTools.createButtonCodesChecker(padSocket, padButtonCodes);
+			final padButtonCodesChecker = HeapsPadTools.createButtonCodesChecker(padPort, padButtonCodes);
 			return () -> keyCodesChecker() || padButtonCodesChecker();
 		};
 		return create(getButtonChecker);

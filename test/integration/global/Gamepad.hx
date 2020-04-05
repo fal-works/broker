@@ -3,13 +3,13 @@ package integration.global;
 import broker.input.Stick;
 import broker.input.builtin.simple.ButtonStatusMap;
 import broker.input.builtin.simple.ShmupGamepad;
-import broker.input.heaps.HeapsPadTools;
+import broker.input.heaps.HeapsPadMultitap;
 import integration.Settings;
 
 class Gamepad {
 	public static final buttons = ButtonStatusMap.createFromHeapsCodeMap(
 		Settings.keyCodeMap,
-		HeapsPadTools.sockets[0],
+		HeapsPadMultitap.ports[0],
 		Settings.buttonCodeMap
 	);
 	public static final stick = new Stick();
