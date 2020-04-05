@@ -17,15 +17,13 @@ class GamepadBase<B, M:GenericButtonStatusMap<B>, S:Stick> implements Gamepad<B,
 		@param buttons Mapping between buttons and their status.
 		@param stick Any `Stick` object.
 	**/
-	public function new(buttons: M, stick: S) {
+	function new(buttons: M, stick: S) {
 		this.buttons = buttons;
 		this.stick = stick;
 	}
 
 	/**
-		Updates status of all `buttons` and `stick`.
+		Override this method to add procedure for updating the gamepad.
 	**/
-	public function update(): Void {
-		this.buttons.forEachValue(ButtonStatus.updateCallback);
-	}
+	public function update(): Void {}
 }
