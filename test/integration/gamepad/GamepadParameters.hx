@@ -8,6 +8,7 @@ import broker.input.heaps.HeapsPadPort;
 **/
 @:structInit
 class GamepadParameters {
+	public final updateButtonStatus: () -> Void;
 	public final heapsPadPort: HeapsPadPort;
 	public final analogStickThreshold: Float;
 
@@ -17,11 +18,13 @@ class GamepadParameters {
 
 	public function new(
 		heapsPadPort: HeapsPadPort,
+		updateButtonStatus: () -> Void,
 		analogStickThreshold: Float,
 		speedChangeButtonStatus: ButtonStatus,
 		defaultSpeed: Float,
 		alternativeSpeed: Float
 	) {
+		this.updateButtonStatus = updateButtonStatus;
 		this.heapsPadPort = heapsPadPort;
 		this.analogStickThreshold = analogStickThreshold;
 

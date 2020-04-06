@@ -2,13 +2,8 @@ package broker.input;
 
 /**
 	Status of a specific virtual gamepad button.
-
-	Also stores a checker function (`buttonIsDown()` passed when instantiating)
-	so that it can be updated by `update()` without passing any additional argument.
 **/
 class ButtonStatus {
-	public static final updateCallback = (status: ButtonStatus) -> status.update();
-
 	/**
 		`true` if the buttons is currently pressed.
 	**/
@@ -30,23 +25,13 @@ class ButtonStatus {
 	**/
 	public var pressedFrameCount = -1;
 
-	/**
-		@see `new()`
-	**/
-	final buttonIsDown: () -> Bool;
-
-	/**
-		@param buttonIsDown Function internally used in `update()`
-		for checking if the button should be considered pressed.
-	**/
-	public function new(buttonIsDown: () -> Bool)
-		this.buttonIsDown = buttonIsDown;
+	public function new() {}
 
 	/**
 		Updates all status of the button.
 	**/
-	public function update() {
-		if (this.buttonIsDown()) {
+	public function update(buttonIsDown: Bool) {
+		if (buttonIsDown) {
 			final frameCount = pressedFrameCount + 1;
 			this.isPressed = true;
 			this.isJustPressed = frameCount == 0;

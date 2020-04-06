@@ -13,19 +13,11 @@ import broker.input.interfaces.GenericButtonStatusMap;
 @:banker_final
 class ButtonStatusMap implements GenericButtonStatusMap<Button> {
 	/**
-		@param getButtonChecker Function that returns a button checker, which is
-		another function that returns `true` if `button` should be considered pressed.
-		@return New `ButtonStatusMap` instance.
+		Function for initializing each variable.
+		@see `FiniteKeys` of `banker` library.
 	**/
-	public static function create(
-		getButtonChecker: (button: Button) -> (() -> Bool)
-	): ButtonStatusMap {
-		getButtonCheckerFunction = getButtonChecker;
-		final statusMap = new ButtonStatusMap();
-		getButtonCheckerFunction = getButtonCheckerDummy;
-
-		return statusMap;
-	}
+	static function initialValue(_: Button): ButtonStatus
+		return new ButtonStatus();
 
 	/**
 		Reflects the status of `this` direction buttons to `stick`.
@@ -36,27 +28,17 @@ class ButtonStatusMap implements GenericButtonStatusMap<Button> {
 		return stick.reflect(this.D_LEFT, this.D_UP, this.D_RIGHT, this.D_DOWN);
 
 	/**
-		Internal null object for `getButtonCheckerFunction`.
+		Creates a function for updating `this` once in a frame.
+		@param getButtonChecker Function that returns another function
+		for checking if a given `button` is down.
+		@return Function that updates all button status of `this`.
 	**/
-	static final getButtonCheckerDummy = function(button: Button): () -> Bool {
-		throw "getButtonCheckerFunction() is not set. This code should not be reached.";
+	public function createUpdater(getButtonChecker: (button: Button) -> (() -> Bool)) {
+		final tickers = this.exportKeys().ref.map(button -> {
+			final buttonIsDown = getButtonChecker(button);
+			final status = this.get(button);
+			return () -> status.update(buttonIsDown());
+		});
+		return () -> for (i in 0...tickers.length) tickers[i]();
 	}
-
-	/**
-		Internally used in `initialValue()`.
-		Is set and reset every time `create()` is called.
-	**/
-	static var getButtonCheckerFunction = getButtonCheckerDummy;
-
-	/**
-		Function for initializing each variable.
-		@see `FiniteKeys` of `banker` library.
-	**/
-	static function initialValue(button: Button): ButtonStatus {
-		final buttonIsDown = getButtonCheckerFunction(button);
-
-		return new ButtonStatus(buttonIsDown);
-	}
-
-	private function new() {}
 }

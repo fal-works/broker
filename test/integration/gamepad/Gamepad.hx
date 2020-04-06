@@ -1,7 +1,6 @@
 package integration.gamepad;
 
 import broker.input.GamepadBase;
-import broker.input.ButtonStatus;
 import broker.input.Stick;
 import broker.input.builtin.simple.Button;
 import broker.input.builtin.simple.ButtonStatusMap;
@@ -26,7 +25,7 @@ class Gamepad extends GamepadBase<Button, ButtonStatusMap, Stick> {
 		final stick = this.stick;
 		final prm = this.parameters;
 
-		buttons.forEachValue(ButtonStatus.updateCallback);
+		prm.updateButtonStatus();
 
 		final speed = if (prm.speedChangeButtonStatus.isPressed)
 			prm.alternativeSpeed

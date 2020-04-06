@@ -39,16 +39,18 @@ class GamepadBuilder {
 	}
 
 	public function build() {
+		final buttons = new ButtonStatusMap();
+		final stick = new Stick();
+
 		final getButtonChecker = HeapsInputTools.createButtonCheckerGenerator(
 			keyCodeMap,
 			padButtonCodeMap,
 			heapsPadPort
 		);
-		final buttons = ButtonStatusMap.create(getButtonChecker);
-
-		final stick = new Stick();
+		final updateButtonStatus = buttons.createUpdater(getButtonChecker);
 
 		final parameters: GamepadParameters = {
+			updateButtonStatus: updateButtonStatus,
 			heapsPadPort: heapsPadPort,
 			analogStickThreshold: analogStickThreshold,
 			speedChangeButtonStatus: buttons.get(speedChangeButton),
