@@ -39,13 +39,14 @@ and provides you an integrated virtual gamepad.
 |---|---|---|
 |broker|broker_generic_disable|Disables `@:generic` meta.|
 
+
 ## Dependencies
 
 <!-- 
 - [sneaker](https://github.com/fal-works/sneaker) (v0.7.0) for assertion, logging and macro utilities
 - [ripper](https://github.com/fal-works/ripper) (v0.2.2) for partial implementation
  -->
-- [banker](https://github.com/fal-works/banker) (v0.2.0) for data structures
+- [banker](https://github.com/fal-works/banker) (v0.4.0) for data structures
 
 ### (Optional)
 
