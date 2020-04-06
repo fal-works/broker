@@ -3,14 +3,14 @@
 	"url": "https://github.com/fal-works/broker/",
 	"license": "MIT",
 	"tags": ["game"],
-	"description": "Utility for game development.",
-	"version": "0.0.1",
+	"description": "Utility for game programming. Currently provides: Basic Entity class and abstraction of gamepad input.",
+	"version": "0.1.0",
 	"classPath": "src/",
 	"releasenote": "Initial release. Everything may change in future.",
 	"contributors": [
 		"fal-works"
 	],
 	"dependencies": {
-		"banker": "0.3.0"
+		"banker": "0.4.0"
 	}
 }
