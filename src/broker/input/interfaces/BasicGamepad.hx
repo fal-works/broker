@@ -1,9 +1,9 @@
 package broker.input.interfaces;
 
 /**
-	A virtual gamepad object consisting of `buttons` and `stick`.
+	A virtual gamepad object consisting of `buttons` and just one `stick`.
 **/
-interface Gamepad<B, M:GenericButtonStatusMap<B>, S:Stick> {
+interface BasicGamepad<B, M:GenericButtonStatusMap<B>, S:Stick> {
 	/**
 		Mapping from virtual buttons to their corresponding status.
 	**/

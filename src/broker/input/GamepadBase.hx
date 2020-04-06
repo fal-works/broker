@@ -1,15 +1,15 @@
 package broker.input;
 
-import broker.input.interfaces.Gamepad;
+import broker.input.interfaces.BasicGamepad;
 import broker.input.interfaces.GenericButtonStatusMap;
 
 /**
-	Base class that implements `broker.input.interfaces.Gamepad`.
+	Base class that implements `broker.input.interfaces.BasicGamepad`.
 **/
 #if !broker_generic_disable
 @:generic
 #end
-class GamepadBase<B, M:GenericButtonStatusMap<B>, S:Stick> implements Gamepad<B, M, S> {
+class GamepadBase<B, M:GenericButtonStatusMap<B>, S:Stick> implements BasicGamepad<B, M, S> {
 	public final buttons: M;
 	public final stick: S;
 
