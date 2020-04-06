@@ -2,7 +2,7 @@ package broker.input.builtin.simple;
 
 import banker.vector.Vector;
 import broker.input.ButtonStatus;
-import broker.input.interfaces.GenericButtonStatusMap;
+import broker.input.interfaces.ButtonStatusMapWithDpad;
 
 /**
 	Mapping from values of `broker.input.builtin.simple.Button`
@@ -11,7 +11,7 @@ import broker.input.interfaces.GenericButtonStatusMap;
 @:build(banker.finite.FiniteKeys.from(Button))
 @:banker_verified
 @:banker_final
-class ButtonStatusMap implements GenericButtonStatusMap<Button> {
+class ButtonStatusMap implements ButtonStatusMapWithDpad<Button> {
 	/**
 		Function for initializing each variable.
 		@see `FiniteKeys` of `banker` library.
