@@ -13,7 +13,7 @@ import broker.input.interfaces.ButtonStatusMapWithDpad;
 @:banker_final
 class ButtonStatusMap implements ButtonStatusMapWithDpad<Button> {
 	/**
-		Function for initializing each variable.
+		Factory function for initializing each value.
 		@see `FiniteKeys` of `banker` library.
 	**/
 	static function initialValue(_: Button): ButtonStatus
@@ -26,19 +26,4 @@ class ButtonStatusMap implements ButtonStatusMapWithDpad<Button> {
 	**/
 	public inline function reflectToStick(stick: Stick): Bool
 		return stick.reflect(this.D_LEFT, this.D_UP, this.D_RIGHT, this.D_DOWN);
-
-	/**
-		Creates a function for updating `this` once in a frame.
-		@param getButtonChecker Function that returns another function
-		for checking if a given `button` is down.
-		@return Function that updates all button status of `this`.
-	**/
-	public function createUpdater(getButtonChecker: (button: Button) -> (() -> Bool)) {
-		final tickers = this.exportKeys().ref.map(button -> {
-			final buttonIsDown = getButtonChecker(button);
-			final status = this.get(button);
-			return () -> status.update(buttonIsDown());
-		});
-		return () -> for (i in 0...tickers.length) tickers[i]();
-	}
 }
