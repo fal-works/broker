@@ -7,7 +7,7 @@ import broker.input.builtin.simple.Button;
 import broker.input.builtin.simple.ButtonStatusMap;
 
 @:structInit
-class GamepadBuilder {
+class GamepadBuilder implements ripper.Data {
 	public final keyCodeMap: Map<Button, Array<Int>>;
 	public final padButtonCodeMap: Map<Button, Array<Int>>;
 
@@ -17,26 +17,6 @@ class GamepadBuilder {
 	public final speedChangeButton: Button;
 	public final defaultSpeed: Float;
 	public final alternativeSpeed: Float;
-
-	public function new(
-		keyCodeMap: Map<Button, Array<Int>>,
-		padButtonCodeMap: Map<Button, Array<Int>>,
-		heapsPadPort: HeapsPadPort,
-		analogStickThreshold: Float,
-		speedChangeButton: Button,
-		defaultSpeed: Float,
-		alternativeSpeed: Float
-	) {
-		this.keyCodeMap = keyCodeMap;
-		this.padButtonCodeMap = padButtonCodeMap;
-
-		this.heapsPadPort = heapsPadPort;
-		this.analogStickThreshold = analogStickThreshold;
-
-		this.speedChangeButton = speedChangeButton;
-		this.defaultSpeed = defaultSpeed;
-		this.alternativeSpeed = alternativeSpeed;
-	}
 
 	public function build() {
 		final buttons = new ButtonStatusMap();

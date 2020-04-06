@@ -8,6 +8,7 @@
 -main Main
 
 -lib sneaker
+-lib ripper
 -lib banker
 -lib heaps
 -lib hldx
