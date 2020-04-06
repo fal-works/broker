@@ -1,6 +1,6 @@
 # broker
 
-Utility library for game development.
+Utility library for game programming.
 
 Mainly intended for use with [heaps](http://heaps.io/), but can also be used with any other engines (maybe).
 
