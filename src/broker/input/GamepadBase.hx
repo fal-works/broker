@@ -5,6 +5,7 @@ import broker.input.interfaces.GenericButtonStatusMap;
 
 /**
 	Base class that implements `broker.input.interfaces.BasicGamepad`.
+	Extend this class and override `update()` to implement updating procedure.
 **/
 #if !broker_generic_disable
 @:generic
@@ -23,7 +24,7 @@ class GamepadBase<B, M:GenericButtonStatusMap<B>, S:Stick> implements BasicGamep
 	}
 
 	/**
-		Override this method to add procedure for updating the gamepad.
+		Updates status of `this` gamepad.
 	**/
 	public function update(): Void {}
 }
