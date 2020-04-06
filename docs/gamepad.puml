@@ -1,0 +1,51 @@
+@startuml gamepad
+
+' ---- (style) --------------------------------
+
+skinparam shadowing false
+skinparam backgroundColor White
+skinparam package {
+  BorderColor #A0A0A0
+  FontColor #A0A0A0
+}
+skinparam class {
+  BackgroundColor White
+  ArrowColor #202020
+  BorderColor #202020
+  FontColor #000000
+}
+skinparam note {
+  BackgroundColor White
+  FontColor #606060
+  BorderColor #C0C0C0
+}
+skinparam stereotypeIBackgroundColor Lavender
+hide empty members
+
+' ---- (diagram) ------------------------------
+
+package input {
+	class ButtonStatus
+	class GamepadBase
+	class Stick
+  interface GenericButtonStatusMap
+
+  GenericButtonStatusMap *-- "n" ButtonStatus
+  GamepadBase *-- GenericButtonStatusMap
+  GamepadBase *-- Stick
+}
+
+package your_implementation {
+  class YourGamepad {
+    update()
+  }
+  enum YourButton
+  class YourButtonStatusMap
+
+  GamepadBase <|-r- YourGamepad
+  YourButtonStatusMap o-- "n" YourButton
+  GenericButtonStatusMap <|.. YourButtonStatusMap
+  YourGamepad *-- YourButtonStatusMap
+}
+
+@enduml

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="418px" preserveAspectRatio="none" style="width:543px;height:418px;" version="1.1" viewBox="0 0 543 418" width="543px" zoomAndPan="magnify"><defs/><g><!--cluster input--><polygon fill="#FFFFFF" points="22,24,64,24,71,47.6094,315,47.6094,315,314,22,314,22,24" style="stroke: #A0A0A0; stroke-width: 1.5;"/><line style="stroke: #A0A0A0; stroke-width: 1.5;" x1="22" x2="71" y1="47.6094" y2="47.6094"/><text fill="#A0A0A0" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="36" x="26" y="40.5332">input</text><!--cluster your_implementation--><polygon fill="#FFFFFF" points="339,116,492,116,499,139.6094,521,139.6094,521,406,339,406,339,116" style="stroke: #A0A0A0; stroke-width: 1.5;"/><line style="stroke: #A0A0A0; stroke-width: 1.5;" x1="339" x2="499" y1="139.6094" y2="139.6094"/><text fill="#A0A0A0" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="147" x="343" y="132.5332">your_implementation</text><!--class ButtonStatus--><rect fill="#FFFFFF" height="32" id="ButtonStatus" style="stroke: #202020; stroke-width: 1.5;" width="102" x="164" y="266"/><ellipse cx="179" cy="282" fill="#ADD1B2" rx="11" ry="11" style="stroke: #202020; stroke-width: 1.0;"/><path d="M182.6875,283.2031 Q182.4375,286.6875 181.2969,287.8438 Q180.2656,288.8594 178.8594,288.8594 Q177.4531,288.8594 176.4219,287.8438 Q174.6719,286.0781 174.6719,282.4063 Q174.6719,278.1563 176.5469,276.25 Q177.5938,275.2344 178.9219,275.2344 Q180.3281,275.2344 181.1719,276.0469 Q182.6563,277.5625 182.5781,280.4375 L180.4531,280.4375 Q180.375,278.1094 179.7344,277.4688 Q179.4531,277.1719 178.9219,277.1719 Q178.4688,277.1719 178.1094,277.5469 Q176.875,278.7656 176.875,282.2813 Q176.875,285.3281 177.9219,286.3438 Q178.3438,286.7813 178.8594,286.7813 Q179.3125,286.7813 179.75,286.3438 Q180.3125,285.7969 180.3906,283.2031 L182.6875,283.2031 Z "/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="70" x="193" y="286.9102">ButtonStatus</text><!--class GamepadBase--><rect fill="#FFFFFF" height="32" id="GamepadBase" style="stroke: #202020; stroke-width: 1.5;" width="116" x="157" y="60"/><ellipse cx="172" cy="76" fill="#ADD1B2" rx="11" ry="11" style="stroke: #202020; stroke-width: 1.0;"/><path d="M175.6875,77.2031 Q175.4375,80.6875 174.2969,81.8438 Q173.2656,82.8594 171.8594,82.8594 Q170.4531,82.8594 169.4219,81.8438 Q167.6719,80.0781 167.6719,76.4063 Q167.6719,72.1563 169.5469,70.25 Q170.5938,69.2344 171.9219,69.2344 Q173.3281,69.2344 174.1719,70.0469 Q175.6563,71.5625 175.5781,74.4375 L173.4531,74.4375 Q173.375,72.1094 172.7344,71.4688 Q172.4531,71.1719 171.9219,71.1719 Q171.4688,71.1719 171.1094,71.5469 Q169.875,72.7656 169.875,76.2813 Q169.875,79.3281 170.9219,80.3438 Q171.3438,80.7813 171.8594,80.7813 Q172.3125,80.7813 172.75,80.3438 Q173.3125,79.7969 173.3906,77.2031 L175.6875,77.2031 Z "/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="84" x="186" y="80.9102">GamepadBase</text><!--class Stick--><rect fill="#FFFFFF" height="32" id="Stick" style="stroke: #202020; stroke-width: 1.5;" width="58" x="38" y="163"/><ellipse cx="53" cy="179" fill="#ADD1B2" rx="11" ry="11" style="stroke: #202020; stroke-width: 1.0;"/><path d="M56.6875,180.2031 Q56.4375,183.6875 55.2969,184.8438 Q54.2656,185.8594 52.8594,185.8594 Q51.4531,185.8594 50.4219,184.8438 Q48.6719,183.0781 48.6719,179.4063 Q48.6719,175.1563 50.5469,173.25 Q51.5938,172.2344 52.9219,172.2344 Q54.3281,172.2344 55.1719,173.0469 Q56.6563,174.5625 56.5781,177.4375 L54.4531,177.4375 Q54.375,175.1094 53.7344,174.4688 Q53.4531,174.1719 52.9219,174.1719 Q52.4688,174.1719 52.1094,174.5469 Q50.875,175.7656 50.875,179.2813 Q50.875,182.3281 51.9219,183.3438 Q52.3438,183.7813 52.8594,183.7813 Q53.3125,183.7813 53.75,183.3438 Q54.3125,182.7969 54.3906,180.2031 L56.6875,180.2031 Z "/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="26" x="67" y="183.9102">Stick</text><!--class GenericButtonStatusMap--><rect fill="#FFFFFF" height="32" id="GenericButtonStatusMap" style="stroke: #202020; stroke-width: 1.5;" width="167" x="131.5" y="163"/><ellipse cx="146.5" cy="179" fill="#E6E6FA" rx="11" ry="11" style="stroke: #202020; stroke-width: 1.0;"/><path d="M147.6719,183.7188 L148.4063,183.7188 L148.4063,185.8594 L144.7188,185.8594 L144.7188,183.7188 L145.4531,183.7188 L145.4531,174.375 L144.7188,174.375 L144.7188,172.2344 L148.4063,172.2344 L148.4063,174.375 L147.6719,174.375 L147.6719,183.7188 Z "/><text fill="#000000" font-family="sans-serif" font-size="12" font-style="italic" lengthAdjust="spacingAndGlyphs" textLength="135" x="160.5" y="183.9102">GenericButtonStatusMap</text><!--class YourGamepad--><rect fill="#FFFFFF" height="53.8359" id="YourGamepad" style="stroke: #202020; stroke-width: 1.5;" width="112" x="364" y="152"/><ellipse cx="379" cy="168" fill="#ADD1B2" rx="11" ry="11" style="stroke: #202020; stroke-width: 1.0;"/><path d="M382.6875,169.2031 Q382.4375,172.6875 381.2969,173.8438 Q380.2656,174.8594 378.8594,174.8594 Q377.4531,174.8594 376.4219,173.8438 Q374.6719,172.0781 374.6719,168.4063 Q374.6719,164.1563 376.5469,162.25 Q377.5938,161.2344 378.9219,161.2344 Q380.3281,161.2344 381.1719,162.0469 Q382.6563,163.5625 382.5781,166.4375 L380.4531,166.4375 Q380.375,164.1094 379.7344,163.4688 Q379.4531,163.1719 378.9219,163.1719 Q378.4688,163.1719 378.1094,163.5469 Q376.875,164.7656 376.875,168.2813 Q376.875,171.3281 377.9219,172.3438 Q378.3438,172.7813 378.8594,172.7813 Q379.3125,172.7813 379.75,172.3438 Q380.3125,171.7969 380.3906,169.2031 L382.6875,169.2031 Z "/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="80" x="393" y="172.9102">YourGamepad</text><line style="stroke: #202020; stroke-width: 1.5;" x1="365" x2="475" y1="184" y2="184"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="41" x="370" y="199.4189">update()</text><!--class YourButton--><rect fill="#FFFFFF" height="32" id="YourButton" style="stroke: #202020; stroke-width: 1.5;" width="92" x="384" y="358"/><ellipse cx="399" cy="374" fill="#EB937F" rx="11" ry="11" style="stroke: #202020; stroke-width: 1.0;"/><path d="M397.7188,372.6719 L402.2344,372.6719 L402.2344,374.625 L397.7188,374.625 L397.7188,378.9219 L402.9531,378.9219 L402.9531,380.8594 L395.5,380.8594 L395.5,367.2344 L402.625,367.2344 L402.625,369.1719 L397.7188,369.1719 L397.7188,372.6719 Z "/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="60" x="413" y="378.9102">YourButton</text><!--class YourButtonStatusMap--><rect fill="#FFFFFF" height="32" id="YourButtonStatusMap" style="stroke: #202020; stroke-width: 1.5;" width="150" x="355" y="266"/><ellipse cx="370" cy="282" fill="#ADD1B2" rx="11" ry="11" style="stroke: #202020; stroke-width: 1.0;"/><path d="M373.6875,283.2031 Q373.4375,286.6875 372.2969,287.8438 Q371.2656,288.8594 369.8594,288.8594 Q368.4531,288.8594 367.4219,287.8438 Q365.6719,286.0781 365.6719,282.4063 Q365.6719,278.1563 367.5469,276.25 Q368.5938,275.2344 369.9219,275.2344 Q371.3281,275.2344 372.1719,276.0469 Q373.6563,277.5625 373.5781,280.4375 L371.4531,280.4375 Q371.375,278.1094 370.7344,277.4688 Q370.4531,277.1719 369.9219,277.1719 Q369.4688,277.1719 369.1094,277.5469 Q367.875,278.7656 367.875,282.2813 Q367.875,285.3281 368.9219,286.3438 Q369.3438,286.7813 369.8594,286.7813 Q370.3125,286.7813 370.75,286.3438 Q371.3125,285.7969 371.3906,283.2031 L373.6875,283.2031 Z "/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="118" x="384" y="286.9102">YourButtonStatusMap</text><!--reverse link GenericButtonStatusMap to ButtonStatus--><path d="M215,208.399 C215,227.046 215,250.701 215,265.847 " fill="none" id="GenericButtonStatusMap&lt;-ButtonStatus" style="stroke: #202020; stroke-width: 1.0;"/><polygon fill="#202020" points="215,195.34,211,201.34,215,207.34,219,201.34,215,195.34" style="stroke: #202020; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="7" x="206.7969" y="255.0999">n</text><!--reverse link GamepadBase to GenericButtonStatusMap--><path d="M215,105.399 C215,124.046 215,147.701 215,162.847 " fill="none" id="GamepadBase&lt;-GenericButtonStatusMap" style="stroke: #202020; stroke-width: 1.0;"/><polygon fill="#202020" points="215,92.34,211,98.34,215,104.34,219,98.34,215,92.34" style="stroke: #202020; stroke-width: 1.0;"/><!--reverse link GamepadBase to Stick--><path d="M144.157,91.93 C133.452,96.063 122.997,101.32 114,108 C94.7253,122.311 80.8575,147.014 73.3794,162.921 " fill="none" id="GamepadBase&lt;-Stick" style="stroke: #202020; stroke-width: 1.0;"/><polygon fill="#202020" points="156.766,87.576,149.7893,85.7525,145.4227,91.4912,152.3994,93.3147,156.766,87.576" style="stroke: #202020; stroke-width: 1.0;"/><!--reverse link GamepadBase to YourGamepad--><path d="M292.43,98.545 C300.173,101.427 307.82,104.582 315,108 C340.123,119.96 366.16,137.281 386.022,151.7 " fill="none" id="GamepadBase&lt;-YourGamepad" style="stroke: #202020; stroke-width: 1.0;"/><polygon fill="none" points="289.838,105.056,273.19,91.948,294.379,91.813,289.838,105.056" style="stroke: #202020; stroke-width: 1.0;"/><!--reverse link YourButtonStatusMap to YourButton--><path d="M430,311.34 C430,326.7851 430,345.2788 430,357.9582 " fill="none" id="YourButtonStatusMap&lt;-YourButton" style="stroke: #202020; stroke-width: 1.0;"/><polygon fill="#FFFFFF" points="430,298.267,426,304.267,430,310.267,434,304.267,430,298.267" style="stroke: #202020; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="7" x="421.7969" y="347.2494">n</text><!--reverse link GenericButtonStatusMap to YourButtonStatusMap--><path d="M265.331,203.644 C306.305,222.892 362.906,249.482 397.944,265.941 " fill="none" id="GenericButtonStatusMap&lt;-YourButtonStatusMap" style="stroke: #202020; stroke-width: 1.0; stroke-dasharray: 7.0,7.0;"/><polygon fill="none" points="262.313,209.96,247.188,195.121,268.266,197.289,262.313,209.96" style="stroke: #202020; stroke-width: 1.0;"/><!--reverse link YourGamepad to YourButtonStatusMap--><path d="M423.876,219.148 C425.49,235.445 427.268,253.404 428.49,265.753 " fill="none" id="YourGamepad&lt;-YourButtonStatusMap" style="stroke: #202020; stroke-width: 1.0;"/><polygon fill="#202020" points="422.575,206.01,419.1859,212.3751,423.7578,217.9516,427.1469,211.5865,422.575,206.01" style="stroke: #202020; stroke-width: 1.0;"/><!--
+@startuml gamepad
+
+
+skinparam shadowing false
+skinparam backgroundColor White
+skinparam package {
+  BorderColor #A0A0A0
+  FontColor #A0A0A0
+}
+skinparam class {
+  BackgroundColor White
+  ArrowColor #202020
+  BorderColor #202020
+  FontColor #000000
+}
+skinparam note {
+  BackgroundColor White
+  FontColor #606060
+  BorderColor #C0C0C0
+}
+skinparam stereotypeIBackgroundColor Lavender
+hide empty members
+
+
+package input {
+	class ButtonStatus
+	class GamepadBase
+	class Stick
+  interface GenericButtonStatusMap
+
+  GenericButtonStatusMap *- - "n" ButtonStatus
+  GamepadBase *- - GenericButtonStatusMap
+  GamepadBase *- - Stick
+}
+
+package your_implementation {
+  class YourGamepad {
+    update()
+  }
+  enum YourButton
+  class YourButtonStatusMap
+
+  GamepadBase <|-r- YourGamepad
+  YourButtonStatusMap o- - "n" YourButton
+  GenericButtonStatusMap <|.. YourButtonStatusMap
+  YourGamepad *- - YourButtonStatusMap
+}
+
+@enduml
+
+PlantUML version 1.2019.09(Tue Aug 27 01:19:51 GMT+09:00 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 1.8.0_242-b08
+Operating System: Windows 10
+OS Version: 10.0
+Default Encoding: MS932
+Language: ja
+Country: JP
+--></g></svg>
