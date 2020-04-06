@@ -10,7 +10,8 @@ import broker.input.interfaces.GenericButtonStatusMap;
 #if !broker_generic_disable
 @:generic
 #end
-class GamepadBase<B, M:GenericButtonStatusMap<B>, S:Stick> implements BasicGamepad<B, M, S> {
+class GamepadBase<B, M:GenericButtonStatusMap<B>, S:Stick>
+	implements BasicGamepad<B, M, S> {
 	public final buttons: M;
 	public final stick: S;
 

@@ -11,10 +11,7 @@ import broker.input.builtin.simple.ButtonStatusMap;
 class Gamepad extends GamepadBase<Button, ButtonStatusMap, Stick> {
 	final parameters: GamepadParameters;
 
-	public function new(
-		buttons: ButtonStatusMap,
-		parameters: GamepadParameters
-	) {
+	public function new(buttons: ButtonStatusMap, parameters: GamepadParameters) {
 		super(buttons, new Stick());
 		this.parameters = parameters;
 	}

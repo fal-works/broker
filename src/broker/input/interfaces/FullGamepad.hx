@@ -3,7 +3,8 @@ package broker.input.interfaces;
 /**
 	A virtual gamepad object consisting of `buttons`, two `Stick` instances and trigger button values.
 **/
-interface FullGamepad<B, M:ButtonStatusMapWithDpad<B>, S:Stick> extends BasicGamepad<B, M, S> {
+interface FullGamepad<B, M:ButtonStatusMapWithDpad<B>, S:Stick>
+	extends BasicGamepad<B, M, S> {
 	/**
 		A virtual right analog stick.
 	**/
