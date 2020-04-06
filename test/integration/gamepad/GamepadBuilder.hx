@@ -20,7 +20,6 @@ class GamepadBuilder implements ripper.Data {
 
 	public function build() {
 		final buttons = new ButtonStatusMap();
-		final stick = new Stick();
 
 		final getButtonChecker = HeapsInputTools.createButtonCheckerGenerator(
 			keyCodeMap,
@@ -38,6 +37,6 @@ class GamepadBuilder implements ripper.Data {
 			alternativeSpeed: alternativeSpeed
 		};
 
-		return new Gamepad(buttons, stick, parameters);
+		return new Gamepad(buttons, parameters);
 	}
 }

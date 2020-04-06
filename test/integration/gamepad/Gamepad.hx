@@ -13,10 +13,9 @@ class Gamepad extends GamepadBase<Button, ButtonStatusMap, Stick> {
 
 	public function new(
 		buttons: ButtonStatusMap,
-		stick: Stick,
 		parameters: GamepadParameters
 	) {
-		super(buttons, stick);
+		super(buttons, new Stick());
 		this.parameters = parameters;
 	}
 
