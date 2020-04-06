@@ -2,7 +2,7 @@
 
 Utility library for game development.
 
-Mainly intend for use with [heaps](http://heaps.io/), but can also be used with any other engines (maybe).
+Mainly intended for use with [heaps](http://heaps.io/), but can also be used with any other engines (maybe).
 
 **Requires Haxe 4** (developed with v4.0.5).
 
@@ -14,7 +14,6 @@ Mainly intend for use with [heaps](http://heaps.io/), but can also be used with 
 Provides a base class for game entities, from which you can generate AoSoA classes.
 
 See also: AoSoA generator of [banker](https://github.com/fal-works/banker) library.
-
 
 ### Gamepad
 
@@ -31,6 +30,11 @@ and provides you an integrated virtual gamepad.
 - Scene manager
 - Asset manager
 - Sound manager
+
+
+## Caveats
+
+Quite unstable!
 
 
 ## Compilation flags
