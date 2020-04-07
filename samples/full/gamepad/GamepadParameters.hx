@@ -1,4 +1,4 @@
-package integration.gamepad;
+package full.gamepad;
 
 import broker.input.ButtonStatus;
 import broker.input.heaps.HeapsPadPort;

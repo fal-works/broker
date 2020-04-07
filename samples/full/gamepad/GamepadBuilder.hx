@@ -1,4 +1,4 @@
-package integration.gamepad;
+package full.gamepad;
 
 import broker.input.Stick;
 import broker.input.heaps.HeapsInputTools;

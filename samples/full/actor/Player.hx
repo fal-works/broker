@@ -1,7 +1,7 @@
-package integration.actor;
+package full.actor;
 
 import banker.vector.WritableVector as Vec;
-import integration.Global;
+import full.Global;
 
 class Player extends Actor {
 	static function update(
@@ -27,5 +27,5 @@ class Player extends Actor {
 	}
 }
 
-@:build(banker.aosoa.Chunk.fromStructure(integration.actor.Player))
+@:build(banker.aosoa.Chunk.fromStructure(full.actor.Player))
 class PlayerChunk {}

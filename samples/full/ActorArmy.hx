@@ -1,6 +1,6 @@
-package integration;
+package full;
 
-import integration.actor.*;
+import full.actor.*;
 
 class ActorArmy {
 	public final agents: ActorAosoa;

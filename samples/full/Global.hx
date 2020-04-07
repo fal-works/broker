@@ -1,7 +1,7 @@
-package integration;
+package full;
 
 import broker.input.heaps.HeapsPadMultitap;
-import integration.gamepad.GamepadBuilder;
+import full.gamepad.GamepadBuilder;
 
 class Global {
 	public static final defaultGamepadBuilder: GamepadBuilder = {

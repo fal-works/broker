@@ -1,4 +1,4 @@
-package integration.actor;
+package full.actor;
 
 import broker.entity.BasicAosoa;
 

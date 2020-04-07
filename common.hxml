@@ -1,7 +1,7 @@
 # Common Build arguments
 
 -cp src
--cp test
+-cp samples
 -dce full
 
 --macro nullSafety("broker", Strict)

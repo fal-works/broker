@@ -1,4 +1,4 @@
-package integration.actor;
+package full.actor;
 
 import banker.vector.WritableVector as Vec;
 import h2d.SpriteBatch.BatchElement;
@@ -28,5 +28,5 @@ class NonPlayer extends Actor {
 	}
 }
 
-@:build(banker.aosoa.Chunk.fromStructure(integration.actor.NonPlayer))
+@:build(banker.aosoa.Chunk.fromStructure(full.actor.NonPlayer))
 class NonPlayerChunk {}

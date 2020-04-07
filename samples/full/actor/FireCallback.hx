@@ -1,4 +1,4 @@
-package integration.actor;
+package full.actor;
 
 typedef FireCallback = (
 	x: Float,

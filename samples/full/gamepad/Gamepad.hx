@@ -1,4 +1,4 @@
-package integration.gamepad;
+package full.gamepad;
 
 import broker.input.GamepadBase;
 import broker.input.Stick;
