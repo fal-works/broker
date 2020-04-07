@@ -5,6 +5,7 @@ class Main {
 		#end
 
 		// new entities.Main();
+		// new gamepad.Main();
 		new full.Main();
 	}
 }
