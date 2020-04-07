@@ -13,10 +13,10 @@ class HeapsPadPortExtension {
 		@return `true` if any button in `buttonCodes` is down.
 	**/
 	public static function anyButtonIsDown(
-		port: HeapsPadPort,
+		_this: HeapsPadPort,
 		buttonCodes: VectorReference<Int>
 	): Bool {
-		final buttons = port.get().buttons;
+		final buttons = _this.get().buttons;
 		for (i in 0...buttonCodes.length) {
 			if (buttons[buttonCodes[i]]) return true;
 		}
@@ -94,7 +94,8 @@ class HeapsPadPortExtension {
 	}
 
 	/**
-		Updates `stick` according to right analog stick values of the gamepad at `this` port.
+		Updates `leftStick` and `rightStick` according to left/right analog sticks
+		of the gamepad at `this` port.
 	**/
 	public static function updateSticks(
 		_this: HeapsPadPort,
