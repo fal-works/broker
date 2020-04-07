@@ -22,16 +22,13 @@ class HeapsPadMultitap {
 		Function called when a new physical gamepad is connected.
 		Can be replaced with any custom function.
 	**/
-	public static var onConnect = function(pad: hxd.Pad, portIndex: Int) return;
+	public static var onConnect = (pad: hxd.Pad, portIndex: Int) -> return;
 
 	/**
 		Function called when a new physical gamepad is disconnected.
 		Can be replaced with any custom function.
 	**/
-	public static var onDisconnect = function(
-			pad: hxd.Pad,
-			portIndex: Int
-	) return;
+	public static var onDisconnect = (pad: hxd.Pad, portIndex: Int) -> return;
 
 	/**
 		Callback function for connecting a new physical gamepad to any available port.

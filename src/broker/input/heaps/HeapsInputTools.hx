@@ -18,8 +18,7 @@ class HeapsInputTools {
 	) {
 		final generateCheckFromKey = HeapsKeyTools.createButtonCheckerGenerator(keyCodeMap);
 
-		final generateCheckFromPad = HeapsPadTools.createButtonCheckerGenerator(
-			padPort,
+		final generateCheckFromPad = padPort.createButtonCheckerGenerator(
 			padButtonCodeMap
 		);
 
