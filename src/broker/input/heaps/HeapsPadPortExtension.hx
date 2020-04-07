@@ -57,6 +57,15 @@ class HeapsPadPortExtension {
 	}
 
 	/**
+		Updates `stick` according to the main (= likely the left) analog stick values
+		of the gamepad at `this` port.
+	**/
+	public static function updateStick(_this: HeapsPadPort, stick: Stick): Void {
+		final pad = _this.get();
+		stick.setCartesian(pad.xAxis, pad.yAxis);
+	}
+
+	/**
 		Updates `stick` according to left analog stick values of the gamepad at `this` port.
 	**/
 	public static function updateStickFromLeftAnalog(
@@ -67,9 +76,7 @@ class HeapsPadPortExtension {
 		final config = pad.config;
 		final padValues = pad.values;
 
-		final x = padValues[config.analogX];
-		final y = -padValues[config.analogY];
-		stick.setCartesian(x, y);
+		stick.setCartesian(padValues[config.analogX], -padValues[config.analogY]);
 	}
 
 	/**
@@ -83,9 +90,30 @@ class HeapsPadPortExtension {
 		final config = pad.config;
 		final padValues = pad.values;
 
-		final x = padValues[config.ranalogX];
-		final y = -padValues[config.ranalogY];
-		stick.setCartesian(x, y);
+		stick.setCartesian(padValues[config.ranalogX], -padValues[config.ranalogY]);
+	}
+
+	/**
+		Updates `stick` according to right analog stick values of the gamepad at `this` port.
+	**/
+	public static function updateSticks(
+		_this: HeapsPadPort,
+		leftStick: Stick,
+		rightStick: Stick
+	): Void {
+		final pad = _this.get();
+		final config = pad.config;
+		final padValues = pad.values;
+
+		leftStick.setCartesian(
+			padValues[config.analogX],
+			-padValues[config.analogY]
+		);
+
+		rightStick.setCartesian(
+			padValues[config.ranalogX],
+			-padValues[config.ranalogY]
+		);
 	}
 
 	/**

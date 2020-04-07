@@ -28,7 +28,7 @@ class Gamepad extends GamepadBase<Button, ButtonStatusMap, Stick> {
 		else
 			prm.defaultSpeed;
 
-		prm.heapsPadPort.updateStickFromLeftAnalog(stick);
+		prm.heapsPadPort.updateStick(stick);
 		if (stick.distance > prm.analogStickThreshold) {
 			stick.setDistance(speed);
 		} else {
