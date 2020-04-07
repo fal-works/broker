@@ -2,6 +2,8 @@ package broker.input.heaps;
 
 import hxd.Pad;
 import banker.types.Reference;
+import broker.input.interfaces.FullGamepad;
+import broker.input.interfaces.ButtonStatusMapWithDpad as ButtonsWithDpad;
 
 /**
 	Virtual port for connecting physical gamepad (i.e. `hxd.Pad` instance).
@@ -42,5 +44,19 @@ class HeapsPadPortExtension {
 		final x = padValues[config.ranalogX];
 		final y = -padValues[config.ranalogY];
 		stick.setCartesian(x, y);
+	}
+
+	/**
+		Updates trigger buttons of `gamepad` according to `this` values.
+	**/
+	public static inline function updateTriggers<B, M: ButtonsWithDpad<B>, S: Stick>(
+		_this: HeapsPadPort,
+		gamepad: FullGamepad<B, M, S>
+	): Void {
+		final pad = _this.get();
+		final config = pad.config;
+		final padValues = pad.values;
+
+		gamepad.reflectTriggers(padValues[config.LT], padValues[config.RT]);
 	}
 }
