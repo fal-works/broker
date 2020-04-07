@@ -8,7 +8,6 @@ class Main extends hxd.App {
 	var army: ActorArmy;
 
 	override function init() {
-		hxd.Res.initEmbed();
 		broker.input.heaps.HeapsKeyTools.initialize();
 		broker.input.heaps.HeapsPadTools.initialize();
 
