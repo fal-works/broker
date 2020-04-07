@@ -10,7 +10,7 @@ class BasicEntity extends broker.entity.BasicEntity {
 	/**
 		Factory function used in initialization of chunks.
 	**/
-	@:hidden
+	@:banker_hidden
 	static function spriteVectorFactory(
 		chunkCapacity: Int
 	): banker.vector.WritableVector<h2d.SpriteBatch.BatchElement> {
