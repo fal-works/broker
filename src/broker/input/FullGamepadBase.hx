@@ -14,10 +14,26 @@ class FullGamepadBase<B, M:ButtonStatusMapWithDpad<B>, S:Stick>
 	extends GamepadBase<B, M, S>
 	implements BasicGamepad<B, M, S> {
 	/**
+		A virtual right analog stick.
+	**/
+	final rightStick: S;
+
+	/**
+		Value of left trigger button.
+	**/
+	var leftTrigger: Float = 0;
+
+	/**
+		Value of right trigger button.
+	**/
+	var rightTrigger: Float = 0;
+
+	/**
 		@param buttons Mapping between buttons and their status.
 		@param stick Any `Stick` object.
 	**/
-	function new(buttons: M, stick: S) {
+	function new(buttons: M, stick: S, rightStick: S) {
 		super(buttons, stick);
+		this.rightStick = rightStick;
 	}
 }
