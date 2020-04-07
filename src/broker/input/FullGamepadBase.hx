@@ -29,6 +29,14 @@ class FullGamepadBase<B, M:ButtonStatusMapWithDpad<B>, S:Stick>
 	var rightTrigger: Float = 0;
 
 	/**
+		Assigns values of left/right trigger buttons.
+	**/
+	public function reflectTriggers(leftValue: Float, rightValue: Float): Void {
+		this.leftTrigger = leftValue;
+		this.rightTrigger = rightValue;
+	}
+
+	/**
 		@param buttons Mapping between buttons and their status.
 		@param stick Any `Stick` object.
 	**/

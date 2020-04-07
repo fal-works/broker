@@ -19,4 +19,9 @@ interface FullGamepad<B, M:ButtonStatusMapWithDpad<B>, S:Stick>
 		Value of right trigger button.
 	**/
 	var rightTrigger: Float;
+
+	/**
+		Assigns values of left/right trigger buttons.
+	**/
+	function reflectTriggers(leftValue: Float, rightValue: Float): Void;
 }
