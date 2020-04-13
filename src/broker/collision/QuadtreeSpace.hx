@@ -1,6 +1,6 @@
 package broker.collision;
 
-import broker.collision.QuadtreeSpaceTools.*;
+import banker.types.Bits;
 import broker.collision.cell.*;
 
 using banker.type_extension.FloatExtension;
@@ -100,10 +100,15 @@ class QuadtreeSpace<T> {
 		return if (x < 0 || x > this.width || y < 0 || y > this.height) {
 			LocalCellIndex.none;
 		} else {
-			final cellPositionX: Int = (x * this.leafCellPositionFactorX).toInt();
-			final cellPositionY: Int = (y * this.leafCellPositionFactorY).toInt();
+			final cellPositionX = (x * this.leafCellPositionFactorX).toInt();
+			final cellPositionY = (y * this.leafCellPositionFactorY).toInt();
 
-			new LocalCellIndex(zipBits(cellPositionX, cellPositionY));
+			final indexValue = Bits.zip(
+				Bits.from(cellPositionX),
+				Bits.from(cellPositionY)
+			).toInt();
+
+			new LocalCellIndex(indexValue);
 		}
 	}
 }
