@@ -4,6 +4,8 @@ import banker.common.MathTools.maxInt;
 import banker.vector.Vector;
 import broker.collision.QuadtreeSpaceTools.*;
 
+using banker.type_extension.FloatExtension;
+
 /**
 	A linear quadtree representing space partitioning.
 **/
@@ -109,8 +111,8 @@ class QuadtreeSpace<T> {
 		return if (x < 0 || x > this.width || y < 0 || y > this.height) {
 			-1;
 		} else {
-			final cellPositionX: Int = Std.int(x * this.leafCellPositionFactorX);
-			final cellPositionY: Int = Std.int(y * this.leafCellPositionFactorY);
+			final cellPositionX: Int = (x * this.leafCellPositionFactorX).toInt();
+			final cellPositionY: Int = (y * this.leafCellPositionFactorY).toInt();
 
 			zipBits(cellPositionX, cellPositionY);
 		}
