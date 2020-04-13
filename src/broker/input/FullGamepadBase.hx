@@ -40,7 +40,11 @@ class FullGamepadBase<B, M:ButtonStatusMapWithDpad<B>, S:Stick>
 		@param buttons Mapping between buttons and their status.
 		@param stick Any `Stick` object.
 	**/
-	function new(buttons: M, stick: S, rightStick: S) {
+	function new(
+		buttons: M,
+		stick: S,
+		rightStick: S
+	) {
 		super(buttons, stick);
 		this.rightStick = rightStick;
 	}
