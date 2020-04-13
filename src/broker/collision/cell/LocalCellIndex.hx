@@ -21,19 +21,20 @@ abstract LocalCellIndex(Int) {
 		level: PartitionLevel
 	): PartitionLevel {
 		final xorBits = leftTop ^ rightBottom;
-		var belongingLevel = level;
-		var checkingLevel = belongingLevel;
 
+		var aabbLevel = level;
+		var checkingLevel = aabbLevel;
 		var shiftCount = 0;
+
 		while (!checkingLevel.isZero()) {
 			--checkingLevel;
 			final twoBits = (xorBits >>> shiftCount) & 0x3;
-			if (twoBits > 0) belongingLevel = checkingLevel;
+			if (twoBits != 0) aabbLevel = checkingLevel;
 
 			shiftCount += 2;
 		}
 
-		return belongingLevel;
+		return aabbLevel;
 	}
 
 	/**
