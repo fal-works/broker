@@ -1,7 +1,5 @@
 package broker.collision;
 
-import banker.common.MathTools.maxInt;
-import banker.vector.Vector;
 import broker.collision.QuadtreeSpaceTools.*;
 
 using banker.type_extension.FloatExtension;
@@ -16,11 +14,11 @@ class QuadtreeSpace<T> {
 	/**
 		List of all `Cell`s in all levels.
 	**/
-	public final cells: Vector<Cell<T>>;
+	public final cells: LinearCells<T>;
 
 	final width: Int;
 	final height: Int;
-	final maxLevel: Int;
+	final maxLevel: PartitionLevel;
 	final nullCell: Cell.NullCell<T>;
 	final leafCellPositionFactorX: Float;
 	final leafCellPositionFactorY: Float;
@@ -28,36 +26,26 @@ class QuadtreeSpace<T> {
 	public function new(
 		width: Int,
 		height: Int,
-		maxLevel: Int,
+		maxLevel: PartitionLevel,
 		defaultColliderValue: T
 	) {
-		final cellCount = getTotalCellCount(maxLevel);
-		this.cells = Vector.createPopulated(
-			cellCount,
-			() -> new Cell(defaultColliderValue)
-		);
+		this.cells = new LinearCells(maxLevel, defaultColliderValue);
 
 		this.width = width;
 		this.height = height;
 		this.maxLevel = maxLevel;
 		this.nullCell = new Cell.NullCell();
 
-		final leafCellCount1D = Math.pow(2, maxLevel);
-		this.leafCellPositionFactorX = leafCellCount1D / width;
-		this.leafCellPositionFactorY = leafCellCount1D / height;
+		final gridSize = maxLevel.gridSize();
+		this.leafCellPositionFactorX = gridSize / width;
+		this.leafCellPositionFactorY = gridSize / height;
 	}
 
 	/**
 		Clears all `Cell`s in `this` quadtree.
 	**/
-	public function clear() {
-		final cells = this.cells;
-		final len = cells.length;
-		var i = 0;
-		while (i < len) {
-			cells[i].clear();
-			++i;
-		}
+	public function clear(): Void {
+		this.cells.reset();
 	}
 
 	/**
@@ -69,29 +57,29 @@ class QuadtreeSpace<T> {
 		rightX: Float,
 		bottomY: Float
 	): Cell.AbstractCell<T> {
-		final leftTopMortonNumber = getMortonNumber(leftX, topY);
-		final rightBottomMortonNumber = getMortonNumber(rightX, bottomY);
+		final leftTop = getLeafCellLocalIndex(leftX, topY);
+		final rightBottom = getLeafCellLocalIndex(rightX, bottomY);
 
-		return if (leftTopMortonNumber == -1 && rightBottomMortonNumber == -1) {
+		return if (leftTop.isNone() && rightBottom.isNone()) {
 			this.nullCell;
 		} else {
 			final maxLevel = this.maxLevel;
-			var level: Int;
-			var localCellIndex: Int;
+			var level: PartitionLevel;
+			var localIndex: LocalCellIndex;
 
-			if (leftTopMortonNumber == rightBottomMortonNumber) {
+			if (leftTop == rightBottom) {
 				level = maxLevel;
-				localCellIndex = leftTopMortonNumber;
+				localIndex = leftTop;
 			} else {
-				level = getBelongingLevel(leftTopMortonNumber, rightBottomMortonNumber, maxLevel);
-				final largerMorton = maxInt(
-					leftTopMortonNumber,
-					rightBottomMortonNumber
+				level = LocalCellIndex.getAabbLevel(leftTop, rightBottom, maxLevel);
+				final largerMorton = LocalCellIndex.max(
+					leftTop,
+					rightBottom
 				); // For avoiding `-1`
-				localCellIndex = getLocalCellIndex(largerMorton, level, maxLevel);
+				localIndex = largerMorton.inRoughLevel(maxLevel, level);
 			}
 
-			this.getCell(level, localCellIndex);
+			this.getCell(level, localIndex);
 		}
 	}
 
@@ -99,22 +87,22 @@ class QuadtreeSpace<T> {
 		Gets the specified `Cell` instance.
 		Also activates all ancestor `Cell`s including the `Cell` to be returned.
 	**/
-	inline function getCell(level: Int, localCellIndex: Int): Cell<T> {
-		final globalCellIndex = getGlobalCellIndex(level, localCellIndex);
-		final cells = this.cells;
-		activateAncestorCells(cells, globalCellIndex);
-
-		return cells[globalCellIndex];
+	inline function getCell(level: PartitionLevel, localIndex: LocalCellIndex): Cell<T> {
+		final globalIndex = localIndex.toGlobal(level);
+		return this.cells.activateCell(globalIndex);
 	}
 
-	inline function getMortonNumber(x: Float, y: Float): Int {
+	/**
+		@return The local index of the leaf `Cell` that contains the position `x, y`.
+	**/
+	inline function getLeafCellLocalIndex(x: Float, y: Float): LocalCellIndex {
 		return if (x < 0 || x > this.width || y < 0 || y > this.height) {
-			-1;
+			LocalCellIndex.none;
 		} else {
 			final cellPositionX: Int = (x * this.leafCellPositionFactorX).toInt();
 			final cellPositionY: Int = (y * this.leafCellPositionFactorY).toInt();
 
-			zipBits(cellPositionX, cellPositionY);
+			new LocalCellIndex(zipBits(cellPositionX, cellPositionY));
 		}
 	}
 }

@@ -1,6 +1,5 @@
 package broker.collision;
 
-import banker.vector.Vector;
 import banker.vector.WritableVector;
 
 #if !broker_generic_disable
@@ -20,13 +19,13 @@ class CollisionDetector<T> {
 	public function new(
 		width: Int,
 		height: Int,
-		spacePartitionLevel: Int,
+		partitionLevelValue: Int,
 		defaultColliderValue: T
 	) {
 		this.quadtree = new QuadtreeSpace(
 			width,
 			height,
-			spacePartitionLevel,
+			new PartitionLevel(partitionLevelValue),
 			defaultColliderValue
 		);
 		this.cellStack = new WritableVector(this.quadtree.cells.length);
@@ -38,21 +37,27 @@ class CollisionDetector<T> {
 	**/
 	public function detect(
 		loadQuadtree: (quadtree: QuadtreeSpace<T>) -> Void,
-		onOverlap:(colliderA:Collider<T>, collierB:Collider<T>) -> Void
+		onOverlap: (colliderA: Collider<T>, collierB: Collider<T>) -> Void
 	): Void {
 		final quadtree = this.quadtree;
 		quadtree.clear();
 		loadQuadtree(quadtree);
 
-		this.detectRecursive(quadtree.cells, 0, cellStack, 0, onOverlap);
+		this.detectRecursive(
+			quadtree.cells,
+			GlobalCellIndex.zero,
+			cellStack,
+			0,
+			onOverlap
+		);
 	}
 
 	function detectRecursive(
-		cells: Vector<Cell<T>>,
-		currentIndex: Int,
+		cells: LinearCells<T>,
+		currentIndex: GlobalCellIndex,
 		cellStack: WritableVector<Cell<T>>,
 		currentCellStackSize: Int,
-		onOverlap:(colliderA:Collider<T>, collierB:Collider<T>) -> Void
+		onOverlap: (colliderA: Collider<T>, collierB: Collider<T>) -> Void
 	): Void {
 		final currentCell = cells[currentIndex];
 		if (currentCell == null) return;
@@ -60,15 +65,17 @@ class CollisionDetector<T> {
 		this.detectInCell(currentCell, cellStack, currentCellStackSize, onOverlap);
 
 		// Detect in child cells recursively
-		var childIndex = currentIndex * 4;
-		final cellCount = cells.length;
-		for (i in 0...4) {
-			++childIndex;
-
-			final hasChildCell = (childIndex < cellCount) && (cells[childIndex].isActive);
-			if (hasChildCell) {
+		for (childIndex in currentIndex.children(cells)) {
+			final childCell = cells[childIndex];
+			if (childCell.isActive) {
 				cellStack[currentCellStackSize] = currentCell;
-				this.detectRecursive(cells, childIndex, cellStack, currentCellStackSize + 1, onOverlap);
+				this.detectRecursive(
+					cells,
+					childIndex,
+					cellStack,
+					currentCellStackSize + 1,
+					onOverlap
+				);
 			}
 		}
 	}
@@ -81,7 +88,7 @@ class CollisionDetector<T> {
 		cell: Cell<T>,
 		cellStack: WritableVector<Cell<T>>,
 		currentCellStackSize: Int,
-		onOverlap:(colliderA:Collider<T>, collierB:Collider<T>) -> Void
+		onOverlap: (colliderA: Collider<T>, collierB: Collider<T>) -> Void
 	): Void {
 		cell.roundRobin(onOverlap);
 
