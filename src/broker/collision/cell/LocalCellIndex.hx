@@ -1,4 +1,4 @@
-package broker.collision;
+package broker.collision.cell;
 
 /**
 	Index of `Cell` in a specific `PartitionLevel` in Z-order.

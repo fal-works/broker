@@ -1,4 +1,4 @@
-package broker.collision;
+package broker.collision.cell;
 
 import banker.vector.Vector;
 

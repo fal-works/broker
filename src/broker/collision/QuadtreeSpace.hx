@@ -1,6 +1,7 @@
 package broker.collision;
 
 import broker.collision.QuadtreeSpaceTools.*;
+import broker.collision.cell.*;
 
 using banker.type_extension.FloatExtension;
 

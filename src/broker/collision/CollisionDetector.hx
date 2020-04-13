@@ -1,6 +1,7 @@
 package broker.collision;
 
 import banker.vector.WritableVector;
+import broker.collision.cell.*;
 
 #if !broker_generic_disable
 @:generic

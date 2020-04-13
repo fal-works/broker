@@ -1,4 +1,4 @@
-package broker.collision;
+package broker.collision.cell;
 
 using banker.type_extension.IntExtension;
 
