@@ -6,7 +6,7 @@ import banker.vector.Vector;
 	List of all `Cell` instances in a `QuadtreeSpace`.
 **/
 @:forward(length)
-abstract LinearCells<T>(Vector<Cell<T>>) from Vector<Cell<T>> {
+abstract LinearCells<T>(Vector<Cell<T>>) {
 	extern public inline function new(maxLevel: PartitionLevel, defaultColliderValue: T) {
 		this = Vector.createPopulated(
 			maxLevel.totalCellCount(),
