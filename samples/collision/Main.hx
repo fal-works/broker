@@ -25,26 +25,32 @@ class Main extends hxd.App {
 		emitEntities(countPerEmit, 5);
 		entities.synchronize();
 
-		final collisionSpace = new CollisionSpace(Constants.width, Constants.height, 4);
-		this.collisionDetector = new CollisionDetector(collisionSpace);
-		final cells = this.collisionDetector.cells;
-		this.loadQuadtree = () -> {
-			cells.reset();
-			entities.loadQuadTree(collisionSpace, cells);
-		}
-
-		final processCollision = (idValue: Int) -> {
-			final id = ChunkEntityId.fromInt(idValue);
+		final collisionSpace = new CollisionSpace(
+			Constants.width,
+			Constants.height,
+			4
+		);
+		final onOverlap = (collider: Collider) -> {
+			final id = ChunkEntityId.fromInt(collider.id);
 			final chunk = entities.getChunk(id);
 			final index = chunk.getReadIndex(id);
 			final sprite = chunk.sprite[index];
 			sprite.g = 0;
 			sprite.b = 0.25;
 		};
-		this.onOverlap = (a, b) -> {
-			processCollision(a.id);
-			processCollision(b.id);
-		};
+		this.collisionDetector = new IntraGroupCollisionDetector(
+			collisionSpace,
+			(a, b) -> {
+				onOverlap(a);
+				onOverlap(b);
+			}
+		);
+
+		final cells = this.collisionDetector.leftCells;
+		this.loadQuadtree = () -> {
+			cells.reset();
+			entities.loadQuadTree(collisionSpace, cells);
+		}
 	}
 
 	override function update(dt: Float) {
@@ -56,17 +62,18 @@ class Main extends hxd.App {
 		entities.synchronize();
 
 		this.loadQuadtree();
-		this.collisionDetector.detect(this.onOverlap);
+		this.collisionDetector.detect();
 	}
 
-	function createEntities(tile: h2d.Tile): EntityAosoa return {
-		chunkCapacity: 128,
-		chunkCount: 16,
-		batchValue: new h2d.SpriteBatch(tile, s2d),
-		spriteFactory: () -> new h2d.SpriteBatch.BatchElement(tile),
-		halfTileWidthValue: tile.width / 2,
-		halfTileHeightValue: tile.height / 2
-	}
+	function createEntities(tile: h2d.Tile): EntityAosoa
+		return {
+			chunkCapacity: 128,
+			chunkCount: 16,
+			batchValue: new h2d.SpriteBatch(tile, s2d),
+			spriteFactory: () -> new h2d.SpriteBatch.BatchElement(tile),
+			halfTileWidthValue: tile.width / 2,
+			halfTileHeightValue: tile.height / 2
+		}
 
 	function emitEntities(entityCount: Int, speed: Float): Void {
 		final x = Constants.width / 2;
