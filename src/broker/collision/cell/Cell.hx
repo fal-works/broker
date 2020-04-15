@@ -1,5 +1,8 @@
 package broker.collision.cell;
 
+import banker.vector.WritableVector;
+import banker.vector.VectorReference;
+
 /**
 	Node of quadtree, i.e. an unit of partitioned space in any partition level.
 **/
@@ -8,6 +11,11 @@ class Cell {
 		The `PartitionLevel` to which `this` belongs.
 	**/
 	public final level: PartitionLevel;
+
+	/**
+		The number of `Collider`s that are registered to `this`.
+	**/
+	public var colliderCount: Int;
 
 	/**
 		`true` if `this` or any of its descendants contains colliders.
@@ -26,6 +34,7 @@ class Cell {
 
 	public function new(level: PartitionLevel) {
 		this.level = level;
+		this.colliderCount = 0;
 		this.isActive = false;
 
 		final dummyCollider = new Collider(-1);
@@ -41,15 +50,17 @@ class Cell {
 		this.last.next = collider;
 		this.last = collider;
 		collider.unlink();
+		++this.colliderCount;
 	}
 
 	/**
 		Clears and deactivates `this` cell.
 	**/
 	public inline function clear(): Void {
+		this.colliderCount = 0;
+		this.isActive = false;
 		this.top.unlink();
 		this.last = this.top;
-		this.isActive = false;
 	}
 
 	/**
@@ -79,29 +90,48 @@ class Cell {
 	}
 
 	/**
-		Detects overlapping of `Collider`s between `this` cell and `otherCell`.
+		Assigns all `Collider`s of `this` to `output`.
+		@param startIndex The index to start writing to `output`.
 	**/
-	public function nestedLoopJoin(
-		otherCell: Cell,
+	public inline function exportTo(
+		output: WritableVector<Collider>,
+		startIndex: Int
+	): Void {
+		var current = this.top.next;
+		var writeIndex = startIndex;
+
+		while (current.isSome()) {
+			final thisCollider = current.unwrap();
+
+			output[writeIndex] = thisCollider;
+			++writeIndex;
+
+			current = thisCollider.next;
+		}
+	}
+
+	/**
+		Detects overlapping of `Collider`s between `this` cell and `otherColliders`.
+	**/
+	public inline function detectCollisionWithVector(
+		otherColliders: VectorReference<Collider>,
+		otherCollidersCount: Int,
 		onOverlap: (colliderA: Collider, colliderB: Collider) -> Void
 	): Void {
-		final otherFirst = otherCell.top.next;
+		final firstThisCollider = this.top.next;
 
-		var currentA = this.top.next;
-		while (currentA.isSome()) {
-			final colliderA = currentA.unwrap();
+		for (i in 0...otherCollidersCount) {
+			final otherCollider = otherColliders[i];
 
-			var currentB = otherFirst;
-			while (currentB.isSome()) {
-				final colliderB = currentB.unwrap();
+			var current = firstThisCollider;
+			while (current.isSome()) {
+				final thisCollider = current.unwrap();
 
-				if (colliderA.overlaps(colliderB))
-					onOverlap(colliderA, colliderB);
+				if (thisCollider.overlaps(otherCollider))
+					onOverlap(thisCollider, otherCollider);
 
-				currentB = colliderB.next;
+				current = thisCollider.next;
 			}
-
-			currentA = colliderA.next;
 		}
 	}
 }

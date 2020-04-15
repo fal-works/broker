@@ -1,5 +1,6 @@
 package broker.collision;
 
+import banker.vector.WritableVector;
 import banker.types.Bits;
 import broker.collision.cell.*;
 
@@ -23,6 +24,16 @@ class CollisionSpace {
 		@see `new()`
 	**/
 	public final partitionLevel: PartitionLevel;
+
+	/**
+		Vector for using as a stack storing `Collider`s in ancestor `Cell`s when traversing the quadtree.
+	**/
+	public final ancestorCellColliders: WritableVector<Collider>;
+
+	/**
+		Vector for using as a stack for depth-first search in quadtree.
+	**/
+	public final searchStack: WritableVector<GlobalCellIndex>;
 
 	/**
 		Factor for calculating the position of a leaf cell
@@ -49,6 +60,10 @@ class CollisionSpace {
 		this.width = width;
 		this.height = height;
 		this.partitionLevel = new PartitionLevel(partitionLevel);
+
+		final cellCount = this.partitionLevel.totalCellCount();
+		this.ancestorCellColliders = new WritableVector(cellCount);
+		this.searchStack = new WritableVector(cellCount);
 
 		final gridSize = this.partitionLevel.gridSize();
 		this.leafCellPositionFactorX = gridSize / width;

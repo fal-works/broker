@@ -1,29 +1,14 @@
 package broker.collision;
 
-import banker.vector.WritableVector;
 import broker.collision.cell.*;
 
 class CollisionDetector {
-	/**
-		Vector for using as a stack of `Cell` when traversing the quadtree.
-	**/
-	static var ancestorStack: WritableVector<Cell> = WritableVector.createZero();
-
-	static var searchStack: WritableVector<GlobalCellIndex> = WritableVector.createZero();
-	static var maxCellCount: Int = -1;
-
 	public final space: CollisionSpace;
 	public final cells: LinearCells;
 
 	public function new(space: CollisionSpace) {
 		this.space = space;
 		this.cells = this.space.createCells();
-		final cellCount = this.cells.length;
-
-		if (cellCount > maxCellCount) {
-			ancestorStack = new WritableVector(space.partitionLevel.toInt() + 1);
-			searchStack = new WritableVector(cellCount);
-		}
 	}
 
 	/**
@@ -34,17 +19,20 @@ class CollisionDetector {
 		loadQuadtree: (space: CollisionSpace, cells: LinearCells) -> Void,
 		onOverlap: (colliderA: Collider, collierB: Collider) -> Void
 	): Void {
-		final ancestorStack = CollisionDetector.ancestorStack;
-		final searchStack = CollisionDetector.searchStack;
 		final cells = this.cells;
 
 		cells.reset();
 		loadQuadtree(this.space, cells);
 
+		final space = this.space;
+		final ancestorCellColliders = space.ancestorCellColliders;
+		final searchStack = space.searchStack;
+
 		var currentIndex: GlobalCellIndex;
 		var currentCell: Cell;
-		var currentLevel: Int;
+		var currentLevel = 0;
 		var searchStackSize = 0;
+		var ancestorCellColliderCount = 0;
 
 		inline function push(index: GlobalCellIndex): Void {
 			searchStack[searchStackSize] = index;
@@ -54,20 +42,27 @@ class CollisionDetector {
 			--searchStackSize;
 			currentIndex = searchStack[searchStackSize];
 			currentCell = cells[currentIndex];
-			currentLevel = currentCell.level.toInt();
+
+			final nextLevel = currentCell.level.toInt();
+			if (nextLevel < currentLevel)
+				ancestorCellColliderCount -= currentCell.colliderCount;
+
+			currentLevel = nextLevel;
 		}
 
 		inline function pushAncestor(): Void {
-			ancestorStack[currentLevel] = currentCell;
+			currentCell.exportTo(ancestorCellColliders, ancestorCellColliderCount);
+			ancestorCellColliderCount += currentCell.colliderCount;
 		}
 
 		inline function detectInCell(cell: Cell): Void {
 			cell.roundRobin(onOverlap);
 
-			for (i in 0...currentLevel) {
-				final otherCell = ancestorStack[i];
-				cell.nestedLoopJoin(otherCell, onOverlap);
-			}
+			cell.detectCollisionWithVector(
+				ancestorCellColliders,
+				ancestorCellColliderCount,
+				onOverlap
+			);
 		}
 
 		push(GlobalCellIndex.zero);
