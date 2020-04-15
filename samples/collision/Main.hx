@@ -26,7 +26,8 @@ class Main extends hxd.App {
 		emitEntities(countPerEmit, 5);
 		entities.synchronize();
 
-		this.collisionDetector = new CollisionDetector(Constants.width, Constants.height, 4);
+		final collisionSpace = new CollisionSpace(Constants.width, Constants.height, 4);
+		this.collisionDetector = new CollisionDetector(collisionSpace);
 		this.loadQuadtree = (space, cells) -> entities.loadQuadTree(space, cells);
 
 		final processCollision = (idValue: Int) -> {

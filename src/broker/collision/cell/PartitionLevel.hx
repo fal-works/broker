@@ -8,17 +8,17 @@ import sneaker.assertion.Asserter.assert;
 	The depth level in quadtree space partitioning.
 **/
 abstract PartitionLevel(Int) {
-	@:op(a - b)
-	public static function subtract(
-		a: PartitionLevel,
-		b: PartitionLevel
-	): PartitionLevel;
+	@:op(A - B)
+	public static function subtract(a: PartitionLevel, b: PartitionLevel): PartitionLevel;
 
-	@:op(a - b)
+	@:op(A - B)
 	public static function subtractInt(a: PartitionLevel, b: Int): PartitionLevel;
 
-	@:op(--n)
+	@:op(--A)
 	public function preDecrement(): PartitionLevel;
+
+	@:op(++A)
+	public function preIncrement(): PartitionLevel;
 
 	/**
 		@param levelValue `0` is the root-cell level. More greater, more deeper and finer.

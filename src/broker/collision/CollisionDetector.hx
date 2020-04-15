@@ -4,24 +4,26 @@ import banker.vector.WritableVector;
 import broker.collision.cell.*;
 
 class CollisionDetector {
-	public final space: CollisionSpace;
-	public final cells: LinearCells;
-
 	/**
 		Vector for using as a stack of `Cell` when traversing the quadtree.
 	**/
-	final cellStack: WritableVector<Cell>;
+	static var ancestorStack: WritableVector<Cell> = WritableVector.createZero();
 
-	public function new(
-		width: Int,
-		height: Int,
-		partitionLevelValue: Int
-	) {
-		final partitionLevel = new PartitionLevel(partitionLevelValue);
-		this.space = new CollisionSpace(width, height, partitionLevel);
+	static var searchStack: WritableVector<GlobalCellIndex> = WritableVector.createZero();
+	static var maxCellCount: Int = -1;
+
+	public final space: CollisionSpace;
+	public final cells: LinearCells;
+
+	public function new(space: CollisionSpace) {
+		this.space = space;
 		this.cells = this.space.createCells();
+		final cellCount = this.cells.length;
 
-		this.cellStack = new WritableVector(this.cells.length);
+		if (cellCount > maxCellCount) {
+			ancestorStack = new WritableVector(space.partitionLevel.toInt() + 1);
+			searchStack = new WritableVector(cellCount);
+		}
 	}
 
 	/**
@@ -32,62 +34,57 @@ class CollisionDetector {
 		loadQuadtree: (space: CollisionSpace, cells: LinearCells) -> Void,
 		onOverlap: (colliderA: Collider, collierB: Collider) -> Void
 	): Void {
+		final ancestorStack = CollisionDetector.ancestorStack;
+		final searchStack = CollisionDetector.searchStack;
 		final cells = this.cells;
+
 		cells.reset();
 		loadQuadtree(this.space, cells);
 
-		this.detectRecursive(
-			cells,
-			GlobalCellIndex.zero,
-			this.cellStack,
-			0,
-			onOverlap
-		);
-	}
+		var currentIndex: GlobalCellIndex;
+		var currentCell: Cell;
+		var currentLevel: Int;
+		var searchStackSize = 0;
 
-	function detectRecursive(
-		cells: LinearCells,
-		currentIndex: GlobalCellIndex,
-		cellStack: WritableVector<Cell>,
-		currentCellStackSize: Int,
-		onOverlap: (colliderA: Collider, collierB: Collider) -> Void
-	): Void {
-		final currentCell = cells[currentIndex];
-		if (currentCell == null) return;
+		inline function push(index: GlobalCellIndex): Void {
+			searchStack[searchStackSize] = index;
+			++searchStackSize;
+		}
+		inline function pop(): Void {
+			--searchStackSize;
+			currentIndex = searchStack[searchStackSize];
+			currentCell = cells[currentIndex];
+			currentLevel = currentCell.level.toInt();
+		}
 
-		this.detectInCell(currentCell, cellStack, currentCellStackSize, onOverlap);
+		inline function pushAncestor(): Void {
+			ancestorStack[currentLevel] = currentCell;
+		}
 
-		// Detect in child cells recursively
-		for (childIndex in currentIndex.children(cells)) {
-			final childCell = cells[childIndex];
-			if (childCell.isActive) {
-				cellStack[currentCellStackSize] = currentCell;
-				this.detectRecursive(
-					cells,
-					childIndex,
-					cellStack,
-					currentCellStackSize + 1,
-					onOverlap
-				);
+		inline function detectInCell(cell: Cell): Void {
+			cell.roundRobin(onOverlap);
+
+			for (i in 0...currentLevel) {
+				final otherCell = ancestorStack[i];
+				cell.nestedLoopJoin(otherCell, onOverlap);
 			}
 		}
-	}
 
-	/**
-		1. Detects collision within `cell`.
-		2. Detects collision between `cell` and each cell in `cellStack`.
-	**/
-	inline function detectInCell(
-		cell: Cell,
-		cellStack: WritableVector<Cell>,
-		currentCellStackSize: Int,
-		onOverlap: (colliderA: Collider, collierB: Collider) -> Void
-	): Void {
-		cell.roundRobin(onOverlap);
+		push(GlobalCellIndex.zero);
 
-		for (i in 0...currentCellStackSize) {
-			final otherCell = cellStack[i];
-			cell.nestedLoopJoin(otherCell, onOverlap);
+		while (searchStackSize > 0) {
+			pop();
+
+			detectInCell(currentCell);
+
+			var childCount = 0;
+			for (childIndex in currentIndex.children(cells)) {
+				if (cells[childIndex].isActive) {
+					++childCount;
+					push(childIndex);
+				}
+			}
+			if (childCount > 0) pushAncestor();
 		}
 	}
 }

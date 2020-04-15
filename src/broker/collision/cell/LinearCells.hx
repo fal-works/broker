@@ -1,23 +1,39 @@
 package broker.collision.cell;
 
 import banker.vector.Vector;
+import banker.vector.WritableVector;
 
 /**
 	List of all `Cell` instances in a quadtree space.
 **/
 @:forward(length)
 abstract LinearCells(Vector<Cell>) {
-	static final createCell = () -> new Cell();
+	@:access(banker.vector.WritableVector)
+	public function new(maxLevel: PartitionLevel) {
+		final length = maxLevel.totalCellCount();
+		final data = new WritableVector(length);
 
-	public extern inline function new(maxLevel: PartitionLevel) {
-		this = Vector.createPopulated(
-			maxLevel.totalCellCount(),
-			createCell
-		);
+		var currentLevel = new PartitionLevel(0);
+		var nextLevelIndex = currentLevel.totalCellCount();
+		for (i in 0...length) {
+			if (i >= nextLevelIndex) {
+				++currentLevel;
+				nextLevelIndex = currentLevel.totalCellCount();
+			}
+			data[i] = new Cell(currentLevel);
+		}
+
+		this = data.nonWritable();
 	}
 
-	@:op([]) extern inline function get(index: GlobalCellIndex)
+	@:op([]) extern inline function get(index: GlobalCellIndex): Cell
 		return this[index.toInt()];
+
+	/**
+		@return The root `Cell`.
+	**/
+	public extern inline function root(): Cell
+		return this[0];
 
 	/**
 		Clears each `Cell` in `this`.

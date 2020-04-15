@@ -39,18 +39,18 @@ class CollisionSpace {
 	/**
 		@param width The width of the entire space (i.e. the width of root cell).
 		@param height The height of the entire space (i.e. the height of root cell).
-		@param partitionLevel The finest `PartitionLevel` of `this` space (i.e. the depth of quadtrees).
+		@param partitionLevel The finest `PartitionLevel` value of `this` space (i.e. the depth of quadtrees).
 	**/
 	public function new(
 		width: Int,
 		height: Int,
-		partitionLevel: PartitionLevel
+		partitionLevel: Int
 	) {
 		this.width = width;
 		this.height = height;
-		this.partitionLevel = partitionLevel;
+		this.partitionLevel = new PartitionLevel(partitionLevel);
 
-		final gridSize = partitionLevel.gridSize();
+		final gridSize = this.partitionLevel.gridSize();
 		this.leafCellPositionFactorX = gridSize / width;
 		this.leafCellPositionFactorY = gridSize / height;
 	}

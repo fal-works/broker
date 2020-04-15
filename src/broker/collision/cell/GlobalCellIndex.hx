@@ -9,8 +9,8 @@ abstract GlobalCellIndex(Int) {
 	extern public static inline final none = new GlobalCellIndex(-1);
 	extern public static inline final zero = new GlobalCellIndex(0);
 
-	@:op(a + b)
-	extern public static function subtractInt(a: GlobalCellIndex, b: Int): GlobalCellIndex;
+	@:op(A + B)
+	extern public static function addInt(a: GlobalCellIndex, b: Int): GlobalCellIndex;
 
 	extern public inline function new(v: Int)
 		this = v;

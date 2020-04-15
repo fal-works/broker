@@ -5,6 +5,11 @@ package broker.collision.cell;
 **/
 class Cell {
 	/**
+		The `PartitionLevel` to which `this` belongs.
+	**/
+	public final level: PartitionLevel;
+
+	/**
 		`true` if `this` or any of its descendants contains colliders.
 	**/
 	public var isActive: Bool;
@@ -19,12 +24,13 @@ class Cell {
 	**/
 	var last: Collider;
 
-	public function new() {
-		final dummyCollider = new Collider(-1);
+	public function new(level: PartitionLevel) {
+		this.level = level;
+		this.isActive = false;
 
+		final dummyCollider = new Collider(-1);
 		this.top = dummyCollider;
 		this.last = dummyCollider;
-		this.isActive = false;
 	}
 
 	/**
