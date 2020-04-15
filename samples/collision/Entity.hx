@@ -1,11 +1,11 @@
 package collision;
 
 import h2d.SpriteBatch.BatchElement;
-import banker.aosoa.ChunkEntityId;
 import banker.vector.WritableVector as Vec;
-import broker.collision.Collider;
-import broker.collision.QuadtreeSpace;
+import banker.aosoa.ChunkEntityId;
 import broker.entity.heaps.BasicEntity;
+import broker.collision.*;
+import broker.collision.cell.*;
 
 class Entity extends BasicEntity {
 	@:nullSafety(Off)
@@ -16,8 +16,8 @@ class Entity extends BasicEntity {
 	@:banker_chunkLevelFinal
 	var halfTileHeight: Float;
 
-	@:banker_factoryWithId((id: ChunkEntityId) -> new Collider<ChunkEntityId>(id))
-	var collider: Collider<ChunkEntityId>;
+	@:banker_factoryWithId((id: ChunkEntityId) -> new Collider(id.toInt()))
+	var collider: Collider;
 
 	static function bounce(
 		x: Vec<Float>,
@@ -61,25 +61,31 @@ class Entity extends BasicEntity {
 
 	/**
 		Registers entities to `quadtree`.
-		@param quadtree
+		@param collisionSpace
+		@param cells
 	**/
 	static function loadQuadTree(
 		id: ChunkEntityId,
 		x: Float,
 		y: Float,
-		collider: Collider<ChunkEntityId>,
+		collider: Collider,
 		halfTileWidth: Float,
 		halfTileHeight: Float,
-		quadtree: QuadtreeSpace<ChunkEntityId>
+		collisionSpace: CollisionSpace,
+		cells: LinearCells
 	): Void {
 		final left = x - halfTileWidth;
 		final top = y - halfTileHeight;
 		final right = x + halfTileWidth;
 		final bottom = y + halfTileHeight;
 
-		collider.setBounds(left, top, right, bottom);
+		final cellIndex = collisionSpace.getCellIndex(left, top, right, bottom);
+		if (!cellIndex.isNone()) {
+			collider.setBounds(left, top, right, bottom);
 
-		quadtree.getCellFromBounds(left, top, right, bottom).add(collider);
+			final cell = cells.activate(cellIndex);
+			cell.add(collider);
+		}
 	}
 }
 

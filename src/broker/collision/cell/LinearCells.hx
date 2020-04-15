@@ -3,14 +3,16 @@ package broker.collision.cell;
 import banker.vector.Vector;
 
 /**
-	List of all `Cell` instances in a `QuadtreeSpace`.
+	List of all `Cell` instances in a quadtree space.
 **/
 @:forward(length)
-abstract LinearCells<T>(Vector<Cell<T>>) {
-	extern public inline function new(maxLevel: PartitionLevel, defaultColliderValue: T) {
+abstract LinearCells(Vector<Cell>) {
+	static final createCell = () -> new Cell();
+
+	public extern inline function new(maxLevel: PartitionLevel) {
 		this = Vector.createPopulated(
 			maxLevel.totalCellCount(),
-			() -> new Cell(defaultColliderValue)
+			createCell
 		);
 	}
 
@@ -33,7 +35,7 @@ abstract LinearCells<T>(Vector<Cell<T>>) {
 		Activates the `Cell` at `index` and all of its ancestors.
 		@return The `Cell` at `index`.
 	**/
-	public inline function activateCell<T>(index: GlobalCellIndex): Cell<T> {
+	public inline function activate(index: GlobalCellIndex): Cell {
 		final cell = this[index.toInt()];
 
 		var currentIndex = index;

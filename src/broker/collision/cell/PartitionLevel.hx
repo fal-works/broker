@@ -5,50 +5,53 @@ using banker.type_extension.IntExtension;
 import sneaker.assertion.Asserter.assert;
 
 /**
-	The level in quadtree space partitioning.
+	The depth level in quadtree space partitioning.
 **/
 abstract PartitionLevel(Int) {
 	@:op(a - b)
-	extern public static function subtract(
+	public static function subtract(
 		a: PartitionLevel,
 		b: PartitionLevel
 	): PartitionLevel;
 
 	@:op(a - b)
-	extern public static function subtractInt(a: PartitionLevel, b: Int): PartitionLevel;
+	public static function subtractInt(a: PartitionLevel, b: Int): PartitionLevel;
 
 	@:op(--n)
-	extern public function preDecrement(): PartitionLevel;
+	public function preDecrement(): PartitionLevel;
 
-	extern public inline function new(v: Int) {
+	/**
+		@param levelValue `0` is the root-cell level. More greater, more deeper and finer.
+	**/
+	public extern inline function new(levelValue: Int) {
 		#if !macro
-		assert(v >= 0);
+		assert(levelValue >= 0);
 		#end
-		this = v;
+		this = levelValue;
 	}
 
 	/**
 		@return `true` if `this` is zero (the roughest, root-cell level).
 	**/
-	extern public inline function isZero(): Bool
+	public extern inline function isZero(): Bool
 		return this == 0;
 
 	/**
 		Casts `this` to `Int`.
 	**/
-	extern public inline function toInt(): Int
+	public extern inline function toInt(): Int
 		return this;
 
 	/**
 		@return The size of the grid in `this` level. Same as `2 ^ (level value)`.
 	**/
-	public inline function gridSize(): Int
+	public extern inline function gridSize(): Int
 		return this.powerOf2();
 
 	/**
 		@return The global cell index of the first `Cell` in `this` level.
 	**/
-	extern public inline function firstGlobalCellIndex(): GlobalCellIndex {
+	public extern inline function firstGlobalCellIndex(): GlobalCellIndex {
 		return new GlobalCellIndex(switch this {
 			case 0: 0;
 			case 1: 1;
@@ -67,7 +70,7 @@ abstract PartitionLevel(Int) {
 	/**
 		@return The total number of `Cell`s that a quadtree with `maxLevel` should contain.
 	**/
-	public inline function totalCellCount(): Int {
+	public extern inline function totalCellCount(): Int {
 		return new PartitionLevel(this + 1).firstGlobalCellIndex().toInt();
 	}
 }

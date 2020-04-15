@@ -3,17 +3,23 @@ package broker.collision.cell;
 import banker.common.MathTools.minInt;
 
 /**
-	The physical index of `Cell` in `LinearCells`.
+	Physical index of `Cell` in `LinearCells`.
 **/
 abstract GlobalCellIndex(Int) {
+	extern public static inline final none = new GlobalCellIndex(-1);
 	extern public static inline final zero = new GlobalCellIndex(0);
 
 	@:op(a + b)
 	extern public static function subtractInt(a: GlobalCellIndex, b: Int): GlobalCellIndex;
 
-	extern public inline function new(v: Int) {
+	extern public inline function new(v: Int)
 		this = v;
-	}
+
+	/**
+		@return `true` if `this` is `GlobalCellIndex.none`.
+	**/
+	extern public inline function isNone(): Bool
+		return this == GlobalCellIndex.none.toInt();
 
 	/**
 		Casts `this` to `Int`.
@@ -37,8 +43,8 @@ abstract GlobalCellIndex(Int) {
 	/**
 		@return Iterator for children indices of `this`.
 	**/
-	extern public inline function children<T>(
-		cells: LinearCells<T>
+	extern public inline function children(
+		cells: LinearCells
 	): GlobalCellIndexIterator {
 		final start = this * 4 + 1;
 		final end = minInt(start + 4, cells.length);

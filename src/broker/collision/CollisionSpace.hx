@@ -6,91 +6,93 @@ import broker.collision.cell.*;
 using banker.type_extension.FloatExtension;
 
 /**
-	A linear quadtree representing space partitioning.
+	Object that represents a 2D space with quadtree space partitioning.
 **/
-#if !broker_generic_disable
-@:generic
-#end
-class QuadtreeSpace<T> {
+class CollisionSpace {
 	/**
-		List of all `Cell`s in all levels.
+		@see `new()`
 	**/
-	public final cells: LinearCells<T>;
+	public final width: Int;
 
-	final width: Int;
-	final height: Int;
-	final maxLevel: PartitionLevel;
-	final nullCell: Cell.NullCell<T>;
+	/**
+		@see `new()`
+	**/
+	public final height: Int;
+
+	/**
+		@see `new()`
+	**/
+	public final partitionLevel: PartitionLevel;
+
+	/**
+		Factor for calculating the position of a leaf cell
+		(i.e. a cell in the finest partition level) in the space grid.
+	**/
 	final leafCellPositionFactorX: Float;
+
+	/**
+		Factor for calculating the position of a leaf cell
+		(i.e. a cell in the finest partition level) in the space grid.
+	**/
 	final leafCellPositionFactorY: Float;
 
+	/**
+		@param width The width of the entire space (i.e. the width of root cell).
+		@param height The height of the entire space (i.e. the height of root cell).
+		@param partitionLevel The finest `PartitionLevel` of `this` space (i.e. the depth of quadtrees).
+	**/
 	public function new(
 		width: Int,
 		height: Int,
-		maxLevel: PartitionLevel,
-		defaultColliderValue: T
+		partitionLevel: PartitionLevel
 	) {
-		this.cells = new LinearCells(maxLevel, defaultColliderValue);
-
 		this.width = width;
 		this.height = height;
-		this.maxLevel = maxLevel;
-		this.nullCell = new Cell.NullCell();
+		this.partitionLevel = partitionLevel;
 
-		final gridSize = maxLevel.gridSize();
+		final gridSize = partitionLevel.gridSize();
 		this.leafCellPositionFactorX = gridSize / width;
 		this.leafCellPositionFactorY = gridSize / height;
 	}
 
-	/**
-		Clears all `Cell`s in `this` quadtree.
-	**/
-	public function clear(): Void {
-		this.cells.reset();
+	public inline function createCells(): LinearCells {
+		return new LinearCells(this.partitionLevel);
 	}
 
 	/**
-		Get the `Cell` instance that corresponds to given bounds.
+		@return `GlobalCellIndex` of the finest `Cell` that contains the given AABB.
 	**/
-	public inline function getCellFromBounds(
+	public inline function getCellIndex(
 		leftX: Float,
 		topY: Float,
 		rightX: Float,
 		bottomY: Float
-	): Cell.AbstractCell<T> {
+	): GlobalCellIndex {
+		// TODO: early return if index is none
 		final leftTop = getLeafCellLocalIndex(leftX, topY);
 		final rightBottom = getLeafCellLocalIndex(rightX, bottomY);
 
 		return if (leftTop.isNone() && rightBottom.isNone()) {
-			this.nullCell;
+			GlobalCellIndex.none;
 		} else {
-			final maxLevel = this.maxLevel;
+			final partitionLevel = this.partitionLevel;
 			var level: PartitionLevel;
 			var localIndex: LocalCellIndex;
 
 			if (leftTop == rightBottom) {
-				level = maxLevel;
+				level = partitionLevel;
 				localIndex = leftTop;
 			} else {
-				level = LocalCellIndex.getAabbLevel(leftTop, rightBottom, maxLevel);
+				level = LocalCellIndex.getAabbLevel(leftTop, rightBottom, partitionLevel);
 				final largerMorton = LocalCellIndex.max(
 					leftTop,
 					rightBottom
 				); // For avoiding `-1`
-				localIndex = largerMorton.inRoughLevel(maxLevel, level);
+				localIndex = largerMorton.inRoughLevel(partitionLevel, level);
 			}
 
-			this.getCell(level, localIndex);
+			localIndex.toGlobal(level);
 		}
-	}
-
-	/**
-		Gets the specified `Cell` instance.
-		Also activates all ancestor `Cell`s including the `Cell` to be returned.
-	**/
-	inline function getCell(level: PartitionLevel, localIndex: LocalCellIndex): Cell<T> {
-		final globalIndex = localIndex.toGlobal(level);
-		return this.cells.activateCell(globalIndex);
 	}
 
 	/**

@@ -1,17 +1,18 @@
 package collision;
 
 import broker.collision.CollisionDetector;
-import broker.collision.QuadtreeSpace;
+import broker.collision.CollisionSpace;
 import broker.collision.Collider;
+import broker.collision.cell.LinearCells;
 import banker.aosoa.ChunkEntityId;
 
 class Main extends hxd.App {
 	static final TWO_PI = 2 * Math.PI;
 
 	var entities: EntityAosoa;
-	var collisionDetector: CollisionDetector<ChunkEntityId>;
-	var loadQuadtree: (quadtree: QuadtreeSpace<ChunkEntityId>) -> Void;
-	var onOverlap: (a: Collider<ChunkEntityId>, b: Collider<ChunkEntityId>) -> Void;
+	var collisionDetector: CollisionDetector;
+	var loadQuadtree: (space: CollisionSpace, cells: LinearCells) -> Void;
+	var onOverlap: (a: Collider, b: Collider) -> Void;
 
 	override function init() {
 		Constants.initialize(hxd.Window.getInstance());
@@ -25,10 +26,11 @@ class Main extends hxd.App {
 		emitEntities(countPerEmit, 5);
 		entities.synchronize();
 
-		this.collisionDetector = new CollisionDetector(Constants.width, Constants.height, 4, ChunkEntityId.dummy);
-		this.loadQuadtree = quadTree -> entities.loadQuadTree(quadTree);
+		this.collisionDetector = new CollisionDetector(Constants.width, Constants.height, 4);
+		this.loadQuadtree = (space, cells) -> entities.loadQuadTree(space, cells);
 
-		final processCollision = (id: ChunkEntityId) -> {
+		final processCollision = (idValue: Int) -> {
+			final id = ChunkEntityId.fromInt(idValue);
 			final chunk = entities.getChunk(id);
 			final index = chunk.getReadIndex(id);
 			final sprite = chunk.sprite[index];
@@ -36,8 +38,8 @@ class Main extends hxd.App {
 			sprite.b = 0.25;
 		};
 		this.onOverlap = (a, b) -> {
-			processCollision(a.value);
-			processCollision(b.value);
+			processCollision(a.id);
+			processCollision(b.id);
 		};
 	}
 

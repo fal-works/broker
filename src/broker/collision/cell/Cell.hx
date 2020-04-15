@@ -1,19 +1,9 @@
 package broker.collision.cell;
 
-#if !broker_generic_disable
-@:generic
-#end
-class AbstractCell<T> {
-	public function add(collider: Collider<T>): Void {}
-}
-
 /**
-	Node of `LinearQuadTree`.
+	Node of quadtree, i.e. an unit of partitioned space in any partition level.
 **/
-#if !broker_generic_disable
-@:generic
-#end
-class Cell<T> extends AbstractCell<T> {
+class Cell {
 	/**
 		`true` if `this` or any of its descendants contains colliders.
 	**/
@@ -22,18 +12,15 @@ class Cell<T> extends AbstractCell<T> {
 	/**
 		The top node of linked list of colliders. This is always a dummy sentinel node.
 	**/
-	final top: Collider<T>;
+	final top: Collider;
 
 	/**
 		The last node of linked list of colliders.
 	**/
-	var last: Collider<T>;
+	var last: Collider;
 
-	/**
-		@param defaultColliderValue Used for creating a dummy sentinel `Collider`.
-	**/
-	public function new(defaultColliderValue: T) {
-		final dummyCollider = new Collider(defaultColliderValue);
+	public function new() {
+		final dummyCollider = new Collider(-1);
 
 		this.top = dummyCollider;
 		this.last = dummyCollider;
@@ -44,7 +31,7 @@ class Cell<T> extends AbstractCell<T> {
 		Adds `collider` to `this` cell.
 		Also unlinks the next node of `collider` so that `collider` is the last node in the linked list.
 	**/
-	override public inline function add(collider: Collider<T>): Void {
+	public inline function add(collider: Collider): Void {
 		this.last.next = collider;
 		this.last = collider;
 		collider.unlink();
@@ -63,7 +50,7 @@ class Cell<T> extends AbstractCell<T> {
 		Detects overlapping for each `Collider` combination pair within `this` cell.
 	**/
 	public function roundRobin(
-		onOverlap: (colliderA: Collider<T>, collierB: Collider<T>) -> Void
+		onOverlap: (colliderA: Collider, collierB: Collider) -> Void
 	): Void {
 		final lastCollider = this.last;
 		var currentA = this.top.next;
@@ -89,8 +76,8 @@ class Cell<T> extends AbstractCell<T> {
 		Detects overlapping of `Collider`s between `this` cell and `otherCell`.
 	**/
 	public function nestedLoopJoin(
-		otherCell: Cell<T>,
-		onOverlap: (colliderA: Collider<T>, colliderB: Collider<T>) -> Void
+		otherCell: Cell,
+		onOverlap: (colliderA: Collider, colliderB: Collider) -> Void
 	): Void {
 		final otherFirst = otherCell.top.next;
 
@@ -111,13 +98,4 @@ class Cell<T> extends AbstractCell<T> {
 			currentA = colliderA.next;
 		}
 	}
-}
-
-#if !broker_generic_disable
-@:generic
-#end
-class NullCell<T> extends AbstractCell<T> {
-	public function new() {}
-
-	override public inline function add(collider: Collider<T>): Void {}
 }

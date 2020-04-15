@@ -3,33 +3,25 @@ package broker.collision;
 import banker.vector.WritableVector;
 import broker.collision.cell.*;
 
-#if !broker_generic_disable
-@:generic
-#end
-class CollisionDetector<T> {
-	/**
-		An instance of linear quadtree space.
-	**/
-	public final quadtree: QuadtreeSpace<T>;
+class CollisionDetector {
+	public final space: CollisionSpace;
+	public final cells: LinearCells;
 
 	/**
 		Vector for using as a stack of `Cell` when traversing the quadtree.
 	**/
-	final cellStack: WritableVector<Cell<T>>;
+	final cellStack: WritableVector<Cell>;
 
 	public function new(
 		width: Int,
 		height: Int,
-		partitionLevelValue: Int,
-		defaultColliderValue: T
+		partitionLevelValue: Int
 	) {
-		this.quadtree = new QuadtreeSpace(
-			width,
-			height,
-			new PartitionLevel(partitionLevelValue),
-			defaultColliderValue
-		);
-		this.cellStack = new WritableVector(this.quadtree.cells.length);
+		final partitionLevel = new PartitionLevel(partitionLevelValue);
+		this.space = new CollisionSpace(width, height, partitionLevel);
+		this.cells = this.space.createCells();
+
+		this.cellStack = new WritableVector(this.cells.length);
 	}
 
 	/**
@@ -37,28 +29,28 @@ class CollisionDetector<T> {
 		for all registered `Collider`s.
 	**/
 	public function detect(
-		loadQuadtree: (quadtree: QuadtreeSpace<T>) -> Void,
-		onOverlap: (colliderA: Collider<T>, collierB: Collider<T>) -> Void
+		loadQuadtree: (space: CollisionSpace, cells: LinearCells) -> Void,
+		onOverlap: (colliderA: Collider, collierB: Collider) -> Void
 	): Void {
-		final quadtree = this.quadtree;
-		quadtree.clear();
-		loadQuadtree(quadtree);
+		final cells = this.cells;
+		cells.reset();
+		loadQuadtree(this.space, cells);
 
 		this.detectRecursive(
-			quadtree.cells,
+			cells,
 			GlobalCellIndex.zero,
-			cellStack,
+			this.cellStack,
 			0,
 			onOverlap
 		);
 	}
 
 	function detectRecursive(
-		cells: LinearCells<T>,
+		cells: LinearCells,
 		currentIndex: GlobalCellIndex,
-		cellStack: WritableVector<Cell<T>>,
+		cellStack: WritableVector<Cell>,
 		currentCellStackSize: Int,
-		onOverlap: (colliderA: Collider<T>, collierB: Collider<T>) -> Void
+		onOverlap: (colliderA: Collider, collierB: Collider) -> Void
 	): Void {
 		final currentCell = cells[currentIndex];
 		if (currentCell == null) return;
@@ -86,10 +78,10 @@ class CollisionDetector<T> {
 		2. Detects collision between `cell` and each cell in `cellStack`.
 	**/
 	inline function detectInCell(
-		cell: Cell<T>,
-		cellStack: WritableVector<Cell<T>>,
+		cell: Cell,
+		cellStack: WritableVector<Cell>,
 		currentCellStackSize: Int,
-		onOverlap: (colliderA: Collider<T>, collierB: Collider<T>) -> Void
+		onOverlap: (colliderA: Collider, collierB: Collider) -> Void
 	): Void {
 		cell.roundRobin(onOverlap);
 
