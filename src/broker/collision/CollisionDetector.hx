@@ -1,5 +1,6 @@
 package broker.collision;
 
+import banker.vector.WritableVector;
 import broker.collision.cell.*;
 
 class CollisionDetector {
@@ -25,61 +26,66 @@ class CollisionDetector {
 		loadQuadtree(this.space, cells);
 
 		final space = this.space;
-		final ancestorCellColliders = space.ancestorCellColliders;
+		final colliderStack = space.colliderStack;
 		final searchStack = space.searchStack;
 
 		var currentIndex: GlobalCellIndex;
 		var currentCell: Cell;
 		var currentLevel = 0;
 		var searchStackSize = 0;
-		var ancestorCellColliderCount = 0;
+		var colliderStackSize = 0;
 
-		inline function push(index: GlobalCellIndex): Void {
+		inline function pushCell(index: GlobalCellIndex): Void {
 			searchStack[searchStackSize] = index;
 			++searchStackSize;
 		}
-		inline function pop(): Void {
+		inline function popCell(): Void {
 			--searchStackSize;
 			currentIndex = searchStack[searchStackSize];
 			currentCell = cells[currentIndex];
 
 			final nextLevel = currentCell.level.toInt();
 			if (nextLevel < currentLevel)
-				ancestorCellColliderCount -= currentCell.colliderCount;
+				colliderStackSize -= currentCell.colliderCount;
 
 			currentLevel = nextLevel;
 		}
 
-		inline function pushAncestor(): Void {
-			currentCell.exportTo(ancestorCellColliders, ancestorCellColliderCount);
-			ancestorCellColliderCount += currentCell.colliderCount;
+		inline function pushColliders(): Void {
+			currentCell.exportTo(colliderStack, colliderStackSize);
+			colliderStackSize += currentCell.colliderCount;
 		}
 
-		inline function detectInCell(cell: Cell): Void {
-			cell.roundRobin(onOverlap);
-
-			cell.detectCollisionWithVector(
-				ancestorCellColliders,
-				ancestorCellColliderCount,
-				onOverlap
-			);
-		}
-
-		push(GlobalCellIndex.zero);
+		pushCell(GlobalCellIndex.zero);
 
 		while (searchStackSize > 0) {
-			pop();
+			popCell();
 
-			detectInCell(currentCell);
+			this.detectInCell(
+				currentCell,
+				colliderStack,
+				colliderStackSize,
+				onOverlap
+			);
 
-			var childCount = 0;
+			var hasChild = false;
 			for (childIndex in currentIndex.children(cells)) {
 				if (cells[childIndex].isActive) {
-					++childCount;
-					push(childIndex);
+					hasChild = true;
+					pushCell(childIndex);
 				}
 			}
-			if (childCount > 0) pushAncestor();
+			if (hasChild) pushColliders();
 		}
+	}
+
+	inline function detectInCell(
+		cell: Cell,
+		colliderStack: WritableVector<Collider>,
+		colliderStackSize: Int,
+		onOverlap: (colliderA: Collider, collierB: Collider) -> Void
+	): Void {
+		cell.roundRobin(onOverlap);
+		cell.detectCollisionWithVector(colliderStack, colliderStackSize, onOverlap);
 	}
 }

@@ -28,7 +28,7 @@ class CollisionSpace {
 	/**
 		Vector for using as a stack storing `Collider`s in ancestor `Cell`s when traversing the quadtree.
 	**/
-	public final ancestorCellColliders: WritableVector<Collider>;
+	public final colliderStack: WritableVector<Collider>;
 
 	/**
 		Vector for using as a stack for depth-first search in quadtree.
@@ -62,7 +62,7 @@ class CollisionSpace {
 		this.partitionLevel = new PartitionLevel(partitionLevel);
 
 		final cellCount = this.partitionLevel.totalCellCount();
-		this.ancestorCellColliders = new WritableVector(cellCount);
+		this.colliderStack = new WritableVector(cellCount);
 		this.searchStack = new WritableVector(cellCount);
 
 		final gridSize = this.partitionLevel.gridSize();
