@@ -17,14 +17,9 @@ class CollisionDetector {
 		for all registered `Collider`s.
 	**/
 	public function detect(
-		loadQuadtree: (space: CollisionSpace, cells: LinearCells) -> Void,
 		onOverlap: (colliderA: Collider, collierB: Collider) -> Void
 	): Void {
 		final cells = this.cells;
-
-		cells.reset();
-		loadQuadtree(this.space, cells);
-
 		final space = this.space;
 		final colliderStack = space.colliderStack;
 		final searchStack = space.searchStack;

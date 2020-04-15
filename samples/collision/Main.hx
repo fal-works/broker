@@ -3,7 +3,6 @@ package collision;
 import broker.collision.CollisionDetector;
 import broker.collision.CollisionSpace;
 import broker.collision.Collider;
-import broker.collision.cell.LinearCells;
 import banker.aosoa.ChunkEntityId;
 
 class Main extends hxd.App {
@@ -11,7 +10,7 @@ class Main extends hxd.App {
 
 	var entities: EntityAosoa;
 	var collisionDetector: CollisionDetector;
-	var loadQuadtree: (space: CollisionSpace, cells: LinearCells) -> Void;
+	var loadQuadtree: () -> Void;
 	var onOverlap: (a: Collider, b: Collider) -> Void;
 
 	override function init() {
@@ -28,7 +27,11 @@ class Main extends hxd.App {
 
 		final collisionSpace = new CollisionSpace(Constants.width, Constants.height, 4);
 		this.collisionDetector = new CollisionDetector(collisionSpace);
-		this.loadQuadtree = (space, cells) -> entities.loadQuadTree(space, cells);
+		final cells = this.collisionDetector.cells;
+		this.loadQuadtree = () -> {
+			cells.reset();
+			entities.loadQuadTree(collisionSpace, cells);
+		}
 
 		final processCollision = (idValue: Int) -> {
 			final id = ChunkEntityId.fromInt(idValue);
@@ -52,7 +55,8 @@ class Main extends hxd.App {
 		// entities.resetColor();
 		entities.synchronize();
 
-		this.collisionDetector.detect(this.loadQuadtree, this.onOverlap);
+		this.loadQuadtree();
+		this.collisionDetector.detect(this.onOverlap);
 	}
 
 	function createEntities(tile: h2d.Tile): EntityAosoa return {
