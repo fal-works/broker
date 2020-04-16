@@ -10,6 +10,32 @@ using banker.type_extension.FloatExtension;
 **/
 class CollisionSpace {
 	/**
+		@return The local index of the leaf `Cell` that contains the position `x, y`.
+	**/
+	static inline function getLeafCellLocalIndex(
+		x: Float,
+		y: Float,
+		width: Int,
+		height: Int,
+		leafCellPositionFactorX: Float,
+		leafCellPositionFactorY: Float
+	): LocalCellIndex {
+		return if (x < 0 || x >= width || y < 0 || y >= height) {
+			LocalCellIndex.none;
+		} else {
+			final cellPositionX = (x * leafCellPositionFactorX).toInt();
+			final cellPositionY = (y * leafCellPositionFactorY).toInt();
+
+			final indexValue = Bits.zip(
+				Bits.from(cellPositionX),
+				Bits.from(cellPositionY)
+			);
+
+			new LocalCellIndex(indexValue.toInt());
+		}
+	}
+
+	/**
 		@see `new()`
 	**/
 	public final width: Int;
@@ -24,6 +50,9 @@ class CollisionSpace {
 	**/
 	public final partitionLevel: PartitionLevel;
 
+	/**
+		The size of the space grid determined by `this.partitionLevel`.
+	**/
 	final gridSize: Int;
 
 	/**
@@ -71,53 +100,52 @@ class CollisionSpace {
 		rightX: Float,
 		bottomY: Float
 	): GlobalCellIndex {
-		// TODO: early return if index is none
-		final leftTop = getLeafCellLocalIndex(leftX, topY);
-		final rightBottom = getLeafCellLocalIndex(rightX, bottomY);
+		final width = this.width;
+		final height = this.height;
+		final leafCellPositionFactorX = this.leafCellPositionFactorX;
+		final leafCellPositionFactorY = this.leafCellPositionFactorY;
+
+		final leftTop = getLeafCellLocalIndex(
+			leftX,
+			topY,
+			width,
+			height,
+			leafCellPositionFactorX,
+			leafCellPositionFactorY
+		);
+		final rightBottom = getLeafCellLocalIndex(
+			rightX,
+			bottomY,
+			width,
+			height,
+			leafCellPositionFactorX,
+			leafCellPositionFactorY
+		);
 
 		return if (leftTop.isNone() && rightBottom.isNone()) {
 			GlobalCellIndex.none;
 		} else {
-			final partitionLevel = this.partitionLevel;
-			var level: PartitionLevel;
-			var localIndex: LocalCellIndex;
+			final leafLevel = this.partitionLevel;
+			var aabbLevel: PartitionLevel;
+			var aabbLocalIndex: LocalCellIndex;
 
 			if (leftTop == rightBottom) {
-				level = partitionLevel;
-				localIndex = leftTop;
+				aabbLevel = leafLevel;
+				aabbLocalIndex = leftTop;
 			} else {
-				level = LocalCellIndex.getAabbLevel(
+				aabbLevel = LocalCellIndex.getAabbLevel(
 					leftTop,
 					rightBottom,
-					partitionLevel
+					leafLevel
 				);
-				final largerMorton = LocalCellIndex.max(
+				final largerLeafCellIndex = LocalCellIndex.max(
 					leftTop,
 					rightBottom
 				); // For avoiding `-1`
-				localIndex = largerMorton.inRoughLevel(partitionLevel, level);
+				aabbLocalIndex = largerLeafCellIndex.inRoughLevel(leafLevel, aabbLevel);
 			}
 
-			localIndex.toGlobal(level);
-		}
-	}
-
-	/**
-		@return The local index of the leaf `Cell` that contains the position `x, y`.
-	**/
-	public inline function getLeafCellLocalIndex(x: Float, y: Float): LocalCellIndex {
-		return if (x < 0 || x >= this.width || y < 0 || y >= this.height) {
-			LocalCellIndex.none;
-		} else {
-			final cellPositionX = (x * this.leafCellPositionFactorX).toInt();
-			final cellPositionY = (y * this.leafCellPositionFactorY).toInt();
-
-			final indexValue = Bits.zip(
-				Bits.from(cellPositionX),
-				Bits.from(cellPositionY)
-			);
-
-			new LocalCellIndex(indexValue.toInt());
+			aabbLocalIndex.toGlobal(aabbLevel);
 		}
 	}
 }
