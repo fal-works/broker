@@ -1,6 +1,5 @@
 package broker.collision;
 
-import banker.vector.WritableVector;
 import banker.types.Bits;
 import broker.collision.cell.*;
 
@@ -25,15 +24,7 @@ class CollisionSpace {
 	**/
 	public final partitionLevel: PartitionLevel;
 
-	/**
-		Vector for using as a stack storing `Collider`s in ancestor `Cell`s when traversing the quadtree.
-	**/
-	public final colliderStack: WritableVector<Collider>;
-
-	/**
-		Vector for using as a stack for depth-first search in quadtree.
-	**/
-	public final searchStack: WritableVector<GlobalCellIndex>;
+	final gridSize: Int;
 
 	/**
 		Factor for calculating the position of a leaf cell
@@ -61,11 +52,8 @@ class CollisionSpace {
 		this.height = height;
 		this.partitionLevel = new PartitionLevel(partitionLevel);
 
-		final cellCount = this.partitionLevel.totalCellCount();
-		this.colliderStack = new WritableVector(cellCount);
-		this.searchStack = new WritableVector(cellCount);
-
 		final gridSize = this.partitionLevel.gridSize();
+		this.gridSize = gridSize;
 		this.leafCellPositionFactorX = gridSize / width;
 		this.leafCellPositionFactorY = gridSize / height;
 	}
@@ -98,7 +86,11 @@ class CollisionSpace {
 				level = partitionLevel;
 				localIndex = leftTop;
 			} else {
-				level = LocalCellIndex.getAabbLevel(leftTop, rightBottom, partitionLevel);
+				level = LocalCellIndex.getAabbLevel(
+					leftTop,
+					rightBottom,
+					partitionLevel
+				);
 				final largerMorton = LocalCellIndex.max(
 					leftTop,
 					rightBottom
@@ -113,8 +105,8 @@ class CollisionSpace {
 	/**
 		@return The local index of the leaf `Cell` that contains the position `x, y`.
 	**/
-	inline function getLeafCellLocalIndex(x: Float, y: Float): LocalCellIndex {
-		return if (x < 0 || x > this.width || y < 0 || y > this.height) {
+	public inline function getLeafCellLocalIndex(x: Float, y: Float): LocalCellIndex {
+		return if (x < 0 || x >= this.width || y < 0 || y >= this.height) {
 			LocalCellIndex.none;
 		} else {
 			final cellPositionX = (x * this.leafCellPositionFactorX).toInt();
@@ -123,9 +115,9 @@ class CollisionSpace {
 			final indexValue = Bits.zip(
 				Bits.from(cellPositionX),
 				Bits.from(cellPositionY)
-			).toInt();
+			);
 
-			new LocalCellIndex(indexValue);
+			new LocalCellIndex(indexValue.toInt());
 		}
 	}
 }

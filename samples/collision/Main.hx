@@ -6,6 +6,12 @@ import broker.collision.Collider;
 import banker.aosoa.ChunkEntityId;
 
 class Main extends hxd.App {
+	/**
+		Set this to `true` for testing inter-group collision detection,
+		or `false` for intra-group collision detection.
+	**/
+	static final interGroup: Bool = false;
+
 	static final TWO_PI = 2 * Math.PI;
 
 	var entities: EntityAosoa;
@@ -28,9 +34,9 @@ class Main extends hxd.App {
 		final collisionSpace = new CollisionSpace(
 			Constants.width,
 			Constants.height,
-			4
+			3
 		);
-		final onOverlap = (collider: Collider) -> {
+		final processCollider = (collider: Collider) -> {
 			final id = ChunkEntityId.fromInt(collider.id);
 			final chunk = entities.getChunk(id);
 			final index = chunk.getReadIndex(id);
@@ -38,18 +44,40 @@ class Main extends hxd.App {
 			sprite.g = 0;
 			sprite.b = 0.25;
 		};
-		this.collisionDetector = new IntraGroupCollisionDetector(
-			collisionSpace,
-			(a, b) -> {
-				onOverlap(a);
-				onOverlap(b);
-			}
-		);
 
-		final cells = this.collisionDetector.leftCells;
+		if (interGroup) {
+			this.onOverlap = (a: Collider, b: Collider) -> {
+				processCollider(a);
+			};
+			this.collisionDetector = CollisionDetector.createInterGroup(
+				collisionSpace,
+				countPerEmit * 3,
+				1
+			);
+
+			final rightCollider = new Collider(-1);
+			final left = Constants.width / 2;
+			final top = 0;
+			final right = Constants.width - 1;
+			final bottom = Constants.height / 2 - 1;
+			rightCollider.setBounds(left, top, right, bottom);
+			final cellIndex = collisionSpace.getCellIndex(left, top, right, bottom);
+			this.collisionDetector.rightGroupCells.activate(cellIndex).add(rightCollider);
+		} else {
+			this.onOverlap = (a: Collider, b: Collider) -> {
+				processCollider(a);
+				processCollider(b);
+			};
+			this.collisionDetector = CollisionDetector.createIntraGroup(
+				collisionSpace,
+				countPerEmit * 3
+			);
+		}
+
+		final leftCells = this.collisionDetector.leftGroupCells;
 		this.loadQuadtree = () -> {
-			cells.reset();
-			entities.loadQuadTree(collisionSpace, cells);
+			leftCells.reset();
+			entities.loadQuadTree(collisionSpace, leftCells);
 		}
 	}
 
@@ -62,7 +90,7 @@ class Main extends hxd.App {
 		entities.synchronize();
 
 		this.loadQuadtree();
-		this.collisionDetector.detect();
+		this.collisionDetector.detect(this.onOverlap);
 	}
 
 	function createEntities(tile: h2d.Tile): EntityAosoa

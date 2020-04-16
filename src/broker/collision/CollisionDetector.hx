@@ -5,42 +5,130 @@ import banker.vector.WritableVector;
 import broker.collision.cell.*;
 
 class CollisionDetector {
-	public final space: CollisionSpace;
-	public final leftCells: LinearCells;
-	public final rightCells: LinearCells;
+	/**
+		Shared vector for using as a stack storing left group `Collider`s in ancestor `Cell`s
+		when traversing a quadtree.
+		Not used by `IntraGroupCollisionDetector`.
+	**/
+	static var leftColliderStack: WritableVector<Collider> = WritableVector.createZero();
 
-	final onOverlap: (colliderA: Collider, collierB: Collider) -> Void;
+	/**
+		Shared vector for storing the number of left group `Collider`s in each `Cell`.
+		Not used by `IntraGroupCollisionDetector`.
+	**/
+	static var leftColliderCountStack: WritableVector<Int> = WritableVector.createZero();
+
+	/**
+		Shared vector for using as a stack storing right group `Collider`s in ancestor `Cell`s
+		when traversing a quadtree.
+	**/
+	static var rightColliderStack: WritableVector<Collider> = WritableVector.createZero();
+
+	/**
+		Shared vector for storing the number of right group `Collider`s in each `Cell`.
+	**/
+	static var rightColliderCountStack: WritableVector<Int> = WritableVector.createZero();
+
+	/**
+		Shared vector for using as a stack for depth-first search in quadtree.
+	**/
+	static var childCellCountStack: WritableVector<Int> = WritableVector.createZero();
+
+	/**
+		Shared vector for using as a stack for depth-first search in quadtree.
+	**/
+	static var searchStack: WritableVector<GlobalCellIndex> = WritableVector.createZero();
+
+	/**
+		Creates a collision detector for round-robin detection within one collider group.
+	**/
+	public static function createIntraGroup(
+		space: CollisionSpace,
+		maxColliderCount: Int
+	): IntraGroupCollisionDetector
+		return new IntraGroupCollisionDetector(space, maxColliderCount);
+
+	/**
+		Creates a collision detector for nested-loop detection between two collider groups.
+	**/
+	public static function createInterGroup(
+		space: CollisionSpace,
+		leftGroupMaxColliderCount: Int,
+		rightGroupMaxColliderCount: Int
+	): InterGroupCollisionDetector
+		return new InterGroupCollisionDetector(
+			space,
+			leftGroupMaxColliderCount,
+			rightGroupMaxColliderCount
+		);
+
+	/**
+		The cells in the "left" group of colliders.
+	**/
+	public final leftGroupCells: LinearCells;
+
+	/**
+		The cells in the "right" group of colliders.
+	**/
+	public final rightGroupCells: LinearCells;
 
 	function new(
-		space: CollisionSpace,
-		leftCells: LinearCells,
-		rightCells: LinearCells,
-		onOverlap: (colliderA: Collider, collierB: Collider) -> Void
+		leftGroupCells: LinearCells,
+		rightGroupCells: LinearCells,
+		leftColliderStackCapacity: Int,
+		rightColliderStackCapacity: Int,
+		partitionLevel: PartitionLevel
 	) {
-		this.space = space;
-		this.leftCells = leftCells;
-		this.rightCells = rightCells;
-		this.onOverlap = onOverlap;
+		this.leftGroupCells = leftGroupCells;
+		this.rightGroupCells = rightGroupCells;
+
+		if (leftColliderStack.length < leftColliderStackCapacity)
+			leftColliderStack = new WritableVector(leftColliderStackCapacity);
+
+		if (rightColliderStack.length < rightColliderStackCapacity)
+			rightColliderStack = new WritableVector(rightColliderStackCapacity);
+
+		final level = partitionLevel.toInt();
+		final levelPlusOne = level + 1;
+
+		if (childCellCountStack.length < levelPlusOne)
+			childCellCountStack = new WritableVector(levelPlusOne);
+
+		if (leftColliderCountStack.length < levelPlusOne)
+			leftColliderCountStack = new WritableVector(levelPlusOne);
+
+		if (rightColliderCountStack.length < levelPlusOne)
+			rightColliderCountStack = new WritableVector(levelPlusOne);
+
+		final searchStackSize = Std.int(Math.pow(4, level));
+		if (searchStack.length < searchStackSize)
+			searchStack = new WritableVector(searchStackSize);
 	}
 
 	/**
-		Registers `Collider`s by `loadQuadtree()` and then runs collision detection process
-		for all registered `Collider`s.
+		Runs collision detection process for all `Collider`s.
+		Be sure to load `Collider`s to the cells before calling this method.
 	**/
-	public function detect(): Void {
-		final space = this.space;
-		final colliderStack = space.colliderStack;
-		final searchStack = space.searchStack;
+	public function detect(
+		onOverlap: (collierA: Collider, colliderB: Collider) -> Void
+	): Void {
+		final leftColliderStack = CollisionDetector.leftColliderStack;
+		final rightColliderStack = CollisionDetector.rightColliderStack;
+		final leftColliderCountStack = CollisionDetector.leftColliderCountStack;
+		final rightColliderCountStack = CollisionDetector.rightColliderCountStack;
+		final childCellCountStack = CollisionDetector.childCellCountStack;
+		final searchStack = CollisionDetector.searchStack;
 
-		final leftCells = this.leftCells;
-		final onOverlap = this.onOverlap;
+		final leftCells = this.leftGroupCells;
+		final rightCells = this.rightGroupCells;
 
 		var currentIndex: GlobalCellIndex;
 		var currentLeftCell: Cell;
 		var currentRightCell: Cell;
 		var currentLevel = 0;
 		var searchStackSize = 0;
-		var colliderStackSize = 0;
+		var leftColliderStackSize = 0;
+		var rightColliderStackSize = 0;
 
 		inline function pushCell(index: GlobalCellIndex): Void {
 			searchStack[searchStackSize] = index;
@@ -51,17 +139,36 @@ class CollisionDetector {
 			currentIndex = searchStack[searchStackSize];
 			currentLeftCell = leftCells[currentIndex];
 			currentRightCell = rightCells[currentIndex];
-
-			final nextLevel = currentLeftCell.level.toInt();
-			if (nextLevel < currentLevel)
-				colliderStackSize -= currentLeftCell.colliderCount;
-
-			currentLevel = nextLevel;
+			currentLevel = currentLeftCell.level.toInt();
 		}
 
-		inline function pushColliders(): Void {
-			currentRightCell.exportTo(colliderStack, colliderStackSize);
-			colliderStackSize += currentRightCell.colliderCount;
+		inline function pushColliders(childCount: Int): Void {
+			final nextLevel = currentLevel + 1;
+			childCellCountStack[nextLevel] = childCount;
+
+			final leftColliderCount = this.pushLeftColliders(
+				currentLeftCell,
+				leftColliderStack,
+				leftColliderStackSize
+			);
+			leftColliderStackSize += leftColliderCount;
+			leftColliderCountStack[nextLevel] = leftColliderCount;
+
+			final rightColliderCount = this.pushRightColliders(
+				currentRightCell,
+				rightColliderStack,
+				rightColliderStackSize
+			);
+			rightColliderStackSize += rightColliderCount;
+			rightColliderCountStack[nextLevel] = rightColliderCount;
+		}
+		inline function countDown(): Void {
+			final nextCount = childCellCountStack[currentLevel] - 1;
+			childCellCountStack[currentLevel] = nextCount;
+			if (nextCount == 0) {
+				leftColliderStackSize -= leftColliderCountStack[currentLevel];
+				rightColliderStackSize -= rightColliderCountStack[currentLevel];
+			}
 		}
 
 		pushCell(GlobalCellIndex.zero);
@@ -71,27 +178,51 @@ class CollisionDetector {
 
 			this.detectInCell(
 				currentLeftCell,
-				colliderStack,
-				colliderStackSize,
+				currentRightCell,
+				leftColliderStack,
+				leftColliderStackSize,
+				rightColliderStack,
+				rightColliderStackSize,
 				onOverlap
 			);
 
-			var hasChild = false;
+			var childCellCount = 0;
 			for (childIndex in currentIndex.children(leftCells)) {
 				if (leftCells[childIndex].isActive) {
-					hasChild = true;
+					++childCellCount;
 					pushCell(childIndex);
 				}
 			}
-			if (hasChild) pushColliders();
+			if (childCellCount != 0) pushColliders(childCellCount);
+			else countDown();
 		}
 	}
 
-	function detectInCell(
+	function pushLeftColliders(
 		cell: Cell,
 		colliderStack: WritableVector<Collider>,
-		colliderStackSize: Int,
-		onOverlap: (colliderA: Collider, collierB: Collider) -> Void
+		colliderStackSize: Int
+	): Int {
+		throw new NotOverriddenException();
+	}
+
+	inline function pushRightColliders(
+		cell: Cell,
+		colliderStack: WritableVector<Collider>,
+		colliderStackSize: Int
+	): Int {
+		cell.exportTo(colliderStack, colliderStackSize);
+		return cell.colliderCount;
+	}
+
+	function detectInCell(
+		leftCell: Cell,
+		rightCell: Cell,
+		leftColliderStack: WritableVector<Collider>,
+		leftColliderStackSize: Int,
+		rightColliderStack: WritableVector<Collider>,
+		rightColliderStackSize: Int,
+		onOverlap: (a: Collider, b: Collider) -> Void
 	): Void {
 		throw new NotOverriddenException();
 	}
@@ -99,27 +230,87 @@ class CollisionDetector {
 
 /**
 	Object that performs round-robin collision detection within one single collider group.
+	`this.leftCells` and `this.rightCells` are identical.
 **/
 class IntraGroupCollisionDetector extends CollisionDetector {
-	public function new(
-		space: CollisionSpace,
-		onOverlap: (colliderA: Collider, collierB: Collider) -> Void
-	) {
+	public function new(space: CollisionSpace, maxColliderCount: Int) {
 		final cells = space.createCells();
-		super(space, cells, cells, onOverlap);
+		super(cells, cells, 0, maxColliderCount, space.partitionLevel);
+	}
+
+	override inline function pushLeftColliders(
+		cell: Cell,
+		colliderStack: WritableVector<Collider>,
+		colliderStackSize: Int
+	): Int {
+		return 0;
 	}
 
 	override inline function detectInCell(
 		leftCell: Cell,
-		colliderStack: WritableVector<Collider>,
-		colliderStackSize: Int,
-		onOverlap: (colliderA: Collider, collierB: Collider) -> Void
+		rightCell: Cell,
+		leftColliderStack: WritableVector<Collider>,
+		leftColliderStackSize: Int,
+		rightColliderStack: WritableVector<Collider>,
+		rightColliderStackSize: Int,
+		onOverlap: (a: Collider, b: Collider) -> Void
 	): Void {
 		leftCell.roundRobin(onOverlap);
+
 		leftCell.detectCollisionWithVector(
-			colliderStack,
-			colliderStackSize,
+			rightColliderStack,
+			rightColliderStackSize,
 			onOverlap
 		);
+	}
+}
+
+/**
+	Object that performs nested-loop collision detection between two collider groups.
+**/
+class InterGroupCollisionDetector extends CollisionDetector {
+	public function new(
+		space: CollisionSpace,
+		leftGroupMaxColliderCount: Int,
+		rightGroupMaxColliderCount: Int
+	) {
+		super(
+			space.createCells(),
+			space.createCells(),
+			leftGroupMaxColliderCount,
+			rightGroupMaxColliderCount,
+			space.partitionLevel
+		);
+	}
+
+	override inline function pushLeftColliders(
+		cell: Cell,
+		colliderStack: WritableVector<Collider>,
+		colliderStackSize: Int
+	): Int {
+		cell.exportTo(colliderStack, colliderStackSize);
+		return cell.colliderCount;
+	}
+
+	override inline function detectInCell(
+		leftCell: Cell,
+		rightCell: Cell,
+		leftColliderStack: WritableVector<Collider>,
+		leftColliderStackSize: Int,
+		rightColliderStack: WritableVector<Collider>,
+		rightColliderStackSize: Int,
+		onOverlap: (a: Collider, b: Collider) -> Void
+	): Void {
+		leftCell.exportTo(leftColliderStack, leftColliderStackSize);
+		rightCell.exportTo(rightColliderStack, rightColliderStackSize);
+
+		for (leftIndex in 0...leftColliderStackSize + leftCell.colliderCount) {
+			final leftCollider = leftColliderStack[leftIndex];
+			for (rightIndex in 0...rightColliderStackSize + rightCell.colliderCount) {
+				final rightCollider = rightColliderStack[rightIndex];
+				if (leftCollider.overlaps(rightCollider))
+					onOverlap(leftCollider, rightCollider);
+			}
+		}
 	}
 }
