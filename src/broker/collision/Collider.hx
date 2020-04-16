@@ -2,6 +2,8 @@ package broker.collision;
 
 import sneaker.types.Maybe;
 
+using banker.type_extension.FloatExtension;
+
 /**
 	Unit data of any collidable object that can be registered to `Cell`.
 **/
@@ -85,5 +87,9 @@ class Collider {
 	**/
 	public extern inline function overlaps(other: Collider): Bool {
 		return (other.top < this.bottom) && (this.top < other.bottom) && (other.left < this.right) && (this.left < other.right);
+	}
+
+	public inline function toString(): String {
+		return '{ id: $id, p1: (${left.toInt()}, ${top.toInt()}), p2: (${right.toInt()}, ${bottom.toInt()}) }';
 	}
 }
