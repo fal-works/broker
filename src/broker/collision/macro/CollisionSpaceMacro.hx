@@ -28,10 +28,12 @@ class CollisionSpaceMacro {
 		final topY = parameters.leftTop.y;
 		final rightX = parameters.rightBottom.x;
 		final bottomY = parameters.rightBottom.y;
+		final width = rightX - leftX;
+		final height = bottomY - topY;
 		final levelValue = parameters.level;
 		final gridSize = 1 << levelValue;
-		final leafCellPositionFactorX = gridSize / (rightX - leftX);
-		final leafCellPositionFactorY = gridSize / (bottomY - topY);
+		final leafCellPositionFactorX = gridSize / width;
+		final leafCellPositionFactorY = gridSize / height;
 
 		final classDef = macro class CollisionSpace {
 			/**
@@ -53,6 +55,16 @@ class CollisionSpaceMacro {
 				The y coordinate of the right-bottom point of the entire space.
 			**/
 			public static final bottomY: Float = $v{bottomY};
+
+			/**
+				The width of the entire space.
+			**/
+			public static final width: Float = $v{width};
+
+			/**
+				The height of the entire space.
+			**/
+			public static final height: Float = $v{height};
 
 			/**
 				The finest `PartitionLevel` value of `this` space (i.e. the depth of quadtrees).
