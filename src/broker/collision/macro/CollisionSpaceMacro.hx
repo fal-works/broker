@@ -24,23 +24,35 @@ class CollisionSpaceMacro {
 		if (maybeParameters.isNone()) return null;
 		final parameters = maybeParameters.unwrap();
 
-		final widthValue: Int = parameters.width;
-		final heightValue: Int = parameters.height;
+		final leftX: Int = parameters.leftTop.x;
+		final topY: Int = parameters.leftTop.y;
+		final rightX: Int = parameters.rightBottom.x;
+		final bottomY: Int = parameters.rightBottom.y;
 		final levelValue: Int = parameters.level;
 		final gridSize: Int = 1 << levelValue;
-		final leafCellPositionFactorX: Float = gridSize / widthValue;
-		final leafCellPositionFactorY: Float = gridSize / heightValue;
+		final leafCellPositionFactorX: Float = gridSize / (rightX - leftX);
+		final leafCellPositionFactorY: Float = gridSize / (bottomY - topY);
 
 		final classDef = macro class CollisionSpace {
 			/**
-				The width of the entire space (i.e. the width of root cell).
+				The x coordinate of the left-top point of the entire space.
 			**/
-			public static var width(get, never): Int;
+			public static final leftX: Int = $v{leftX};
 
 			/**
-				The height of the entire space (i.e. the height of root cell).
+				The y coordinate of the left-top point of the entire space.
 			**/
-			public static var height(get, never): Int;
+			public static final topY: Int = $v{topY};
+
+			/**
+				The x coordinate of the right-bottom point of the entire space.
+			**/
+			public static final rightX: Int = $v{rightX};
+
+			/**
+				The y coordinate of the right-bottom point of the entire space.
+			**/
+			public static final bottomY: Int = $v{bottomY};
 
 			/**
 				The finest `PartitionLevel` value of `this` space (i.e. the depth of quadtrees).
@@ -74,11 +86,11 @@ class CollisionSpaceMacro {
 				x: Float,
 				y: Float
 			): broker.collision.cell.LocalCellIndex {
-				return if (x < 0 || x >= width || y < 0 || y >= height) {
+				return if (x < leftX || x >= rightX || y < topY || y >= bottomY) {
 					broker.collision.cell.LocalCellIndex.none;
 				} else {
-					final cellPositionX = banker.type_extension.FloatExtension.toInt(x * leafCellPositionFactorX);
-					final cellPositionY = banker.type_extension.FloatExtension.toInt(y * leafCellPositionFactorY);
+					final cellPositionX = banker.type_extension.FloatExtension.toInt((x - leftX) * leafCellPositionFactorX);
+					final cellPositionY = banker.type_extension.FloatExtension.toInt((y - topY) * leafCellPositionFactorY);
 
 					final indexValue = banker.types.Bits.zip(
 						banker.types.Bits.from(cellPositionX),
@@ -137,12 +149,6 @@ class CollisionSpaceMacro {
 				}
 			}
 
-			static extern inline function get_width()
-				return $v{widthValue};
-
-			static extern inline function get_height()
-				return $v{heightValue};
-
 			static extern inline function get_partitionLevel()
 				return new broker.collision.cell.PartitionLevel($v{levelValue});
 
@@ -180,28 +186,32 @@ class CollisionSpaceMacro {
 	}
 
 	static function getMetadataParameters(localClass: ClassType): Maybe<{
-		width: Int,
-		height: Int,
+		leftTop: { x: Int, y: Int },
+		rightBottom: { x: Int, y: Int },
 		level: Int
 	}> {
-		var width: Maybe<Int> = Maybe.none();
-		var height: Maybe<Int> = Maybe.none();
+		var leftTop: Maybe<{ x: Int, y: Int }> = Maybe.none();
+		var rightBottom: Maybe<{ x: Int, y: Int }> = Maybe.none();
 		var level: Maybe<Int> = Maybe.none();
 
 		for (meta in localClass.meta.get()) {
 			final params = meta.params;
 
 			switch meta.name {
-				case ':broker.width' | ':broker_width':
-					if (!validParameterLength(meta, 1)) return null;
-					final widthResult = params[0].getIntLiteralValue();
-					if (widthResult.isFailedWarn()) return null;
-					width = widthResult.toMaybe();
-				case ':broker.height' | ':broker_height':
-					if (!validParameterLength(meta, 1)) return null;
-					final heightResult = params[0].getIntLiteralValue();
-					if (heightResult.isFailedWarn()) return null;
-					height = heightResult.toMaybe();
+				case ':broker.leftTop' | ':broker_leftTop':
+					if (!validParameterLength(meta, 2)) return null;
+					final xResult = params[0].getIntLiteralValue();
+					if (xResult.isFailedWarn()) return null;
+					final yResult = params[1].getIntLiteralValue();
+					if (yResult.isFailedWarn()) return null;
+					leftTop = { x: xResult.unwrap(), y: yResult.unwrap() };
+				case ':broker.rightBottom' | ':broker_rightBottom':
+					if (!validParameterLength(meta, 2)) return null;
+					final xResult = params[0].getIntLiteralValue();
+					if (xResult.isFailedWarn()) return null;
+					final yResult = params[1].getIntLiteralValue();
+					if (yResult.isFailedWarn()) return null;
+					rightBottom = { x: xResult.unwrap(), y: yResult.unwrap() };
 				case ':broker.partitionLevel' | ':broker_partitionLevel':
 					if (!validParameterLength(meta, 1)) return null;
 					final levelResult = params[0].getIntLiteralValue();
@@ -211,13 +221,13 @@ class CollisionSpaceMacro {
 			}
 		}
 
-		if (width.isNone()) {
-			warn("Missing metadata: @:broker.width");
+		if (leftTop.isNone()) {
+			warn("Missing metadata: @:broker.leftTop");
 			return null;
 		}
 
-		if (height.isNone()) {
-			warn("Missing metadata: @:broker.height");
+		if (rightBottom.isNone()) {
+			warn("Missing metadata: @:broker.rightBottom");
 			return null;
 		}
 
@@ -227,8 +237,8 @@ class CollisionSpaceMacro {
 		}
 
 		return {
-			width: width.unwrap(),
-			height: height.unwrap(),
+			leftTop: leftTop.unwrap(),
+			rightBottom: rightBottom.unwrap(),
 			level: level.unwrap()
 		};
 	}
