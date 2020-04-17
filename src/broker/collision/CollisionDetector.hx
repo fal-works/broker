@@ -43,21 +43,21 @@ class CollisionDetector {
 		Creates a collision detector for round-robin detection within one collider group.
 	**/
 	public static function createIntraGroup(
-		space: CollisionSpace,
+		partitionLevel: PartitionLevel,
 		maxColliderCount: Int
 	): IntraGroupCollisionDetector
-		return new IntraGroupCollisionDetector(space, maxColliderCount);
+		return new IntraGroupCollisionDetector(partitionLevel, maxColliderCount);
 
 	/**
 		Creates a collision detector for nested-loop detection between two collider groups.
 	**/
 	public static function createInterGroup(
-		space: CollisionSpace,
+		partitionLevel: PartitionLevel,
 		leftGroupMaxColliderCount: Int,
 		rightGroupMaxColliderCount: Int
 	): InterGroupCollisionDetector
 		return new InterGroupCollisionDetector(
-			space,
+			partitionLevel,
 			leftGroupMaxColliderCount,
 			rightGroupMaxColliderCount
 		);
@@ -233,9 +233,9 @@ class CollisionDetector {
 	`this.leftCells` and `this.rightCells` are identical.
 **/
 class IntraGroupCollisionDetector extends CollisionDetector {
-	public function new(space: CollisionSpace, maxColliderCount: Int) {
-		final cells = space.createCells();
-		super(cells, cells, 0, maxColliderCount, space.partitionLevel);
+	public function new(partitionLevel: PartitionLevel, maxColliderCount: Int) {
+		final cells = new LinearCells(partitionLevel);
+		super(cells, cells, 0, maxColliderCount, partitionLevel);
 	}
 
 	override inline function pushLeftColliders(
@@ -270,16 +270,18 @@ class IntraGroupCollisionDetector extends CollisionDetector {
 **/
 class InterGroupCollisionDetector extends CollisionDetector {
 	public function new(
-		space: CollisionSpace,
+		partitionLevel: PartitionLevel,
 		leftGroupMaxColliderCount: Int,
 		rightGroupMaxColliderCount: Int
 	) {
+		final leftCells = new LinearCells(partitionLevel);
+		final rightCells = new LinearCells(partitionLevel);
 		super(
-			space.createCells(),
-			space.createCells(),
+			leftCells,
+			rightCells,
 			leftGroupMaxColliderCount,
 			rightGroupMaxColliderCount,
-			space.partitionLevel
+			partitionLevel
 		);
 	}
 

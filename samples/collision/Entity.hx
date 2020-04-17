@@ -71,7 +71,6 @@ class Entity extends BasicEntity {
 		collider: Collider,
 		halfTileWidth: Float,
 		halfTileHeight: Float,
-		collisionSpace: CollisionSpace,
 		cells: LinearCells
 	): Void {
 		final left = x - halfTileWidth;
@@ -79,7 +78,7 @@ class Entity extends BasicEntity {
 		final right = x + halfTileWidth;
 		final bottom = y + halfTileHeight;
 
-		final cellIndex = collisionSpace.getCellIndex(left, top, right, bottom);
+		final cellIndex = Space.getCellIndex(left, top, right, bottom);
 		if (!cellIndex.isNone()) {
 			collider.setBounds(left, top, right, bottom);
 

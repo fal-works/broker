@@ -1,7 +1,6 @@
 package collision;
 
 import broker.collision.CollisionDetector;
-import broker.collision.CollisionSpace;
 import broker.collision.Collider;
 import banker.aosoa.ChunkEntityId;
 
@@ -30,12 +29,8 @@ class Main extends hxd.App {
 		emitEntities(countPerEmit, 3);
 		emitEntities(countPerEmit, 5);
 		entities.synchronize();
+		final leftGroupEntityCount = 3 * countPerEmit;
 
-		final collisionSpace = new CollisionSpace(
-			Constants.width,
-			Constants.height,
-			3
-		);
 		final processCollider = (collider: Collider) -> {
 			final id = ChunkEntityId.fromInt(collider.id);
 			final chunk = entities.getChunk(id);
@@ -50,8 +45,8 @@ class Main extends hxd.App {
 				processCollider(a);
 			};
 			this.collisionDetector = CollisionDetector.createInterGroup(
-				collisionSpace,
-				countPerEmit * 3,
+				Space.partitionLevel,
+				leftGroupEntityCount,
 				1
 			);
 
@@ -61,7 +56,7 @@ class Main extends hxd.App {
 			final right = Constants.width - 1;
 			final bottom = Constants.height / 2 - 1;
 			rightCollider.setBounds(left, top, right, bottom);
-			final cellIndex = collisionSpace.getCellIndex(left, top, right, bottom);
+			final cellIndex = Space.getCellIndex(left, top, right, bottom);
 			this.collisionDetector.rightGroupCells.activate(cellIndex).add(rightCollider);
 		} else {
 			this.onOverlap = (a: Collider, b: Collider) -> {
@@ -69,15 +64,15 @@ class Main extends hxd.App {
 				processCollider(b);
 			};
 			this.collisionDetector = CollisionDetector.createIntraGroup(
-				collisionSpace,
-				countPerEmit * 3
+				Space.partitionLevel,
+				leftGroupEntityCount
 			);
 		}
 
 		final leftCells = this.collisionDetector.leftGroupCells;
 		this.loadQuadtree = () -> {
 			leftCells.reset();
-			entities.loadQuadTree(collisionSpace, leftCells);
+			entities.loadQuadTree(leftCells);
 		}
 	}
 
