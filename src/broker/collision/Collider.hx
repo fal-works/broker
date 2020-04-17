@@ -86,10 +86,14 @@ class Collider {
 		@return `true` if `this` overlaps `other`.
 	**/
 	public extern inline function overlaps(other: Collider): Bool {
-		return (other.top < this.bottom) && (this.top < other.bottom) && (other.left < this.right) && (this.left < other.right);
+		return (other.top < this.bottom)
+			&& (this.top < other.bottom)
+			&& (other.left < this.right)
+			&& (this.left < other.right);
 	}
 
 	public inline function toString(): String {
-		return '{ id: $id, p1: (${left.toInt()}, ${top.toInt()}), p2: (${right.toInt()}, ${bottom.toInt()}) }';
+		return
+			'{ id: $id, p1: (${left.toInt()}, ${top.toInt()}), p2: (${right.toInt()}, ${bottom.toInt()}) }';
 	}
 }

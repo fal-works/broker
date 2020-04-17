@@ -89,8 +89,11 @@ class CollisionSpaceMacro {
 				return if (x < leftX || x >= rightX || y < topY || y >= bottomY) {
 					broker.collision.cell.LocalCellIndex.none;
 				} else {
-					final cellPositionX = banker.type_extension.FloatExtension.toInt((x - leftX) * leafCellPositionFactorX);
-					final cellPositionY = banker.type_extension.FloatExtension.toInt((y - topY) * leafCellPositionFactorY);
+					inline function toInt(v: Float)
+						return banker.type_extension.FloatExtension.toInt(v);
+
+					final cellPositionX = toInt((x - leftX) * leafCellPositionFactorX);
+					final cellPositionY = toInt((y - topY) * leafCellPositionFactorY);
 
 					final indexValue = banker.types.Bits.zip(
 						banker.types.Bits.from(cellPositionX),

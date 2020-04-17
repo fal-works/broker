@@ -43,9 +43,7 @@ abstract GlobalCellIndex(Int) {
 	/**
 		@return Iterator for children indices of `this`.
 	**/
-	extern public inline function children(
-		quadtree: Quadtree
-	): GlobalCellIndexIterator {
+	extern public inline function children(quadtree: Quadtree): GlobalCellIndexIterator {
 		final start = this * 4 + 1;
 		final end = minInt(start + 4, quadtree.cellCount);
 		return start...end;
