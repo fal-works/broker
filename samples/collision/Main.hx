@@ -46,8 +46,10 @@ class Main extends hxd.App {
 			};
 			this.collisionDetector = CollisionDetector.createInterGroup(
 				Space.partitionLevel,
-				leftGroupEntityCount,
-				1
+				{
+					left: { maxColliderCount: leftGroupEntityCount },
+					right: { maxColliderCount: 1 }
+				}
 			);
 
 			final rightCollider = new Collider(-1);

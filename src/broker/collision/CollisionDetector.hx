@@ -1,5 +1,6 @@
 package broker.collision;
 
+import sneaker.exception.Exception;
 import sneaker.exception.NotOverriddenException;
 import banker.vector.WritableVector;
 import broker.collision.cell.*;
@@ -41,26 +42,43 @@ class CollisionDetector {
 
 	/**
 		Creates a collision detector for round-robin detection within one collider group.
+		@param quadtree Any `Quadtree` with the same level as `partitionLevel`.
+		If not provided, creates a new one.
 	**/
 	public static function createIntraGroup(
 		partitionLevel: PartitionLevel,
-		maxColliderCount: Int
-	): IntraGroupCollisionDetector
-		return new IntraGroupCollisionDetector(partitionLevel, maxColliderCount);
+		maxColliderCount: Int,
+		?quadtree: Quadtree
+	): IntraGroupCollisionDetector {
+		return new IntraGroupCollisionDetector(
+			partitionLevel,
+			maxColliderCount,
+			quadtree
+		);
+	}
 
 	/**
 		Creates a collision detector for nested-loop detection between two collider groups.
+		@param groups.left.quadtree
+		Any `Quadtree` with the same level as `partitionLevel`.
+		If not given, creates a new one.
+		@param groups.right.quadtree ditto
 	**/
 	public static function createInterGroup(
 		partitionLevel: PartitionLevel,
-		leftGroupMaxColliderCount: Int,
-		rightGroupMaxColliderCount: Int
-	): InterGroupCollisionDetector
+		groups: {
+			left: { maxColliderCount: Int, ?quadtree: Quadtree },
+			right: { maxColliderCount: Int, ?quadtree: Quadtree }
+		}
+	): InterGroupCollisionDetector {
 		return new InterGroupCollisionDetector(
 			partitionLevel,
-			leftGroupMaxColliderCount,
-			rightGroupMaxColliderCount
+			groups.left.maxColliderCount,
+			groups.right.maxColliderCount,
+			groups.left.quadtree,
+			groups.right.quadtree
 		);
+	}
 
 	/**
 		The `Quadtree` for loading colliders in the "left" group.
@@ -233,8 +251,17 @@ class CollisionDetector {
 	`this.leftQuadtree` and `this.rightQuadtree` are identical.
 **/
 class IntraGroupCollisionDetector extends CollisionDetector {
-	public function new(partitionLevel: PartitionLevel, maxColliderCount: Int) {
-		final quadtree = new Quadtree(partitionLevel);
+	public function new(
+		partitionLevel: PartitionLevel,
+		maxColliderCount: Int,
+		?quadtree: Quadtree
+	) {
+		final quadtree = if (quadtree != null) {
+			if (quadtree.cellCount != partitionLevel.totalCellCount())
+				throw new Exception("Partition level of quadtree does not match.");
+			quadtree;
+		} else new Quadtree(partitionLevel);
+
 		super(quadtree, quadtree, 0, maxColliderCount, partitionLevel);
 	}
 
@@ -272,10 +299,22 @@ class InterGroupCollisionDetector extends CollisionDetector {
 	public function new(
 		partitionLevel: PartitionLevel,
 		leftGroupMaxColliderCount: Int,
-		rightGroupMaxColliderCount: Int
+		rightGroupMaxColliderCount: Int,
+		?leftQuadtree: Quadtree,
+		?rightQuadtree: Quadtree
 	) {
-		final leftQuadtree = new Quadtree(partitionLevel);
-		final rightQuadtree = new Quadtree(partitionLevel);
+		final leftQuadtree = if (leftQuadtree != null) {
+			if (leftQuadtree.cellCount != partitionLevel.totalCellCount())
+				throw new Exception("Partition level of leftQuadtree does not match.");
+			leftQuadtree;
+		} else new Quadtree(partitionLevel);
+
+		final rightQuadtree = if (rightQuadtree != null) {
+			if (rightQuadtree.cellCount != partitionLevel.totalCellCount())
+				throw new Exception("Partition level of rightQuadtree does not match.");
+			rightQuadtree;
+		} else new Quadtree(partitionLevel);
+
 		super(
 			leftQuadtree,
 			rightQuadtree,
