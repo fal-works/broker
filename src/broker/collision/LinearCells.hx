@@ -1,7 +1,8 @@
-package broker.collision.cell;
+package broker.collision;
 
 import banker.vector.Vector;
 import banker.vector.WritableVector;
+import broker.collision.cell.*;
 
 /**
 	List of all `Cell` instances in a quadtree space.

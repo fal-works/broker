@@ -119,8 +119,8 @@ class CollisionSpaceMacro {
 			/**
 				@return New `LinearCells` with the specified `PartitionLevel`.
 			**/
-			public static inline function createCells(): broker.collision.cell.LinearCells {
-				return new broker.collision.cell.LinearCells(partitionLevel);
+			public static inline function createCells(): broker.collision.LinearCells {
+				return new broker.collision.LinearCells(partitionLevel);
 			}
 
 			/**
