@@ -224,13 +224,12 @@ class CollisionDetector {
 		throw new NotOverriddenException();
 	}
 
-	inline function pushRightColliders(
+	function pushRightColliders(
 		cell: Cell,
 		colliderStack: WritableVector<Collider>,
 		colliderStackSize: Int
 	): Int {
-		cell.exportTo(colliderStack, colliderStackSize);
-		return cell.colliderCount;
+		throw new NotOverriddenException();
 	}
 
 	function detectInCell(
@@ -271,6 +270,15 @@ class IntraGroupCollisionDetector extends CollisionDetector {
 		colliderStackSize: Int
 	): Int {
 		return 0;
+	}
+
+	override inline function pushRightColliders(
+		cell: Cell,
+		colliderStack: WritableVector<Collider>,
+		colliderStackSize: Int
+	): Int {
+		cell.exportTo(colliderStack, colliderStackSize);
+		return cell.colliderCount;
 	}
 
 	override inline function detectInCell(
@@ -329,7 +337,16 @@ class InterGroupCollisionDetector extends CollisionDetector {
 		colliderStack: WritableVector<Collider>,
 		colliderStackSize: Int
 	): Int {
-		cell.exportTo(colliderStack, colliderStackSize);
+		// cell is already exported to colliderStack in detectInCell() called just before
+		return cell.colliderCount;
+	}
+
+	override inline function pushRightColliders(
+		cell: Cell,
+		colliderStack: WritableVector<Collider>,
+		colliderStackSize: Int
+	): Int {
+		// cell is already exported to colliderStack in detectInCell() called just before
 		return cell.colliderCount;
 	}
 
