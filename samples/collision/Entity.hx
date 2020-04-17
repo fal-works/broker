@@ -42,17 +42,13 @@ class Entity extends BasicEntity {
 		}
 	}
 
-	static function resetColor(
-		sprite: BatchElement
-	): Void {
+	static function resetColor(sprite: BatchElement): Void {
 		sprite.r = 1.0;
 		sprite.g = 1.0;
 		sprite.b = 1.0;
 	}
 
-	static function coolDown(
-		sprite: BatchElement
-	): Void {
+	static function coolDown(sprite: BatchElement): Void {
 		sprite.r += 0.2 * (1.0 - sprite.r);
 		sprite.g += 0.2 * (1.0 - sprite.g);
 		sprite.b += 0.2 * (1.0 - sprite.b);
