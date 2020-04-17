@@ -48,6 +48,12 @@ abstract LinearCells(Vector<Cell>) {
 	}
 
 	/**
+		Activates the `Cell` at `index` and all of its ancestors, then adds `collider` to that `Cell`.
+	**/
+	public inline function loadAt(index: GlobalCellIndex, collider: Collider): Void
+		activate(index).add(collider);
+
+	/**
 		Activates the `Cell` at `index` and all of its ancestors.
 		@return The `Cell` at `index`.
 	**/

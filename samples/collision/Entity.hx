@@ -81,9 +81,7 @@ class Entity extends BasicEntity {
 		final cellIndex = Space.getCellIndex(left, top, right, bottom);
 		if (!cellIndex.isNone()) {
 			collider.setBounds(left, top, right, bottom);
-
-			final cell = cells.activate(cellIndex);
-			cell.add(collider);
+			cells.loadAt(cellIndex, collider);
 		}
 	}
 }
