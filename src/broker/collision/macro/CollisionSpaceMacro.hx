@@ -10,7 +10,7 @@ import sneaker.macro.ContextTools;
 import sneaker.macro.MacroLogger.*;
 import broker.collision.cell.PartitionLevel;
 
-using haxe.macro.ExprTools;
+using sneaker.macro.extensions.ExprExtension;
 
 class CollisionSpaceMacro {
 	public static macro function build(): Null<Fields> {
@@ -20,13 +20,13 @@ class CollisionSpaceMacro {
 		final localClass = localClassRef.get();
 		final localClassPathString = localClassRef.toString();
 
-		final maybeParameters = getParameters(localClass);
+		final maybeParameters = getMetadataParameters(localClass);
 		if (maybeParameters.isNone()) return null;
 		final parameters = maybeParameters.unwrap();
 
-		final widthValue: Int = parameters.width.getValue();
-		final heightValue: Int = parameters.height.getValue();
-		final levelValue: Int = parameters.level.getValue();
+		final widthValue: Int = parameters.width;
+		final heightValue: Int = parameters.height;
+		final levelValue: Int = parameters.level;
 		final gridSize: Int = 1 << levelValue;
 		final leafCellPositionFactorX: Float = gridSize / widthValue;
 		final leafCellPositionFactorY: Float = gridSize / heightValue;
@@ -179,15 +179,14 @@ class CollisionSpaceMacro {
 		}
 	}
 
-	static function getParameters(localClass: ClassType): Maybe<{
-		width: Expr,
-		height: Expr,
-		level: Expr
+	static function getMetadataParameters(localClass: ClassType): Maybe<{
+		width: Int,
+		height: Int,
+		level: Int
 	}> {
-		final dummyExpression = macro throw "Missing or invalid metadata";
-		var width: Expr = dummyExpression;
-		var height: Expr = dummyExpression;
-		var level: Expr = dummyExpression;
+		var width: Maybe<Int> = Maybe.none();
+		var height: Maybe<Int> = Maybe.none();
+		var level: Maybe<Int> = Maybe.none();
 
 		for (meta in localClass.meta.get()) {
 			final params = meta.params;
@@ -195,36 +194,42 @@ class CollisionSpaceMacro {
 			switch meta.name {
 				case ':broker.width' | ':broker_width':
 					if (!validParameterLength(meta, 1)) return null;
-					width = params[0];
+					final widthResult = params[0].getIntLiteralValue();
+					if (widthResult.isFailedWarn()) return null;
+					width = widthResult.toMaybe();
 				case ':broker.height' | ':broker_height':
 					if (!validParameterLength(meta, 1)) return null;
-					height = params[0];
+					final heightResult = params[0].getIntLiteralValue();
+					if (heightResult.isFailedWarn()) return null;
+					height = heightResult.toMaybe();
 				case ':broker.partitionLevel' | ':broker_partitionLevel':
 					if (!validParameterLength(meta, 1)) return null;
-					level = params[0];
+					final levelResult = params[0].getIntLiteralValue();
+					if (levelResult.isFailedWarn()) return null;
+					level = levelResult.toMaybe();
 				default:
 			}
 		}
 
-		if (width == dummyExpression) {
+		if (width.isNone()) {
 			warn("Missing metadata: @:broker.width");
 			return null;
 		}
 
-		if (height == dummyExpression) {
+		if (height.isNone()) {
 			warn("Missing metadata: @:broker.height");
 			return null;
 		}
 
-		if (level == dummyExpression) {
+		if (level.isNone()) {
 			warn("Missing metadata: @:broker.partitionLevel");
 			return null;
 		}
 
 		return {
-			width: width,
-			height: height,
-			level: level
+			width: width.unwrap(),
+			height: height.unwrap(),
+			level: level.unwrap()
 		};
 	}
 }
