@@ -16,22 +16,22 @@ class Collider {
 	/**
 		The x coordinate of the left bound.
 	**/
-	public var left: Float;
+	public var leftX: Float;
 
 	/**
 		The y coordinate of the top bound.
 	**/
-	public var top: Float;
+	public var topY: Float;
 
 	/**
 		The x coordinate of the right bound.
 	**/
-	public var right: Float;
+	public var rightX: Float;
 
 	/**
 		The y coordinate of the bottom bound.
 	**/
-	public var bottom: Float;
+	public var bottomY: Float;
 
 	/**
 		Used for linking another `Collider` and constructing a linked list.
@@ -40,10 +40,10 @@ class Collider {
 
 	public function new(id: Int) {
 		this.id = id;
-		this.left = Math.NEGATIVE_INFINITY;
-		this.top = Math.NEGATIVE_INFINITY;
-		this.right = Math.NEGATIVE_INFINITY;
-		this.bottom = Math.NEGATIVE_INFINITY;
+		this.leftX = Math.NEGATIVE_INFINITY;
+		this.topY = Math.NEGATIVE_INFINITY;
+		this.rightX = Math.NEGATIVE_INFINITY;
+		this.bottomY = Math.NEGATIVE_INFINITY;
 		this.next = Maybe.none();
 	}
 
@@ -57,15 +57,15 @@ class Collider {
 		Sets bounds of `this`.
 	**/
 	public extern inline function setBounds(
-		left: Float,
-		top: Float,
-		right: Float,
-		bottom: Float
+		leftX: Float,
+		topY: Float,
+		rightX: Float,
+		bottomY: Float
 	): Void {
-		this.left = left;
-		this.top = top;
-		this.right = right;
-		this.bottom = bottom;
+		this.leftX = leftX;
+		this.topY = topY;
+		this.rightX = rightX;
+		this.bottomY = bottomY;
 	}
 
 	/**
@@ -73,27 +73,30 @@ class Collider {
 	**/
 	public inline function set(
 		id: Int,
-		left: Float,
-		top: Float,
-		right: Float,
-		bottom: Float
+		leftX: Float,
+		topY: Float,
+		rightX: Float,
+		bottomY: Float
 	): Void {
 		this.id = id;
-		this.setBounds(left, top, right, bottom);
+		this.setBounds(leftX, topY, rightX, bottomY);
 	}
 
 	/**
 		@return `true` if `this` overlaps `other`.
 	**/
 	public extern inline function overlaps(other: Collider): Bool {
-		return (other.top < this.bottom)
-			&& (this.top < other.bottom)
-			&& (other.left < this.right)
-			&& (this.left < other.right);
+		return (other.topY < this.bottomY)
+			&& (this.topY < other.bottomY)
+			&& (other.leftX < this.rightX)
+			&& (this.leftX < other.rightX);
 	}
 
+	/**
+		@return `String` representation of `this`.
+	**/
 	public inline function toString(): String {
 		return
-			'{ id: $id, p1: (${left.toInt()}, ${top.toInt()}), p2: (${right.toInt()}, ${bottom.toInt()}) }';
+			'{ id: $id, p1: (${leftX.toInt()}, ${topY.toInt()}), p2: (${rightX.toInt()}, ${bottomY.toInt()}) }';
 	}
 }
