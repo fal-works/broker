@@ -24,7 +24,7 @@ hide empty members
 
 ' ---- (diagram) ------------------------------
 
-package input {
+package banker.input {
 	class ButtonStatus
 	class GamepadBase
 	class Stick
@@ -35,17 +35,15 @@ package input {
   GamepadBase *-- Stick
 }
 
-package your_implementation {
   class YourGamepad {
     update()
   }
   enum YourButton
   class YourButtonStatusMap
 
-  GamepadBase <|-r- YourGamepad
-  YourButtonStatusMap o-- "n" YourButton
+  GamepadBase <|-- YourGamepad
   GenericButtonStatusMap <|.. YourButtonStatusMap
   YourGamepad *-- YourButtonStatusMap
-}
+  YourButtonStatusMap o-- "n" YourButton
 
 @enduml

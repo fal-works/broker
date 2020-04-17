@@ -1,0 +1,68 @@
+@startuml collision
+
+' ---- (style) --------------------------------
+
+skinparam shadowing false
+skinparam backgroundColor White
+skinparam package {
+  BorderColor #A0A0A0
+  FontColor #A0A0A0
+}
+skinparam class {
+  BackgroundColor White
+  ArrowColor #202020
+  BorderColor #202020
+  FontColor #000000
+}
+skinparam note {
+  BackgroundColor White
+  FontColor #606060
+  BorderColor #C0C0C0
+}
+skinparam stereotypeIBackgroundColor Lavender
+hide empty members
+
+' ---- (diagram) ------------------------------
+
+package broker.collision {
+	class Collider
+	class CollisionDetector {
+    {static} createIntraGroup()
+    {static} createInterGroup()
+    ----
+    detect(onOverlap)
+  }
+	class Quadtree {
+    loadAt(cellIndex, collider)
+    reset()
+  }
+	class Cell
+  interface CollisionSpace
+
+  CollisionDetector o-- "1..2" Quadtree
+  Quadtree *-- "n" Cell
+  Cell o-r- "n" Collider
+
+  CollisionSpace -[hidden]- CollisionDetector
+}
+
+  class YourDetectingProcess
+  class YourSpace {
+    {static} partitionLevel
+    {static} createQuadtree()
+    {static} getCellIndex(coordinatesofAABB)
+  }
+  Class YourUpdatingProcess {
+    yourMethodToUpdateQuadtree()
+  }
+  class YourCollidableObject
+
+  YourSpace <.. YourUpdatingProcess : use
+  YourUpdatingProcess ..> YourCollidableObject : use
+
+  CollisionSpace <|.. YourSpace
+  Quadtree <.r. YourUpdatingProcess : use
+  Collider -r-* YourCollidableObject
+  CollisionDetector::detect <.r. YourDetectingProcess
+
+@enduml
