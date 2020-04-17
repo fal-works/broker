@@ -24,35 +24,35 @@ class CollisionSpaceMacro {
 		if (maybeParameters.isNone()) return null;
 		final parameters = maybeParameters.unwrap();
 
-		final leftX: Int = parameters.leftTop.x;
-		final topY: Int = parameters.leftTop.y;
-		final rightX: Int = parameters.rightBottom.x;
-		final bottomY: Int = parameters.rightBottom.y;
-		final levelValue: Int = parameters.level;
-		final gridSize: Int = 1 << levelValue;
-		final leafCellPositionFactorX: Float = gridSize / (rightX - leftX);
-		final leafCellPositionFactorY: Float = gridSize / (bottomY - topY);
+		final leftX = parameters.leftTop.x;
+		final topY = parameters.leftTop.y;
+		final rightX = parameters.rightBottom.x;
+		final bottomY = parameters.rightBottom.y;
+		final levelValue = parameters.level;
+		final gridSize = 1 << levelValue;
+		final leafCellPositionFactorX = gridSize / (rightX - leftX);
+		final leafCellPositionFactorY = gridSize / (bottomY - topY);
 
 		final classDef = macro class CollisionSpace {
 			/**
 				The x coordinate of the left-top point of the entire space.
 			**/
-			public static final leftX: Int = $v{leftX};
+			public static final leftX: Float = $v{leftX};
 
 			/**
 				The y coordinate of the left-top point of the entire space.
 			**/
-			public static final topY: Int = $v{topY};
+			public static final topY: Float = $v{topY};
 
 			/**
 				The x coordinate of the right-bottom point of the entire space.
 			**/
-			public static final rightX: Int = $v{rightX};
+			public static final rightX: Float = $v{rightX};
 
 			/**
 				The y coordinate of the right-bottom point of the entire space.
 			**/
-			public static final bottomY: Int = $v{bottomY};
+			public static final bottomY: Float = $v{bottomY};
 
 			/**
 				The finest `PartitionLevel` value of `this` space (i.e. the depth of quadtrees).
@@ -186,12 +186,12 @@ class CollisionSpaceMacro {
 	}
 
 	static function getMetadataParameters(localClass: ClassType): Maybe<{
-		leftTop: { x: Int, y: Int },
-		rightBottom: { x: Int, y: Int },
+		leftTop: Point,
+		rightBottom: Point,
 		level: Int
 	}> {
-		var leftTop: Maybe<{ x: Int, y: Int }> = Maybe.none();
-		var rightBottom: Maybe<{ x: Int, y: Int }> = Maybe.none();
+		var leftTop: Maybe<Point> = Maybe.none();
+		var rightBottom: Maybe<Point> = Maybe.none();
 		var level: Maybe<Int> = Maybe.none();
 
 		for (meta in localClass.meta.get()) {
@@ -200,16 +200,16 @@ class CollisionSpaceMacro {
 			switch meta.name {
 				case ':broker.leftTop' | ':broker_leftTop':
 					if (!validParameterLength(meta, 2)) return null;
-					final xResult = params[0].getIntLiteralValue();
+					final xResult = params[0].getFloatLiteralValue();
 					if (xResult.isFailedWarn()) return null;
-					final yResult = params[1].getIntLiteralValue();
+					final yResult = params[1].getFloatLiteralValue();
 					if (yResult.isFailedWarn()) return null;
 					leftTop = { x: xResult.unwrap(), y: yResult.unwrap() };
 				case ':broker.rightBottom' | ':broker_rightBottom':
 					if (!validParameterLength(meta, 2)) return null;
-					final xResult = params[0].getIntLiteralValue();
+					final xResult = params[0].getFloatLiteralValue();
 					if (xResult.isFailedWarn()) return null;
-					final yResult = params[1].getIntLiteralValue();
+					final yResult = params[1].getFloatLiteralValue();
 					if (yResult.isFailedWarn()) return null;
 					rightBottom = { x: xResult.unwrap(), y: yResult.unwrap() };
 				case ':broker.partitionLevel' | ':broker_partitionLevel':
@@ -243,4 +243,6 @@ class CollisionSpaceMacro {
 		};
 	}
 }
+
+private typedef Point = { x: Float, y: Float }
 #end
