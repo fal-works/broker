@@ -5,13 +5,17 @@ import banker.vector.WritableVector;
 import broker.collision.cell.*;
 
 /**
-	List of all `Cell` instances in a quadtree space.
+	Linear implementation of a quadtree of `Cell` instances.
 **/
-@:forward(length)
-abstract LinearCells(Vector<Cell>) {
+abstract Quadtree(Vector<Cell>) {
+	/**
+		The total number of `Cell`s in `this` quadtree.
+	**/
+	public var cellCount(get, never): Int;
+
 	@:access(banker.vector.WritableVector)
-	public function new(maxLevel: PartitionLevel) {
-		final length = maxLevel.totalCellCount();
+	public function new(partitionLevel: PartitionLevel) {
+		final length = partitionLevel.totalCellCount();
 		final data = new WritableVector(length);
 
 		var currentLevel = new PartitionLevel(0);
@@ -74,4 +78,7 @@ abstract LinearCells(Vector<Cell>) {
 
 		return cell;
 	}
+
+	extern inline function get_cellCount()
+		return this.length;
 }

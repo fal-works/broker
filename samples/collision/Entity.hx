@@ -60,8 +60,7 @@ class Entity extends BasicEntity {
 
 	/**
 		Registers entities to `quadtree`.
-		@param collisionSpace
-		@param cells
+		@param quadtree
 	**/
 	static function loadQuadTree(
 		id: ChunkEntityId,
@@ -70,7 +69,7 @@ class Entity extends BasicEntity {
 		collider: Collider,
 		halfTileWidth: Float,
 		halfTileHeight: Float,
-		cells: LinearCells
+		quadtree: Quadtree
 	): Void {
 		final left = x - halfTileWidth;
 		final top = y - halfTileHeight;
@@ -80,7 +79,7 @@ class Entity extends BasicEntity {
 		final cellIndex = Space.getCellIndex(left, top, right, bottom);
 		if (!cellIndex.isNone()) {
 			collider.setBounds(left, top, right, bottom);
-			cells.loadAt(cellIndex, collider);
+			quadtree.loadAt(cellIndex, collider);
 		}
 	}
 }

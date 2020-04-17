@@ -3,7 +3,7 @@ package broker.collision.cell;
 import banker.common.MathTools.minInt;
 
 /**
-	Physical index of `Cell` in `LinearCells`.
+	Physical index of `Cell` in `Quadtree`.
 **/
 abstract GlobalCellIndex(Int) {
 	extern public static inline final none = new GlobalCellIndex(-1);
@@ -44,10 +44,10 @@ abstract GlobalCellIndex(Int) {
 		@return Iterator for children indices of `this`.
 	**/
 	extern public inline function children(
-		cells: LinearCells
+		quadtree: Quadtree
 	): GlobalCellIndexIterator {
 		final start = this * 4 + 1;
-		final end = minInt(start + 4, cells.length);
+		final end = minInt(start + 4, quadtree.cellCount);
 		return start...end;
 	}
 }

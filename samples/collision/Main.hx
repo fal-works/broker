@@ -57,7 +57,7 @@ class Main extends hxd.App {
 			final bottom = Constants.height / 2 - 1;
 			rightCollider.setBounds(left, top, right, bottom);
 			final cellIndex = Space.getCellIndex(left, top, right, bottom);
-			this.collisionDetector.rightGroupCells.activate(cellIndex).add(rightCollider);
+			this.collisionDetector.rightQuadtree.activate(cellIndex).add(rightCollider);
 		} else {
 			this.onOverlap = (a: Collider, b: Collider) -> {
 				processCollider(a);
@@ -69,10 +69,10 @@ class Main extends hxd.App {
 			);
 		}
 
-		final leftCells = this.collisionDetector.leftGroupCells;
+		final leftQuadtree = this.collisionDetector.leftQuadtree;
 		this.loadQuadtree = () -> {
-			leftCells.reset();
-			entities.loadQuadTree(leftCells);
+			leftQuadtree.reset();
+			entities.loadQuadTree(leftQuadtree);
 		}
 	}
 

@@ -117,10 +117,10 @@ class CollisionSpaceMacro {
 			}
 
 			/**
-				@return New `LinearCells` with the specified `PartitionLevel`.
+				@return New `Quadtree` with the specified `PartitionLevel`.
 			**/
-			public static inline function createCells(): broker.collision.LinearCells {
-				return new broker.collision.LinearCells(partitionLevel);
+			public static inline function createQuadtree(): broker.collision.Quadtree {
+				return new broker.collision.Quadtree(partitionLevel);
 			}
 
 			/**

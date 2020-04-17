@@ -63,24 +63,24 @@ class CollisionDetector {
 		);
 
 	/**
-		The cells in the "left" group of colliders.
+		The `Quadtree` for loading colliders in the "left" group.
 	**/
-	public final leftGroupCells: LinearCells;
+	public final leftQuadtree: Quadtree;
 
 	/**
-		The cells in the "right" group of colliders.
+		The `Quadtree` for loading colliders in the "right" group.
 	**/
-	public final rightGroupCells: LinearCells;
+	public final rightQuadtree: Quadtree;
 
 	function new(
-		leftGroupCells: LinearCells,
-		rightGroupCells: LinearCells,
+		leftQuadtree: Quadtree,
+		rightQuadtree: Quadtree,
 		leftColliderStackCapacity: Int,
 		rightColliderStackCapacity: Int,
 		partitionLevel: PartitionLevel
 	) {
-		this.leftGroupCells = leftGroupCells;
-		this.rightGroupCells = rightGroupCells;
+		this.leftQuadtree = leftQuadtree;
+		this.rightQuadtree = rightQuadtree;
 
 		if (leftColliderStack.length < leftColliderStackCapacity)
 			leftColliderStack = new WritableVector(leftColliderStackCapacity);
@@ -119,8 +119,8 @@ class CollisionDetector {
 		final childCellCountStack = CollisionDetector.childCellCountStack;
 		final searchStack = CollisionDetector.searchStack;
 
-		final leftCells = this.leftGroupCells;
-		final rightCells = this.rightGroupCells;
+		final leftQuadtree = this.leftQuadtree;
+		final rightQuadtree = this.rightQuadtree;
 
 		var currentIndex: GlobalCellIndex;
 		var currentLeftCell: Cell;
@@ -137,8 +137,8 @@ class CollisionDetector {
 		inline function popCell(): Void {
 			--searchStackSize;
 			currentIndex = searchStack[searchStackSize];
-			currentLeftCell = leftCells[currentIndex];
-			currentRightCell = rightCells[currentIndex];
+			currentLeftCell = leftQuadtree[currentIndex];
+			currentRightCell = rightQuadtree[currentIndex];
 			currentLevel = currentLeftCell.level.toInt();
 		}
 
@@ -187,8 +187,8 @@ class CollisionDetector {
 			);
 
 			var childCellCount = 0;
-			for (childIndex in currentIndex.children(leftCells)) {
-				if (leftCells[childIndex].isActive) {
+			for (childIndex in currentIndex.children(leftQuadtree)) {
+				if (leftQuadtree[childIndex].isActive) {
 					++childCellCount;
 					pushCell(childIndex);
 				}
@@ -230,12 +230,12 @@ class CollisionDetector {
 
 /**
 	Object that performs round-robin collision detection within one single collider group.
-	`this.leftCells` and `this.rightCells` are identical.
+	`this.leftQuadtree` and `this.rightQuadtree` are identical.
 **/
 class IntraGroupCollisionDetector extends CollisionDetector {
 	public function new(partitionLevel: PartitionLevel, maxColliderCount: Int) {
-		final cells = new LinearCells(partitionLevel);
-		super(cells, cells, 0, maxColliderCount, partitionLevel);
+		final quadtree = new Quadtree(partitionLevel);
+		super(quadtree, quadtree, 0, maxColliderCount, partitionLevel);
 	}
 
 	override inline function pushLeftColliders(
@@ -274,11 +274,11 @@ class InterGroupCollisionDetector extends CollisionDetector {
 		leftGroupMaxColliderCount: Int,
 		rightGroupMaxColliderCount: Int
 	) {
-		final leftCells = new LinearCells(partitionLevel);
-		final rightCells = new LinearCells(partitionLevel);
+		final leftQuadtree = new Quadtree(partitionLevel);
+		final rightQuadtree = new Quadtree(partitionLevel);
 		super(
-			leftCells,
-			rightCells,
+			leftQuadtree,
+			rightQuadtree,
 			leftGroupMaxColliderCount,
 			rightGroupMaxColliderCount,
 			partitionLevel
