@@ -11,6 +11,19 @@ import broker.collision.cell.PartitionLevel;
 using haxe.macro.ExprTools;
 
 class CollisionSpaceMacro {
+	static function validParameterLength(meta: MetadataEntry, validLength: Int): Bool {
+		return switch (meta.params.length) {
+			case n if (n < validLength):
+				warn("Not enough parameters", meta.pos);
+				false;
+			case n if (n > validLength):
+				warn("Too many parameters", meta.pos);
+				false;
+			default:
+				true;
+		}
+	}
+
 	public static macro function build(): Null<Fields> {
 		final localClassResult = ContextTools.getLocalClassRef();
 		if (localClassResult.isFailedWarn()) return null;
@@ -31,20 +44,30 @@ class CollisionSpaceMacro {
 
 			switch meta.name {
 				case ':broker.width' | ':broker_width':
-					debug('Found metadata: @:broker.width');
+					if (!validParameterLength(meta, 1)) return null;
 					width = params[0];
 				case ':broker.height' | ':broker_height':
-					debug('Found metadata: @:broker.height');
+					if (!validParameterLength(meta, 1)) return null;
 					height = params[0];
 				case ':broker.partitionLevel' | ':broker_partitionLevel':
-					debug('Found metadata: @:broker.partitionLevel');
+					if (!validParameterLength(meta, 1)) return null;
 					level = params[0];
 				default:
 			}
 		}
 
-		if (width == dummyExpression || height == dummyExpression || level == dummyExpression) {
-			warn("Missing or invalid metadata");
+		if (width == dummyExpression) {
+			warn("Missing metadata: @:broker.width");
+			return null;
+		}
+
+		if (height == dummyExpression) {
+			warn("Missing metadata: @:broker.height");
+			return null;
+		}
+
+		if (level == dummyExpression) {
+			warn("Missing metadata: @:broker.partitionLevel");
 			return null;
 		}
 
