@@ -14,11 +14,9 @@ using sneaker.macro.extensions.ExprExtension;
 
 class CollisionSpaceMacro {
 	public static macro function build(): Null<Fields> {
-		final localClassResult = ContextTools.getLocalClassRef();
+		final localClassResult = ContextTools.getLocalClass();
 		if (localClassResult.isFailedWarn()) return null;
-		final localClassRef = localClassResult.unwrap();
-		final localClass = localClassRef.get();
-		final localClassPathString = localClassRef.toString();
+		final localClass = localClassResult.unwrap();
 
 		final maybeParameters = getMetadataParameters(localClass);
 		if (maybeParameters.isNone()) return null;
@@ -28,14 +26,15 @@ class CollisionSpaceMacro {
 		final topY = parameters.leftTop.y;
 		final rightX = parameters.rightBottom.x;
 		final bottomY = parameters.rightBottom.y;
+		final levelValue = parameters.level;
+
 		final width = rightX - leftX;
 		final height = bottomY - topY;
-		final levelValue = parameters.level;
 		final gridSize = 1 << levelValue;
 		final leafCellPositionFactorX = gridSize / width;
 		final leafCellPositionFactorY = gridSize / height;
 
-		final classDef = macro class CollisionSpace {
+		final classDefinition = macro class CollisionSpace {
 			/**
 				The x coordinate of the left-top point of the entire space.
 			**/
@@ -169,22 +168,25 @@ class CollisionSpaceMacro {
 		};
 
 		final buildFields = Context.getBuildFields();
-		return buildFields.concat(classDef.fields);
+		return buildFields.concat(classDefinition.fields);
 	}
 
-	static function validParameterLength(meta: MetadataEntry, validLength: Int): Bool {
-		final params = meta.params;
-		if (params == null) {
-			warn("Missing parameters", meta.pos);
+	static function validParameterLength(
+		metadataEntry: MetadataEntry,
+		validLength: Int
+	): Bool {
+		final parameters = metadataEntry.params;
+		if (parameters == null) {
+			warn("Missing parameters", metadataEntry.pos);
 			return false;
 		}
 
-		return switch (params.length) {
+		return switch (parameters.length) {
 			case n if (n < validLength):
-				warn("Not enough parameters", meta.pos);
+				warn("Not enough parameters", metadataEntry.pos);
 				false;
 			case n if (n > validLength):
-				warn("Too many parameters", meta.pos);
+				warn("Too many parameters", metadataEntry.pos);
 				false;
 			default:
 				true;
@@ -200,29 +202,40 @@ class CollisionSpaceMacro {
 		var rightBottom: Maybe<Point> = Maybe.none();
 		var level: Maybe<Int> = Maybe.none();
 
-		for (meta in localClass.meta.get()) {
-			final params = meta.params;
+		for (metadataEntry in localClass.meta.get()) {
+			final params = metadataEntry.params;
 
-			switch meta.name {
+			switch metadataEntry.name {
 				case ':broker.leftTop' | ':broker_leftTop':
-					if (!validParameterLength(meta, 2)) return null;
+					if (!validParameterLength(metadataEntry, 2)) return null;
+
 					final xResult = params[0].getFloatLiteralValue();
 					if (xResult.isFailedWarn()) return null;
+
 					final yResult = params[1].getFloatLiteralValue();
 					if (yResult.isFailedWarn()) return null;
+
 					leftTop = { x: xResult.unwrap(), y: yResult.unwrap() };
+
 				case ':broker.rightBottom' | ':broker_rightBottom':
-					if (!validParameterLength(meta, 2)) return null;
+					if (!validParameterLength(metadataEntry, 2)) return null;
+
 					final xResult = params[0].getFloatLiteralValue();
 					if (xResult.isFailedWarn()) return null;
+
 					final yResult = params[1].getFloatLiteralValue();
 					if (yResult.isFailedWarn()) return null;
+
 					rightBottom = { x: xResult.unwrap(), y: yResult.unwrap() };
+
 				case ':broker.partitionLevel' | ':broker_partitionLevel':
-					if (!validParameterLength(meta, 1)) return null;
+					if (!validParameterLength(metadataEntry, 1)) return null;
+
 					final levelResult = params[0].getIntLiteralValue();
 					if (levelResult.isFailedWarn()) return null;
+
 					level = levelResult.toMaybe();
+
 				default:
 			}
 		}
