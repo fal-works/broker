@@ -39,32 +39,32 @@ class CollisionSpaceMacro {
 			/**
 				The x coordinate of the left-top point of the entire space.
 			**/
-			public static final leftX: Float = $v{leftX};
+			public static extern inline final leftX: Float = $v{leftX};
 
 			/**
 				The y coordinate of the left-top point of the entire space.
 			**/
-			public static final topY: Float = $v{topY};
+			public static extern inline final topY: Float = $v{topY};
 
 			/**
 				The x coordinate of the right-bottom point of the entire space.
 			**/
-			public static final rightX: Float = $v{rightX};
+			public static extern inline final rightX: Float = $v{rightX};
 
 			/**
 				The y coordinate of the right-bottom point of the entire space.
 			**/
-			public static final bottomY: Float = $v{bottomY};
+			public static extern inline final bottomY: Float = $v{bottomY};
 
 			/**
 				The width of the entire space.
 			**/
-			public static final width: Float = $v{width};
+			public static extern inline final width: Float = $v{width};
 
 			/**
 				The height of the entire space.
 			**/
-			public static final height: Float = $v{height};
+			public static extern inline final height: Float = $v{height};
 
 			/**
 				The finest `PartitionLevel` value of `this` space (i.e. the depth of quadtrees).
@@ -77,19 +77,19 @@ class CollisionSpaceMacro {
 			/**
 				The size of the space grid determined by `this.partitionLevel`.
 			**/
-			public static var gridSize(get, never): Int;
+			public static extern inline final gridSize: Int = $v{gridSize};
 
 			/**
 				Factor for calculating the position of a leaf cell
 				(i.e. a cell in the finest partition level) in the space grid.
 			**/
-			public static var leafCellPositionFactorX(get, never): Float;
+			public static extern inline final leafCellPositionFactorX: Float = $v{leafCellPositionFactorX};
 
 			/**
 				Factor for calculating the position of a leaf cell
 				(i.e. a cell in the finest partition level) in the space grid.
 			**/
-			public static var leafCellPositionFactorY(get, never): Float;
+			public static extern inline final leafCellPositionFactorY: Float = $v{leafCellPositionFactorY};
 
 			/**
 				@return The local index of the leaf `Cell` that contains the position `x, y`.
@@ -166,15 +166,6 @@ class CollisionSpaceMacro {
 
 			static extern inline function get_partitionLevel()
 				return new broker.collision.cell.PartitionLevel($v{levelValue});
-
-			static extern inline function get_gridSize()
-				return $v{gridSize};
-
-			static extern inline function get_leafCellPositionFactorX()
-				return $v{leafCellPositionFactorX};
-
-			static extern inline function get_leafCellPositionFactorY()
-				return $v{leafCellPositionFactorY};
 		};
 
 		final buildFields = Context.getBuildFields();
