@@ -3,6 +3,8 @@ package broker.collision.macro;
 #if macro
 import haxe.macro.Context;
 import haxe.macro.Expr;
+import haxe.macro.Type;
+import sneaker.types.Maybe;
 import sneaker.macro.Types;
 import sneaker.macro.ContextTools;
 import sneaker.macro.MacroLogger.*;
@@ -11,19 +13,6 @@ import broker.collision.cell.PartitionLevel;
 using haxe.macro.ExprTools;
 
 class CollisionSpaceMacro {
-	static function validParameterLength(meta: MetadataEntry, validLength: Int): Bool {
-		return switch (meta.params.length) {
-			case n if (n < validLength):
-				warn("Not enough parameters", meta.pos);
-				false;
-			case n if (n > validLength):
-				warn("Too many parameters", meta.pos);
-				false;
-			default:
-				true;
-		}
-	}
-
 	public static macro function build(): Null<Fields> {
 		final localClassResult = ContextTools.getLocalClassRef();
 		if (localClassResult.isFailedWarn()) return null;
@@ -31,49 +20,13 @@ class CollisionSpaceMacro {
 		final localClass = localClassRef.get();
 		final localClassPathString = localClassRef.toString();
 
-		final buildFields = Context.getBuildFields();
+		final maybeParameters = getParameters(localClass);
+		if (maybeParameters.isNone()) return null;
+		final parameters = maybeParameters.unwrap();
 
-		final dummyExpression = macro throw "Missing or invalid metadata";
-		var width: Expr = dummyExpression;
-		var height: Expr = dummyExpression;
-		var level: Expr = dummyExpression;
-
-		for (meta in localClass.meta.get()) {
-			final params = meta.params;
-			if (params == null || params.length != 1) continue;
-
-			switch meta.name {
-				case ':broker.width' | ':broker_width':
-					if (!validParameterLength(meta, 1)) return null;
-					width = params[0];
-				case ':broker.height' | ':broker_height':
-					if (!validParameterLength(meta, 1)) return null;
-					height = params[0];
-				case ':broker.partitionLevel' | ':broker_partitionLevel':
-					if (!validParameterLength(meta, 1)) return null;
-					level = params[0];
-				default:
-			}
-		}
-
-		if (width == dummyExpression) {
-			warn("Missing metadata: @:broker.width");
-			return null;
-		}
-
-		if (height == dummyExpression) {
-			warn("Missing metadata: @:broker.height");
-			return null;
-		}
-
-		if (level == dummyExpression) {
-			warn("Missing metadata: @:broker.partitionLevel");
-			return null;
-		}
-
-		final widthValue: Int = width.getValue();
-		final heightValue: Int = height.getValue();
-		final levelValue: Int = level.getValue();
+		final widthValue: Int = parameters.width.getValue();
+		final heightValue: Int = parameters.height.getValue();
+		final levelValue: Int = parameters.level.getValue();
 		final gridSize: Int = 1 << levelValue;
 		final leafCellPositionFactorX: Float = gridSize / widthValue;
 		final leafCellPositionFactorY: Float = gridSize / heightValue;
@@ -83,39 +36,36 @@ class CollisionSpaceMacro {
 				The width of the entire space (i.e. the width of root cell).
 			**/
 			public static var width(get, never): Int;
-			static extern inline function get_width() return $v{widthValue};
 
 			/**
 				The height of the entire space (i.e. the height of root cell).
 			**/
 			public static var height(get, never): Int;
-			static extern inline function get_height() return $v{heightValue};
 
 			/**
 				The finest `PartitionLevel` value of `this` space (i.e. the depth of quadtrees).
 			**/
-			public static var partitionLevel(get, never): broker.collision.cell.PartitionLevel;
-			static extern inline function get_partitionLevel() return new broker.collision.cell.PartitionLevel($v{levelValue});
+			public static var partitionLevel(
+				get,
+				never
+			): broker.collision.cell.PartitionLevel;
 
 			/**
 				The size of the space grid determined by `this.partitionLevel`.
 			**/
 			public static var gridSize(get, never): Int;
-			static extern inline function get_gridSize() return $v{gridSize};
 
 			/**
 				Factor for calculating the position of a leaf cell
 				(i.e. a cell in the finest partition level) in the space grid.
 			**/
 			public static var leafCellPositionFactorX(get, never): Float;
-			static extern inline function get_leafCellPositionFactorX() return $v{leafCellPositionFactorX};
 
 			/**
 				Factor for calculating the position of a leaf cell
 				(i.e. a cell in the finest partition level) in the space grid.
 			**/
 			public static var leafCellPositionFactorY(get, never): Float;
-			static extern inline function get_leafCellPositionFactorY() return $v{leafCellPositionFactorY};
 
 			/**
 				@return The local index of the leaf `Cell` that contains the position `x, y`.
@@ -155,14 +105,8 @@ class CollisionSpaceMacro {
 				rightX: Float,
 				bottomY: Float
 			): broker.collision.cell.GlobalCellIndex {
-				final leftTop = getLeafCellLocalIndex(
-					leftX,
-					topY
-				);
-				final rightBottom = getLeafCellLocalIndex(
-					rightX,
-					bottomY
-				);
+				final leftTop = getLeafCellLocalIndex(leftX, topY);
+				final rightBottom = getLeafCellLocalIndex(rightX, bottomY);
 
 				return if (leftTop.isNone() && rightBottom.isNone()) {
 					broker.collision.cell.GlobalCellIndex.none;
@@ -183,15 +127,105 @@ class CollisionSpaceMacro {
 							leftTop,
 							rightBottom
 						); // For avoiding `-1`
-						aabbLocalIndex = largerLeafCellIndex.inRoughLevel(partitionLevel, aabbLevel);
+						aabbLocalIndex = largerLeafCellIndex.inRoughLevel(
+							partitionLevel,
+							aabbLevel
+						);
 					}
 
 					aabbLocalIndex.toGlobal(aabbLevel);
 				}
 			}
+
+			static extern inline function get_width()
+				return $v{widthValue};
+
+			static extern inline function get_height()
+				return $v{heightValue};
+
+			static extern inline function get_partitionLevel()
+				return new broker.collision.cell.PartitionLevel($v{levelValue});
+
+			static extern inline function get_gridSize()
+				return $v{gridSize};
+
+			static extern inline function get_leafCellPositionFactorX()
+				return $v{leafCellPositionFactorX};
+
+			static extern inline function get_leafCellPositionFactorY()
+				return $v{leafCellPositionFactorY};
 		};
 
+		final buildFields = Context.getBuildFields();
 		return buildFields.concat(classDef.fields);
+	}
+
+	static function validParameterLength(meta: MetadataEntry, validLength: Int): Bool {
+		final params = meta.params;
+		if (params == null) {
+			warn("Missing parameters", meta.pos);
+			return false;
+		}
+
+		return switch (params.length) {
+			case n if (n < validLength):
+				warn("Not enough parameters", meta.pos);
+				false;
+			case n if (n > validLength):
+				warn("Too many parameters", meta.pos);
+				false;
+			default:
+				true;
+		}
+	}
+
+	static function getParameters(localClass: ClassType): Maybe<{
+		width: Expr,
+		height: Expr,
+		level: Expr
+	}> {
+		final dummyExpression = macro throw "Missing or invalid metadata";
+		var width: Expr = dummyExpression;
+		var height: Expr = dummyExpression;
+		var level: Expr = dummyExpression;
+
+		for (meta in localClass.meta.get()) {
+			final params = meta.params;
+
+			switch meta.name {
+				case ':broker.width' | ':broker_width':
+					if (!validParameterLength(meta, 1)) return null;
+					width = params[0];
+				case ':broker.height' | ':broker_height':
+					if (!validParameterLength(meta, 1)) return null;
+					height = params[0];
+				case ':broker.partitionLevel' | ':broker_partitionLevel':
+					if (!validParameterLength(meta, 1)) return null;
+					level = params[0];
+				default:
+			}
+		}
+
+		if (width == dummyExpression) {
+			warn("Missing metadata: @:broker.width");
+			return null;
+		}
+
+		if (height == dummyExpression) {
+			warn("Missing metadata: @:broker.height");
+			return null;
+		}
+
+		if (level == dummyExpression) {
+			warn("Missing metadata: @:broker.partitionLevel");
+			return null;
+		}
+
+		return {
+			width: width,
+			height: height,
+			level: level
+		};
 	}
 }
 #end
