@@ -209,7 +209,8 @@ class CollisionDetector {
 			);
 
 			var childCellCount = UInt.zero;
-			for (childIndex in currentIndex.children(leftQuadtree)) {
+			for (i in currentIndex.children(leftQuadtree)) {
+				final childIndex = new GlobalCellIndex(i);
 				if (leftQuadtree[childIndex].isActive) {
 					++childCellCount;
 					pushCell(childIndex);

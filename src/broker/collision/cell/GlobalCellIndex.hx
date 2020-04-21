@@ -47,21 +47,9 @@ abstract GlobalCellIndex(Int) {
 	/**
 		@return Iterator for children indices of `this`.
 	**/
-	extern public inline function children(quadtree: Quadtree): GlobalCellIndexIterator {
-		// TODO: ensure that this does not invoke allocation, or rewrite it with while()
+	extern public inline function children(quadtree: Quadtree): IntIterator {
 		final start = this * 4 + 1;
 		final end = UInts.min(start + 4, quadtree.cellCount);
 		return start...end;
-	}
-}
-
-@:access(IntIterator)
-abstract GlobalCellIndexIterator(IntIterator) from IntIterator {
-	extern public inline function hasNext(): Bool {
-		return this.min < this.max;
-	}
-
-	extern public inline function next(): GlobalCellIndex {
-		return new GlobalCellIndex(this.min++);
 	}
 }
