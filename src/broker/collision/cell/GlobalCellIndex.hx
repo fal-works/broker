@@ -1,7 +1,5 @@
 package broker.collision.cell;
 
-import banker.common.MathTools.minInt;
-
 /**
 	Physical index of `Cell` in `Quadtree`.
 **/
@@ -19,12 +17,18 @@ abstract GlobalCellIndex(Int) {
 		@return `true` if `this` is `GlobalCellIndex.none`.
 	**/
 	extern public inline function isNone(): Bool
-		return this == GlobalCellIndex.none.toInt();
+		return this == GlobalCellIndex.none.int();
 
 	/**
 		Casts `this` to `Int`.
 	**/
-	extern public inline function toInt(): Int
+	extern public inline function int(): Int
+		return this;
+
+	/**
+		Casts `this` to `UInt`.
+	**/
+	extern public inline function uint(): UInt
 		return this;
 
 	/**
@@ -46,7 +50,7 @@ abstract GlobalCellIndex(Int) {
 	extern public inline function children(quadtree: Quadtree): GlobalCellIndexIterator {
 		// TODO: ensure that this does not invoke allocation, or rewrite it with while()
 		final start = this * 4 + 1;
-		final end = minInt(start + 4, quadtree.cellCount);
+		final end = UInts.min(start + 4, quadtree.cellCount);
 		return start...end;
 	}
 }

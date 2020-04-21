@@ -44,7 +44,7 @@ abstract LocalCellIndex(Int) {
 		a: LocalCellIndex,
 		b: LocalCellIndex
 	): LocalCellIndex {
-		return if (a.toInt() < b.toInt()) b else a;
+		return if (a.int() < b.int()) b else a;
 	}
 
 	public extern inline function new(v: Int)
@@ -53,7 +53,7 @@ abstract LocalCellIndex(Int) {
 	/**
 		Casts `this` to `Int`.
 	**/
-	public extern inline function toInt(): Int
+	public extern inline function int(): Int
 		return this;
 
 	/**
@@ -78,7 +78,7 @@ abstract LocalCellIndex(Int) {
 		currentLevel: PartitionLevel,
 		roughLevel: PartitionLevel
 	): LocalCellIndex {
-		final shift = ((currentLevel - roughLevel).toInt() * 2);
+		final shift = ((currentLevel - roughLevel).int() * 2);
 		return new LocalCellIndex(this >>> shift);
 	}
 }

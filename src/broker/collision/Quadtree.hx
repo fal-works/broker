@@ -11,14 +11,14 @@ abstract Quadtree(Vector<Cell>) {
 	/**
 		The total number of `Cell`s in `this` quadtree.
 	**/
-	public var cellCount(get, never): Int;
+	public var cellCount(get, never): UInt;
 
 	@:access(banker.vector.WritableVector)
 	public function new(partitionLevel: PartitionLevel) {
 		final length = partitionLevel.totalCellCount();
 		final data = new WritableVector(length);
 
-		var currentLevel = new PartitionLevel(0);
+		var currentLevel = new PartitionLevel(UInt.zero);
 		var nextLevelIndex = currentLevel.totalCellCount();
 		for (i in 0...length) {
 			if (i >= nextLevelIndex) {
@@ -32,20 +32,20 @@ abstract Quadtree(Vector<Cell>) {
 	}
 
 	@:op([]) extern inline function get(index: GlobalCellIndex): Cell
-		return this[index.toInt()];
+		return this[index.uint()];
 
 	/**
 		@return The root `Cell`.
 	**/
 	public extern inline function root(): Cell
-		return this[0];
+		return this[UInt.zero];
 
 	/**
 		Clears each `Cell` in `this`.
 	**/
 	public inline function reset(): Void {
 		final len = this.length;
-		var i = 0;
+		var i = UInt.zero;
 		while (i < len) {
 			this[i].clear();
 			++i;
@@ -63,7 +63,7 @@ abstract Quadtree(Vector<Cell>) {
 		@return The `Cell` at `index`.
 	**/
 	public inline function activate(index: GlobalCellIndex): Cell {
-		final cell = this[index.toInt()];
+		final cell = this[index.uint()];
 
 		var currentIndex = index;
 		var currentCell = cell;
@@ -73,7 +73,7 @@ abstract Quadtree(Vector<Cell>) {
 
 			if (currentIndex.isZero()) break;
 			currentIndex = currentIndex.parent();
-			currentCell = this[currentIndex.toInt()];
+			currentCell = this[currentIndex.int()];
 		}
 
 		return cell;

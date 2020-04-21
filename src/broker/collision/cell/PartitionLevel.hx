@@ -1,9 +1,5 @@
 package broker.collision.cell;
 
-using banker.type_extension.IntExtension;
-
-import sneaker.assertion.Asserter.assert;
-
 /**
 	The depth level in quadtree space partitioning.
 **/
@@ -23,10 +19,7 @@ abstract PartitionLevel(Int) {
 	/**
 		@param levelValue `0` is the root-cell level. More greater, more deeper and finer.
 	**/
-	public extern inline function new(levelValue: Int) {
-		#if !macro
-		assert(levelValue >= 0);
-		#end
+	public extern inline function new(levelValue: UInt) {
 		this = levelValue;
 	}
 
@@ -39,14 +32,21 @@ abstract PartitionLevel(Int) {
 	/**
 		Casts `this` to `Int`.
 	**/
-	public extern inline function toInt(): Int
+	public extern inline function int(): Int
 		return this;
+
+	/**
+		Casts `this` to `Int`.
+	**/
+	@:access(sinker.UInt)
+	public extern inline function uint(): UInt
+		return new UInt(this);
 
 	/**
 		@return The size of the grid in `this` level. Same as `2 ^ (level value)`.
 	**/
-	public extern inline function gridSize(): Int
-		return this.powerOf2();
+	public extern inline function gridSize(): UInt
+		return UInts.powerOf2(this);
 
 	/**
 		@return The global cell index of the first `Cell` in `this` level.
@@ -70,7 +70,7 @@ abstract PartitionLevel(Int) {
 	/**
 		@return The total number of `Cell`s that a quadtree with `maxLevel` should contain.
 	**/
-	public extern inline function totalCellCount(): Int {
-		return new PartitionLevel(this + 1).firstGlobalCellIndex().toInt();
+	public extern inline function totalCellCount(): UInt {
+		return new PartitionLevel(this + 1).firstGlobalCellIndex().uint();
 	}
 }

@@ -30,7 +30,7 @@ class CollisionSpaceMacro {
 
 		final width = rightX - leftX;
 		final height = bottomY - topY;
-		final gridSize = 1 << levelValue;
+		final gridSize = UInt.one << levelValue;
 		final leafCellPositionFactorX = gridSize / width;
 		final leafCellPositionFactorY = gridSize / height;
 
@@ -76,7 +76,7 @@ class CollisionSpaceMacro {
 			/**
 				The size of the space grid determined by `this.partitionLevel`.
 			**/
-			public static extern inline final gridSize: Int = $v{gridSize};
+			public static extern inline final gridSize: sinker.UInt = $v{gridSize};
 
 			/**
 				Factor for calculating the position of a leaf cell
@@ -100,18 +100,18 @@ class CollisionSpaceMacro {
 				return if (x < leftX || x >= rightX || y < topY || y >= bottomY) {
 					broker.collision.cell.LocalCellIndex.none;
 				} else {
-					inline function toInt(v: Float)
-						return banker.type_extension.FloatExtension.toInt(v);
+					inline function int(v: Float)
+						return sinker.Floats.toInt(v);
 
-					final cellPositionX = toInt((x - leftX) * leafCellPositionFactorX);
-					final cellPositionY = toInt((y - topY) * leafCellPositionFactorY);
+					final cellPositionX = int((x - leftX) * leafCellPositionFactorX);
+					final cellPositionY = int((y - topY) * leafCellPositionFactorY);
 
 					final indexValue = banker.types.Bits.zip(
 						banker.types.Bits.from(cellPositionX),
 						banker.types.Bits.from(cellPositionY)
 					);
 
-					new broker.collision.cell.LocalCellIndex(indexValue.toInt());
+					new broker.collision.cell.LocalCellIndex(indexValue.int());
 				}
 			}
 
@@ -152,7 +152,7 @@ class CollisionSpaceMacro {
 						final largerLeafCellIndex = broker.collision.cell.LocalCellIndex.max(
 							leftTop,
 							rightBottom
-						); // For avoiding `-1`
+						); // For avoiding LocalCellIndex.none
 						aabbLocalIndex = largerLeafCellIndex.inRoughLevel(
 							partitionLevel,
 							aabbLevel
@@ -196,11 +196,11 @@ class CollisionSpaceMacro {
 	static function getMetadataParameters(localClass: ClassType): Maybe<{
 		leftTop: Point,
 		rightBottom: Point,
-		level: Int
+		level: UInt
 	}> {
 		var leftTop: Maybe<Point> = Maybe.none();
 		var rightBottom: Maybe<Point> = Maybe.none();
-		var level: Maybe<Int> = Maybe.none();
+		var level: Maybe<UInt> = Maybe.none();
 
 		for (metadataEntry in localClass.meta.get()) {
 			final params = metadataEntry.params;
@@ -234,7 +234,7 @@ class CollisionSpaceMacro {
 					final levelResult = params[0].getIntLiteralValue();
 					if (levelResult.isFailedWarn()) return null;
 
-					level = levelResult.toMaybe();
+					level = levelResult.toMaybe().map(intValue -> UInt.fromInt(intValue));
 
 				default:
 			}

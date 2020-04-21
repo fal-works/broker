@@ -144,11 +144,10 @@ class YourSystem {
 
 ## Dependencies
 
-<!-- 
-- [sneaker](https://github.com/fal-works/sneaker) (v0.7.0) for assertion, logging and macro utilities
-- [ripper](https://github.com/fal-works/ripper) (v0.2.2) for partial implementation
- -->
-- [banker](https://github.com/fal-works/banker) (v0.4.0) for data structures
+- [sinker](https://github.com/fal-works/sinker) (v0.1.0)
+- [sneaker](https://github.com/fal-works/sneaker) (v0.7.0)
+- [ripper](https://github.com/fal-works/ripper) (v0.2.2)
+- [banker](https://github.com/fal-works/banker) (v0.4.0)
 
 ### (Optional)
 

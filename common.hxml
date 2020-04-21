@@ -7,6 +7,7 @@
 --macro nullSafety("broker", Strict)
 -main Main
 
+-lib sinker
 -lib sneaker
 -lib ripper
 -lib banker
@@ -14,6 +15,7 @@
 -lib hldx
 # -lib hlsdl
 
+-D sinker_debug
 -D sneaker_log_level=500
 -D sneaker_macro_log_level=500
 

@@ -1,9 +1,5 @@
 package broker.collision;
 
-import sneaker.types.Maybe;
-
-using banker.type_extension.FloatExtension;
-
 /**
 	Unit data of any collidable object that can be registered to `Cell`.
 **/
@@ -93,7 +89,10 @@ class Collider {
 		@return `String` representation of `this`.
 	**/
 	public inline function toString(): String {
+		inline function int(v: Float): Int
+			return Floats.toInt(v);
+
 		return
-			'{ id: $id, p1: (${leftX.toInt()}, ${topY.toInt()}), p2: (${rightX.toInt()}, ${bottomY.toInt()}) }';
+			'{ id: $id, p1: (${int(leftX)}, ${int(topY)}), p2: (${int(rightX)}, ${int(bottomY)}) }';
 	}
 }

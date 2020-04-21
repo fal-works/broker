@@ -11,9 +11,9 @@ class Settings {
 	**/
 	public static inline final interGroup: Bool = false;
 
-	public static inline final tileSize: Int = 24;
+	public static inline final tileSize: UInt = 24;
 
-	public static inline final entityCountPerEmit: Int = 24;
+	public static inline final entityCountPerEmit: UInt = 24;
 
 	public static inline final speedFactor: Float = 1.0;
 }
@@ -59,7 +59,7 @@ class Main extends hxd.App {
 		// Just one static invisible collider in the "right" group
 		final rightCollider = new Collider(-1);
 		final left = Constants.width / 2;
-		final top = 0;
+		final top = 0.0;
 		final right = Constants.width - 1;
 		final bottom = Constants.height / 2 - 1;
 		rightCollider.setBounds(left, top, right, bottom);
@@ -124,7 +124,7 @@ class Main extends hxd.App {
 		this.collisionDetector.detect(this.onOverlap);
 	}
 
-	function createEntities(tile: h2d.Tile, capacity: Int): EntityAosoa
+	function createEntities(tile: h2d.Tile, capacity: UInt): EntityAosoa
 		return {
 			chunkCapacity: 128,
 			chunkCount: Math.ceil(capacity / 128),

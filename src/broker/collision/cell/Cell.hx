@@ -15,7 +15,7 @@ class Cell {
 	/**
 		The number of `Collider`s that are registered to `this`.
 	**/
-	public var colliderCount: Int;
+	public var colliderCount: UInt;
 
 	/**
 		`true` if `this` or any of its descendants contains colliders.
@@ -34,7 +34,7 @@ class Cell {
 
 	public function new(level: PartitionLevel) {
 		this.level = level;
-		this.colliderCount = 0;
+		this.colliderCount = UInt.zero;
 		this.isActive = false;
 
 		final dummyCollider = new Collider(-1);
@@ -57,7 +57,7 @@ class Cell {
 		Clears and deactivates `this` cell.
 	**/
 	public inline function clear(): Void {
-		this.colliderCount = 0;
+		this.colliderCount = UInt.zero;
 		this.isActive = false;
 		this.top.unlink();
 		this.last = this.top;
@@ -95,7 +95,7 @@ class Cell {
 	**/
 	public inline function exportTo(
 		output: WritableVector<Collider>,
-		startIndex: Int
+		startIndex: UInt
 	): Void {
 		var current = this.top.next;
 		var writeIndex = startIndex;
@@ -115,13 +115,16 @@ class Cell {
 	**/
 	public inline function detectCollisionWithVector(
 		otherColliders: VectorReference<Collider>,
-		otherCollidersCount: Int,
+		otherCollidersCount: UInt,
 		onOverlap: (colliderA: Collider, colliderB: Collider) -> Void
 	): Void {
 		final firstThisCollider = this.top.next;
 
+		inline function u(v: Int)
+			return @:privateAccess new UInt(v);
+
 		for (i in 0...otherCollidersCount) {
-			final otherCollider = otherColliders[i];
+			final otherCollider = otherColliders[u(i)];
 
 			var current = firstThisCollider;
 			while (current.isSome()) {

@@ -15,7 +15,7 @@ class Entity extends BasicEntity {
 	@:banker_chunkLevelFinal
 	var halfTileHeight: Float;
 
-	@:banker_factoryWithId((id: ChunkEntityId) -> new Collider(id.toInt()))
+	@:banker_factoryWithId((id: ChunkEntityId) -> new Collider(id.int()))
 	var collider: Collider;
 
 	static function bounce(
