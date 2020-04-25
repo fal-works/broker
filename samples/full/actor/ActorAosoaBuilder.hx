@@ -1,10 +1,8 @@
 package full.actor;
 
-import banker.common.MathTools.minInt;
-
 typedef ActorAosoaConstructor = (
-	chunkCapacity: Int,
-	chunkCount: Int,
+	chunkCapacity: UInt,
+	chunkCount: UInt,
 	batch: h2d.SpriteBatch,
 	spriteFactory: () -> h2d.SpriteBatch.BatchElement,
 	fireCallback: FireCallback
@@ -17,11 +15,11 @@ class ActorAosoaBuilder {
 
 	@:generic
 	public static function create<T: ActorAosoaConstructible>(
-		maxEntityCount: Int,
+		maxEntityCount: UInt,
 		batch: h2d.SpriteBatch,
 		fireCallback: FireCallback
 	): T {
-		final chunkCapacity = minInt(defaultChunkCapacity, maxEntityCount);
+		final chunkCapacity = UInts.min(defaultChunkCapacity, maxEntityCount);
 		final chunkCount = Math.ceil(maxEntityCount / chunkCapacity);
 
 		final tile = batch.tile;
