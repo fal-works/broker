@@ -145,6 +145,7 @@ class YourSystem {
 ## Dependencies
 
 - [sinker](https://github.com/fal-works/sinker) (v0.1.0)
+- [prayer](https://github.com/fal-works/prayer) (v0.1.0)
 - [sneaker](https://github.com/fal-works/sneaker) (v0.7.0)
 - [ripper](https://github.com/fal-works/ripper) (v0.2.2)
 - [banker](https://github.com/fal-works/banker) (v0.4.0)

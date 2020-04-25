@@ -4,13 +4,12 @@ package broker.collision.macro;
 import haxe.macro.Context;
 import haxe.macro.Expr;
 import haxe.macro.Type;
-import sneaker.types.Maybe;
-import sneaker.macro.Types;
-import sneaker.macro.ContextTools;
+import prayer.*;
 import sneaker.macro.MacroLogger.*;
 import broker.collision.cell.PartitionLevel;
 
-using sneaker.macro.extensions.ExprExtension;
+using prayer.extensions.Index;
+using sneaker.macro.extensions.MacroResultExtension;
 
 class CollisionSpaceMacro {
 	public static macro function build(): Null<Fields> {

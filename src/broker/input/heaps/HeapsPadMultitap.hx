@@ -34,11 +34,12 @@ class HeapsPadMultitap {
 		Callback function for connecting a new physical gamepad to any available port.
 	**/
 	public static final connect = function(pad: hxd.Pad) {
-		final index = ports.ref.findFirstIndex(portIsEmpty);
-		if (index < 0) {
+		final maybeIndex = ports.ref.findFirstIndex(portIsEmpty);
+		if (maybeIndex.isNone()) {
 			debug('New gamepad recognized but the ports are already full.');
 			return;
 		}
+		final index = maybeIndex.unwrap();
 		info('Gamepad connected. Port index: $index');
 		ports[index].set(pad);
 		onConnect(pad, index);
