@@ -17,7 +17,7 @@ See also: AoSoA generator of [banker](https://github.com/fal-works/banker) libra
 
 ### Collision
 
-A 2D AABB collision detection.
+2D AABB collision detection.
 
 ![Class diagram. Visit GitHub repo for details.](docs/collision.svg)
 
@@ -155,4 +155,4 @@ See also:
 
 ### (Optional)
 
-- [heaps](http://heaps.io/) v1.7.0
+- [heaps](http://heaps.io/) v1.8.0
