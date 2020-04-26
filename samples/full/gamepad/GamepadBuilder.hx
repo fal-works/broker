@@ -1,6 +1,5 @@
 package full.gamepad;
 
-import broker.input.Stick;
 import broker.input.heaps.HeapsInputTools;
 import broker.input.heaps.HeapsPadPort;
 import broker.input.builtin.simple.Button;
