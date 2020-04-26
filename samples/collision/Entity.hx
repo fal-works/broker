@@ -73,7 +73,7 @@ class Entity extends BasicEntity {
 		final bottom = y + halfTileHeight;
 
 		final cellIndex = Space.getCellIndex(left, top, right, bottom);
-		if (!cellIndex.isNone()) {
+		if (cellIndex.isSome()) {
 			collider.setBounds(left, top, right, bottom);
 			quadtree.loadAt(cellIndex, collider);
 		}

@@ -20,6 +20,12 @@ abstract GlobalCellIndex(Int) {
 		return this == GlobalCellIndex.none.int();
 
 	/**
+		@return `true` if `this` is a valid index.
+	**/
+	extern public inline function isSome(): Bool
+		return this >= GlobalCellIndex.zero.int();
+
+	/**
 		Casts `this` to `Int`.
 	**/
 	extern public inline function int(): Int
