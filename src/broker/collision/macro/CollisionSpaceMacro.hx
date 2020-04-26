@@ -123,6 +123,8 @@ class CollisionSpaceMacro {
 
 			/**
 				@return `GlobalCellIndex` of the finest `Cell` that contains the given AABB.
+				`GlobalCellIndex.none` if the AABB is out of space.
+				Be sure to validate the value before passing it to a `Quadtree`.
 			**/
 			public static inline function getCellIndex(
 				leftX: Float,

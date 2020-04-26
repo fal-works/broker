@@ -4,7 +4,15 @@ package broker.collision.cell;
 	Physical index of `Cell` in `Quadtree`.
 **/
 abstract GlobalCellIndex(Int) {
+	/**
+		A special `GlobalCellIndex` constant that represents the absense of valid value.
+		This cannot be used for accessing any `Cell`.
+	**/
 	extern public static inline final none = new GlobalCellIndex(-1);
+
+	/**
+		Value `0` in `GlobalCellIndex` representation.
+	**/
 	extern public static inline final zero = new GlobalCellIndex(0);
 
 	@:op(A + B)

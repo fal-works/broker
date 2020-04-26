@@ -54,12 +54,14 @@ abstract Quadtree(Vector<Cell>) {
 
 	/**
 		Activates the `Cell` at `index` and all of its ancestors, then adds `collider` to that `Cell`.
+		Be sure to not pass `GlobalCellIndex.none`.
 	**/
 	public inline function loadAt(index: GlobalCellIndex, collider: Collider): Void
 		activate(index).add(collider);
 
 	/**
 		Activates the `Cell` at `index` and all of its ancestors.
+		Be sure to not pass `GlobalCellIndex.none`.
 		@return The `Cell` at `index`.
 	**/
 	public inline function activate(index: GlobalCellIndex): Cell {
