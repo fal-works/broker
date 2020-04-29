@@ -32,5 +32,8 @@ class Global {
 		alternativeSpeed: 3
 	};
 
+	public static inline final width: UInt = 800;
+	public static inline final height: UInt = 600;
+
 	public static var gamepad(default, null) = defaultGamepadBuilder.build();
 }

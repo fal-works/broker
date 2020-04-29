@@ -1,24 +1,16 @@
 package full;
 
 class Main extends hxd.App {
-	static function main() {
+	static function main()
 		new Main();
-	}
 
-	var army: ActorArmy;
+	var world: World;
 
 	override function init() {
 		broker.input.heaps.HeapsKeyTools.initialize();
 		broker.input.heaps.HeapsPadTools.initialize();
 
-		final playerTile = h2d.Tile.fromColor(0xFFFFFF, 64, 64).center();
-		final playerBatch = new h2d.SpriteBatch(playerTile, s2d);
-
-		final playerBulletTile = h2d.Tile.fromColor(0xFFFFFF, 32, 32).center();
-		final playerBulletBatch = new h2d.SpriteBatch(playerBulletTile, s2d);
-
-		army = new ActorArmy(1, playerBatch, 1024, playerBulletBatch);
-		army.agents.use(200, 200, 0, 0);
+		world = new World(s2d);
 
 		debug("initialized.");
 	}
@@ -26,7 +18,6 @@ class Main extends hxd.App {
 	override function update(dt: Float) {
 		Global.gamepad.update();
 
-		army.update();
-		army.synchronize();
+		world.update();
 	}
 }
