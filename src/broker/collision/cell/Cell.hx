@@ -54,6 +54,24 @@ class Cell {
 	}
 
 	/**
+		Checks if a given collider is already added to `this` cell. O(n) complexity.
+		@return `true` if `this` contains `collider`.
+	**/
+	public inline function has(collider: Collider): Bool {
+		var found = false;
+		var current = this.top.next;
+		while (current.isSome()) {
+			final currentCollider = current.unwrap();
+			if (currentCollider == collider) {
+				found = true;
+				break;
+			}
+			current = currentCollider.next;
+		}
+		return found;
+	}
+
+	/**
 		Clears and deactivates `this` cell.
 	**/
 	public inline function clear(): Void {
