@@ -1,72 +1,24 @@
 package full.actor;
 
-import full.actor.Army.ArmyBuilder.*;
-
-enum ArmyParameters {
-	Player(
-		agentBatch: h2d.SpriteBatch,
-		bulletBatch: h2d.SpriteBatch,
-		maxBulletCount: UInt
-	);
-	NonPlayer(
-		agentBatch: h2d.SpriteBatch,
-		bulletBatch: h2d.SpriteBatch,
-		maxAgentCount: UInt,
-		maxBulletCount: UInt
-	);
-}
-
 class Army {
 	public final agents: ActorAosoa;
 	public final bullets: ActorAosoa;
+	public final onHitAgent: Collider->Void;
+	public final onHitBullet: Collider->Void;
 	public final agentQuadtree: Quadtree;
 	public final bulletQuadtree: Quadtree;
-	public final onHitAgent: Collider -> Void;
-	public final onHitBullet: Collider -> Void;
 
-	public function new(parameters: ArmyParameters) {
-		// TODO: optimize?
-		final fireCallback = (
-			x,
-			y,
-			speed,
-			direction
-		) -> this.bullets.emit(x, y, speed, direction);
+	public function new(
+		agents: ActorAosoa,
+		onHitAgent: Collider->Void,
+		bullets: ActorAosoa,
+		onHitBullet: Collider->Void
+	) {
+		this.agents = agents;
+		this.onHitAgent = onHitAgent;
 
-		switch parameters {
-			case Player(agentBatch, bulletBatch, maxBulletCount):
-				final agentAosoa = createPlayableActors(
-					agentBatch,
-					fireCallback
-				);
-				this.agents = agentAosoa;
-				this.onHitAgent = createOnHitPlayable(agentAosoa);
-
-				final bulletAosoa = createNonPlayableActors(
-					maxBulletCount,
-					bulletBatch,
-					fireCallback
-				);
-				this.bullets = bulletAosoa;
-				this.onHitBullet = createOnHitNonPlayable(bulletAosoa);
-
-			case NonPlayer(agentBatch, bulletBatch, maxAgentCount, maxBulletCount):
-				final agentAosoa = createNonPlayableActors(
-					maxAgentCount,
-					agentBatch,
-					fireCallback
-				);
-				this.agents = agentAosoa;
-				this.onHitAgent = createOnHitNonPlayable(agentAosoa);
-
-				final bulletAosoa = createNonPlayableActors(
-					maxBulletCount,
-					bulletBatch,
-					fireCallback
-				);
-				this.bullets = bulletAosoa;
-				this.onHitBullet = createOnHitNonPlayable(bulletAosoa);
-		}
+		this.bullets = bullets;
+		this.onHitBullet = onHitBullet;
 
 		this.agentQuadtree = new Quadtree(Space.partitionLevel);
 		this.bulletQuadtree = new Quadtree(Space.partitionLevel);
@@ -109,66 +61,35 @@ class Army {
 	}
 }
 
-/**
-	Functions internally used in `Army.new()`.
-**/
-class ArmyBuilder {
-	static var defaultChunkCapacity: UInt = 64;
+class PlayableArmy extends Army {
+	public final playerAosoa: PlayableActorAosoa;
 
-	public static function createPlayableActors(
-		batch: h2d.SpriteBatch,
-		fireCallback: FireCallback
-	): PlayableActorAosoa {
-		final tile = batch.tile;
-		final spriteFactory = () -> new h2d.SpriteBatch.BatchElement(tile);
-		return new PlayableActorAosoa(
-			1,
-			1,
-			batch,
-			spriteFactory,
-			tile.width / 2,
-			tile.height / 2,
-			fireCallback
-		);
+	public function new(
+		agents: PlayableActorAosoa,
+		onHitAgent: Collider->Void,
+		bullets: ActorAosoa,
+		onHitBullet: Collider->Void
+	) {
+		super(agents, onHitAgent, bullets, onHitBullet);
+		this.playerAosoa = agents;
+	}
+}
+
+class NonPlayableArmy extends Army {
+	public final enemyAgents: NonPlayableActorAosoa;
+
+	public function new(
+		agents: NonPlayableActorAosoa,
+		onHitAgent: Collider->Void,
+		bullets: ActorAosoa,
+		onHitBullet: Collider->Void
+	) {
+		super(agents, onHitAgent, bullets, onHitBullet);
+		this.enemyAgents = agents;
 	}
 
-	public static function createOnHitPlayable(aosoa: PlayableActorAosoa) {
-		return (collider: Collider) -> {
-			final id = ChunkEntityId.fromInt(collider.id);
-			final chunk = aosoa.getChunk(id);
-			final index = chunk.getReadIndex(id);
-			// chunk.dead[index] = true;
-		};
-	}
-
-	public static function createNonPlayableActors(
-		maxEntityCount: UInt,
-		batch: h2d.SpriteBatch,
-		fireCallback: FireCallback
-	): NonPlayableActorAosoa {
-		final chunkCapacity = UInts.min(defaultChunkCapacity, maxEntityCount);
-		final chunkCount = Math.ceil(maxEntityCount / chunkCapacity);
-
-		final tile = batch.tile;
-		final spriteFactory = () -> new h2d.SpriteBatch.BatchElement(tile);
-		return new NonPlayableActorAosoa(
-			chunkCapacity,
-			chunkCount,
-			batch,
-			spriteFactory,
-			tile.width / 2,
-			tile.height / 2,
-			fireCallback
-		);
-	}
-
-	public static function createOnHitNonPlayable(aosoa: NonPlayableActorAosoa) {
-		return (collider: Collider) -> {
-			final id = ChunkEntityId.fromInt(collider.id);
-			final chunk = aosoa.getChunk(id);
-			final index = chunk.getReadIndex(id);
-			chunk.dead[index] = true;
-			@:privateAccess chunk.deadChunkBuffer[index] = true;
-		};
+	override public function update(): Void {
+		super.update();
+		this.enemyAgents.mayFire();
 	}
 }

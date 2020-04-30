@@ -43,4 +43,22 @@ class Actor extends BasicEntity {
 			quadtree.loadAt(cellIndex, collider);
 		}
 	}
+
+	static function findOverlapped(
+		x: Float,
+		y: Float,
+		halfTileWidth: Float,
+		halfTileHeight: Float,
+		collider: Aabb,
+		found: Reference<Bool>
+	): Void {
+		if (collider.overlapsAabb(
+			x - halfTileWidth,
+			y - halfTileHeight,
+			x + halfTileWidth,
+			y + halfTileHeight
+		)) {
+			found.set(true);
+		}
+	}
 }

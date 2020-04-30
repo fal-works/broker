@@ -1,7 +1,5 @@
 package full.actor;
 
-import broker.geometry.AxisAlignedBoundingBox;
-
 class NonPlayableActor extends Actor {
 	/**
 		`true` if the entity should be disused in the next call of `update()`.
@@ -10,7 +8,7 @@ class NonPlayableActor extends Actor {
 	var dead: Bool = false;
 
 	@:banker_chunkLevelFinal
-	static final habitableZone: AxisAlignedBoundingBox = {
+	static final habitableZone: Aabb = {
 		leftX: 0 - 64,
 		topY: 0 - 64,
 		rightX: 800 + 64,
@@ -27,7 +25,7 @@ class NonPlayableActor extends Actor {
 		disuse: Bool,
 		disusedSprites: WritableVector<BatchElement>,
 		disusedCount: Int,
-		habitableZone: AxisAlignedBoundingBox,
+		habitableZone: Aabb,
 		dead: WritableVector<Bool>
 	): Void {
 		final nextX = x[i] + vx;
@@ -40,6 +38,22 @@ class NonPlayableActor extends Actor {
 			disusedSprites[disusedCount] = sprite;
 			++disusedCount;
 			dead[i] = false;
+		}
+	}
+
+	static function mayFire(
+		x: Float,
+		y: Float,
+		fire: FireCallback
+	): Void {
+		if (y < 240 && Random.bool(0.01)) {
+			final playerPosition = Global.playerPosition;
+			fire(
+				x,
+				y,
+				4,
+				Math.atan2(playerPosition.y() - y, playerPosition.x() - x)
+			);
 		}
 	}
 }

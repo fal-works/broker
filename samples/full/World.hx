@@ -1,18 +1,25 @@
 package full;
 
+import full.actor.Army.PlayableArmy;
+import banker.types.Reference;
+import broker.geometry.MutableAabb;
 import broker.collision.*;
-import full.actor.Army;
+import full.actor.*;
 
 class World {
-	static inline final maxPlayerAgentCount = 1;
-	static inline final maxPlayerBulletCount = 256;
-	static inline final maxEnemyAgentCount = 64;
-	static inline final maxEnemyBulletCount = 1024;
+	static inline final maxPlayerAgentCount: UInt = 1;
+	static inline final maxPlayerBulletCount: UInt = 256;
+	static inline final maxEnemyAgentCount: UInt = 64;
+	static inline final maxEnemyBulletCount: UInt = 1024;
+	static inline final playerAgentHalfCollisionSize = 16.0;
 
-	final playerArmy: Army;
+	final playerArmy: PlayableArmy;
 	final enemyArmy: Army;
 	final offenceCollisionDetector: CollisionDetector;
 	final offenctCollisionHandler: Collider -> Collider -> Void;
+
+	final playerAabb: MutableAabb = new MutableAabb();
+	final foundDefenceCollision: Reference<Bool> = false;
 
 	public function new(scene: h2d.Scene) {
 		playerArmy = WorldBuilder.createPlayerArmy(scene);
@@ -52,6 +59,24 @@ class World {
 		enemyArmy.reloadQuadtrees();
 
 		offenceCollisionDetector.detect(offenctCollisionHandler);
+
+		foundDefenceCollision.set(false);
+		final playerPosition = Global.playerPosition;
+		playerArmy.playerAosoa.assignPosition(playerPosition);
+		enemyArmy.bullets.findOverlapped(
+			playerAabb.set(
+				playerPosition.x() - playerAgentHalfCollisionSize,
+				playerPosition.y() - playerAgentHalfCollisionSize,
+				playerPosition.x() + playerAgentHalfCollisionSize,
+				playerPosition.y() + playerAgentHalfCollisionSize
+			),
+			foundDefenceCollision
+		);
+		if (foundDefenceCollision.get()) {
+			enemyArmy.bullets.disuseAll();
+			enemyArmy.bullets.synchronize();
+			playerArmy.playerAosoa.damage();
+		}
 	}
 
 	function newEnemy(): Void {
@@ -69,32 +94,35 @@ class World {
 **/
 @:access(full.World)
 private class WorldBuilder {
-	public static function createPlayerArmy(scene: h2d.Scene): Army {
+	public static function createPlayerArmy(scene: h2d.Scene) {
 		final agentTile = h2d.Tile.fromColor(0xE0FFE0, 48, 48).center();
 		final agentBatch = new h2d.SpriteBatch(agentTile, scene);
 
 		final bulletTile = h2d.Tile.fromColor(0xE0FFE0, 16, 16).center();
 		final bulletBatch = new h2d.SpriteBatch(bulletTile, scene);
 
-		return new Army(Player(
-			agentBatch,
-			bulletBatch,
-			World.maxPlayerBulletCount
-		));
+		final bullets = ArmyBuilder.createNonPlayableActors(World.maxPlayerBulletCount, bulletBatch);
+		final onHitBullet = ArmyBuilder.createOnHitNonPlayable(bullets);
+
+		final agents = ArmyBuilder.createPlayableActors(agentBatch, bullets);
+		final onHitAgent = ArmyBuilder.createOnHitPlayable(agents);
+
+		return new Army.PlayableArmy(agents, onHitAgent, bullets, onHitBullet);
 	}
 
-	public static function createEnemyArmy(scene: h2d.Scene): Army {
+	public static function createEnemyArmy(scene: h2d.Scene) {
 		final agentTile = h2d.Tile.fromColor(0xD0D0FF, 48, 48).center();
 		final agentBatch = new h2d.SpriteBatch(agentTile, scene);
 
 		final bulletTile = h2d.Tile.fromColor(0xD0D0FF, 16, 16).center();
 		final bulletBatch = new h2d.SpriteBatch(bulletTile, scene);
 
-		return new Army(NonPlayer(
-			agentBatch,
-			bulletBatch,
-			World.maxEnemyAgentCount,
-			World.maxEnemyBulletCount
-		));
+		final bullets = ArmyBuilder.createNonPlayableActors(World.maxEnemyBulletCount, bulletBatch);
+		final onHitBullet = ArmyBuilder.createOnHitNonPlayable(bullets);
+
+		final agents = ArmyBuilder.createNonPlayableActors(World.maxEnemyAgentCount, agentBatch, bullets);
+		final onHitAgent = ArmyBuilder.createOnHitNonPlayable(agents);
+
+		return new Army.NonPlayableArmy(agents, onHitAgent, bullets, onHitBullet);
 	}
 }

@@ -1,6 +1,7 @@
 package full;
 
 import broker.input.heaps.HeapsPadMultitap;
+import broker.geometry.MutablePoint;
 import full.gamepad.GamepadBuilder;
 
 class Global {
@@ -36,4 +37,6 @@ class Global {
 	public static inline final height: UInt = 600;
 
 	public static var gamepad(default, null) = defaultGamepadBuilder.build();
+
+	public static final playerPosition = new MutablePoint();
 }
