@@ -157,5 +157,20 @@ class BasicEntity extends broker.entity.BasicEntity {
 		usedSprites[usedCount] = sprite;
 		++usedCount;
 	}
+
+	/**
+		Disuses all entities currently in use.
+	**/
+	static function disuseAll(
+		sprite: h2d.SpriteBatch.BatchElement,
+		i: Int,
+		disuse: Bool,
+		disusedSprites: banker.vector.WritableVector<h2d.SpriteBatch.BatchElement>,
+		disusedCount: Int
+	): Void {
+		disuse = true;
+		disusedSprites[disusedCount] = sprite;
+		++disusedCount;
+	}
 }
 #end
