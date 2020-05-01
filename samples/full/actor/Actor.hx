@@ -2,6 +2,7 @@ package full.actor;
 
 import broker.entity.heaps.BasicEntity;
 
+@:banker_verified
 class Actor extends BasicEntity {
 	@:nullSafety(Off)
 	@:banker_chunkLevelFinal

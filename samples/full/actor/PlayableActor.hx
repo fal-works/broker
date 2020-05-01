@@ -1,5 +1,6 @@
 package full.actor;
 
+@:banker_verified
 class PlayableActor extends Actor {
 	var fireCoolTime: Int = 0;
 

@@ -1,5 +1,6 @@
 package full.actor;
 
+@:banker_verified
 class NonPlayableActor extends Actor {
 	/**
 		`true` if the entity should be disused in the next call of `update()`.
