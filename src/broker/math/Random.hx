@@ -30,4 +30,10 @@ class Random {
 	public static extern inline function signed(maxMagnitude: Float): Float {
 		return (if (bool(0.5)) 1.0 else -1.0) * value(maxMagnitude);
 	}
+
+	/**
+		@return Random value from `0` up to (but not including) `2 * Math.PI`.
+	**/
+	public static extern inline function angle(): Float
+		return value(Constants.TWO_PI);
 }
