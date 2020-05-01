@@ -11,10 +11,22 @@ class Random {
 		return max * Math.random();
 
 	/**
+		@return Random value from `min` up to (but not including) `max`.
+	**/
+	public static extern inline function between(min: Float, max: Float): Float
+		return min + value(max - min);
+
+	/**
 		@return Random value from `0` up to (but not including) `max`.
 	**/
 	public static extern inline function int(max: Float): Int
 		return Floats.toInt(value(max));
+
+	/**
+		@return Random value from `min` up to (but not including) `max`.
+	**/
+	public static extern inline function intBetween(min: Int, max: Int): Int
+		return min + int(max - min);
 
 	/**
 		Returns `true` or `false` randomly.
