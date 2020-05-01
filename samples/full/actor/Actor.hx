@@ -16,6 +16,9 @@ class Actor extends BasicEntity {
 	@:banker_swap
 	var collider: Collider;
 
+	/**
+		Clojure function for emitting a new bullet.
+	**/
 	@:banker_chunkLevelFinal
 	var fire: FireCallback;
 
@@ -45,15 +48,20 @@ class Actor extends BasicEntity {
 		}
 	}
 
+	/**
+		Set `found` to `true` if any entity overlaps `otherAabb`.
+		@param otherAabb
+		@param found
+	**/
 	static function findOverlapped(
 		x: Float,
 		y: Float,
 		halfTileWidth: Float,
 		halfTileHeight: Float,
-		collider: Aabb,
+		otherAabb: Aabb,
 		found: Reference<Bool>
 	): Void {
-		if (collider.overlapsAabb(
+		if (otherAabb.overlapsAabb(
 			x - halfTileWidth,
 			y - halfTileHeight,
 			x + halfTileWidth,

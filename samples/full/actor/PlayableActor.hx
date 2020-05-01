@@ -62,9 +62,9 @@ class PlayableActor extends Actor {
 		y: Float,
 		damageEffectCoolTime: Int
 	): Void {
-		final dx = broker.math.Random.signed(1 * damageEffectCoolTime);
+		final dx = Random.signed(1 * damageEffectCoolTime);
 		sprite.x = x + dx;
-		final dy = broker.math.Random.signed(1 * damageEffectCoolTime);
+		final dy = Random.signed(1 * damageEffectCoolTime);
 		sprite.y = y + dy;
 	}
 }

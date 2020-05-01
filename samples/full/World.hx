@@ -60,19 +60,7 @@ class World {
 
 		offenceCollisionDetector.detect(offenctCollisionHandler);
 
-		foundDefenceCollision.set(false);
-		final playerPosition = Global.playerPosition;
-		playerArmy.playerAosoa.assignPosition(playerPosition);
-		enemyArmy.bullets.findOverlapped(
-			playerAabb.set(
-				playerPosition.x() - playerAgentHalfCollisionSize,
-				playerPosition.y() - playerAgentHalfCollisionSize,
-				playerPosition.x() + playerAgentHalfCollisionSize,
-				playerPosition.y() + playerAgentHalfCollisionSize
-			),
-			foundDefenceCollision
-		);
-		if (foundDefenceCollision.get()) {
+		if (playerHasCollided()) {
 			enemyArmy.bullets.disuseAll();
 			enemyArmy.bullets.synchronize();
 			playerArmy.playerAosoa.damage();
@@ -86,6 +74,29 @@ class World {
 			1 + Math.random() * 1,
 			0.5 * Math.PI
 		);
+	}
+
+	function updatePlayerAabb(): Void {
+		final playerPosition = Global.playerPosition;
+		playerArmy.playerAosoa.assignPosition(playerPosition);
+		playerAabb.set(
+			playerPosition.x() - playerAgentHalfCollisionSize,
+			playerPosition.y() - playerAgentHalfCollisionSize,
+			playerPosition.x() + playerAgentHalfCollisionSize,
+			playerPosition.y() + playerAgentHalfCollisionSize
+		);
+	}
+
+	function playerHasCollided(): Bool {
+		updatePlayerAabb();
+
+		foundDefenceCollision.set(false);
+		enemyArmy.bullets.findOverlapped(
+			playerAabb,
+			foundDefenceCollision
+		);
+
+		return foundDefenceCollision.get();
 	}
 }
 

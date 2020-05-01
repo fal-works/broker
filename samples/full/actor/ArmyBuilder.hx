@@ -75,9 +75,8 @@ class ArmyBuilder {
 		return (collider: Collider) -> {
 			final id = ChunkEntityId.fromInt(collider.id);
 			final chunk = aosoa.getChunk(id);
-			final index = chunk.getReadIndex(id);
-			chunk.dead[index] = true;
-			@:privateAccess chunk.deadChunkBuffer[index] = true;
+			final index = chunk.getWriteIndex(id);
+			chunk.deadBuffer[index] = true;
 		};
 	}
 }

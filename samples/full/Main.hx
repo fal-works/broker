@@ -11,8 +11,6 @@ class Main extends hxd.App {
 		broker.input.heaps.HeapsPadTools.initialize();
 
 		world = new World(s2d);
-
-		debug("initialized.");
 	}
 
 	override function update(dt: Float) {
