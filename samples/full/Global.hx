@@ -2,7 +2,9 @@ package full;
 
 import broker.input.heaps.HeapsPadMultitap;
 import broker.geometry.MutablePoint;
+import broker.math.Random;
 import full.gamepad.GamepadBuilder;
+import full.particle.ParticleAosoa;
 
 class Global {
 	public static final defaultGamepadBuilder: GamepadBuilder = {
@@ -39,4 +41,50 @@ class Global {
 	public static var gamepad(default, null) = defaultGamepadBuilder.build();
 
 	public static final playerPosition = new MutablePoint();
+
+	public static var particles(default, null): ParticleAosoa;
+
+	public static function initialize(s2d: h2d.Scene): Void {
+		initializeParticles(s2d);
+	}
+
+	public static function update(): Void {
+		gamepad.update();
+
+		particles.update();
+		particles.synchronize();
+	}
+
+	public static function emitParticles(
+		x: Float,
+		y: Float,
+		minSpeed: Float,
+		maxSpeed: Float,
+		count: UInt
+	): Void {
+		var i = UInt.zero;
+		while (i < count) {
+			particles.emit(x, y, Random.between(minSpeed, maxSpeed), Random.angle());
+			++i;
+		}
+	}
+
+	static function initializeParticles(scene: h2d.Scene): Void {
+		final tile = h2d.Tile.fromColor(0xFFFFFF, 12, 12).center();
+		final batch = new h2d.SpriteBatch(tile, scene);
+		batch.hasRotationScale = true;
+		final spriteFactory = () -> new h2d.SpriteBatch.BatchElement(tile);
+		particles = new ParticleAosoa(128, 24, batch, spriteFactory);
+	}
+}
+
+class HabitableZone {
+	static extern inline final margin: Float = 64;
+	public static extern inline final leftX: Float = 0 - margin;
+	public static extern inline final topY: Float = 0 - margin;
+	public static extern inline final rightX: Float = 800 + margin;
+	public static extern inline final bottomY: Float = 600 + margin;
+
+	public static extern inline function containsPoint(x: Float, y: Float): Bool
+		return y < bottomY && topY <= y && leftX <= x && x < rightX;
 }

@@ -70,4 +70,22 @@ class Actor extends BasicEntity {
 			found.set(true);
 		}
 	}
+
+	/**
+		Disuses all entities currently in use and emits particles.
+	**/
+	static function crashAll(
+		x: Float,
+		y: Float,
+		sprite: h2d.SpriteBatch.BatchElement,
+		i: Int,
+		disuse: Bool,
+		disusedSprites: banker.vector.WritableVector<h2d.SpriteBatch.BatchElement>,
+		disusedCount: Int
+	): Void {
+		disuse = true;
+		disusedSprites[disusedCount] = sprite;
+		++disusedCount;
+		Global.emitParticles(x, y, 1, 6, 6);
+	}
 }

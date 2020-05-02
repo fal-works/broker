@@ -8,14 +8,6 @@ class NonPlayableActor extends Actor {
 	**/
 	var dead: Bool = false;
 
-	@:banker_chunkLevelFinal
-	static final habitableZone: Aabb = {
-		leftX: 0 - 64,
-		topY: 0 - 64,
-		rightX: 800 + 64,
-		bottomY: 600 + 64
-	};
-
 	static function update(
 		sprite: BatchElement,
 		x: WritableVector<Float>,
@@ -26,19 +18,22 @@ class NonPlayableActor extends Actor {
 		disuse: Bool,
 		disusedSprites: WritableVector<BatchElement>,
 		disusedCount: Int,
-		habitableZone: Aabb,
 		dead: WritableVector<Bool>
 	): Void {
-		final nextX = x[i] + vx;
-		final nextY = y[i] + vy;
-		x[i] = nextX;
-		y[i] = nextY;
+		final currentX = x[i];
+		final currentY = y[i];
 
-		if (dead[i] || !habitableZone.containsPoint(nextX, nextY)) {
+		if (dead[i] || !HabitableZone.containsPoint(currentX, currentY)) {
 			disuse = true;
 			disusedSprites[disusedCount] = sprite;
 			++disusedCount;
-			dead[i] = false;
+			if (dead[i]) {
+				Global.emitParticles(currentX, currentY, 2, 16, 32);
+				dead[i] = false;
+			}
+		} else {
+			x[i] = currentX + vx;
+			y[i] = currentY + vy;
 		}
 	}
 
@@ -60,4 +55,5 @@ class NonPlayableActor extends Actor {
 }
 
 @:build(banker.aosoa.Chunk.fromStructure(full.actor.NonPlayableActor))
+@:banker_verified
 class NonPlayableActorChunk {}

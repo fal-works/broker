@@ -61,7 +61,7 @@ class World {
 		offenceCollisionDetector.detect(offenctCollisionHandler);
 
 		if (playerHasCollided()) {
-			enemyArmy.bullets.disuseAll();
+			enemyArmy.bullets.crashAll();
 			enemyArmy.bullets.synchronize();
 			playerArmy.playerAosoa.damage();
 		}

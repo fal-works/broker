@@ -9,13 +9,13 @@ class Main extends hxd.App {
 	override function init() {
 		broker.input.heaps.HeapsKeyTools.initialize();
 		broker.input.heaps.HeapsPadTools.initialize();
+		Global.initialize(s2d);
 
 		world = new World(s2d);
 	}
 
 	override function update(dt: Float) {
-		Global.gamepad.update();
-
+		Global.update();
 		world.update();
 	}
 }

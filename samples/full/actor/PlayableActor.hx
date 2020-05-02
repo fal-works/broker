@@ -70,4 +70,5 @@ class PlayableActor extends Actor {
 }
 
 @:build(banker.aosoa.Chunk.fromStructure(full.actor.PlayableActor))
+@:banker_verified
 class PlayableActorChunk {}
