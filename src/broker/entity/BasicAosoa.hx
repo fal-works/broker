@@ -31,4 +31,9 @@ interface BasicAosoa extends banker.aosoa.interfaces.Aosoa {
 		Updates position by adding current velocity.
 	**/
 	function updatePosition(): Void;
+
+	/**
+		Disuses all entities currently in use.
+	**/
+	function disuseAll(): Void;
 }

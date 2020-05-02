@@ -89,4 +89,13 @@ class BasicEntity implements banker.aosoa.Structure {
 		x[i] += vx;
 		y[i] += vy;
 	}
+
+	/**
+		Disuses all entities currently in use.
+	**/
+	static function disuseAll(
+		disuse: Bool
+	): Void {
+		disuse = true;
+	}
 }
