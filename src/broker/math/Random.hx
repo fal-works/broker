@@ -44,8 +44,14 @@ class Random {
 	}
 
 	/**
-		@return Random value from `0` up to (but not including) `2 * Math.PI`.
+		@return Random value from `0` up to (but not including) `2 * PI`.
 	**/
 	public static extern inline function angle(): Float
 		return value(Constants.TWO_PI);
+
+	/**
+		@return Random value from `-PI` up to (but not including) `+PI`.
+	**/
+	public static extern inline function signedAngle(): Float
+		return Constants.MINUS_PI + angle();
 }
