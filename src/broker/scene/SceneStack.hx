@@ -81,7 +81,10 @@ class SceneStack extends Tagged {
 		@param destroy If `true`, calls `destroy()` on the popped scene.
 	**/
 	public function switchTop(newScene: Scene, destroy = true): Void {
-		this.pop(destroy);
+		final popped = scenes.pop().unwrap();
+		popped.deactivate();
+		if (destroy) popped.destroy();
+
 		this.push(newScene);
 	}
 
