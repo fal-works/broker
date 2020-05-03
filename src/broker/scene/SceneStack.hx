@@ -91,4 +91,24 @@ class SceneStack extends Tagged {
 	**/
 	public function update(): Void
 		this.peek().update();
+
+	/**
+		Removes and destroys all scenes in `this` stack and resets the stack with `bottomScene`.
+		@param bottomScene If not provided, preserves the existing bottom scene without destroying it.
+	**/
+	public function reset(?bottomScene: Scene): Void {
+		final scenes = this.scenes;
+		var index = scenes.length.minusOne().unwrap();
+		while (index > UInt.zero) {
+			scenes[index].destroy();
+			--index;
+		}
+		scenes.resize(UInt.one);
+
+		if (bottomScene != null) {
+			scenes[UInt.zero].destroy();
+			scenes[UInt.zero] = bottomScene;
+			bottomScene.activate();
+		}
+	}
 }
