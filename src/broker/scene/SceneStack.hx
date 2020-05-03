@@ -68,8 +68,7 @@ class SceneStack extends Tagged {
 		assert(scenes.length > 1, this.tag, "SceneStack cannot be empty.");
 
 		final popped = scenes.pop().unwrap();
-		popped.deactivate();
-		if (destroy) popped.destroy();
+		if (destroy) popped.destroy(); else popped.deactivate();
 
 		scenes.peek().activate();
 
@@ -81,9 +80,8 @@ class SceneStack extends Tagged {
 		@param destroy If `true`, calls `destroy()` on the popped scene.
 	**/
 	public function switchTop(newScene: Scene, destroy = true): Void {
-		final popped = scenes.pop().unwrap();
-		popped.deactivate();
-		if (destroy) popped.destroy();
+		final popped = this.scenes.pop().unwrap();
+		if (destroy) popped.destroy(); else popped.deactivate();
 
 		this.push(newScene);
 	}
