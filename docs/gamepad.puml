@@ -24,7 +24,7 @@ hide empty members
 
 ' ---- (diagram) ------------------------------
 
-package banker.input {
+package broker.input {
 	class ButtonStatus
 	class GamepadBase
 	class Stick
