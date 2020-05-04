@@ -1,0 +1,44 @@
+@startuml scene
+
+' ---- (style) --------------------------------
+
+skinparam shadowing false
+skinparam backgroundColor White
+skinparam package {
+  BorderColor #A0A0A0
+  FontColor #A0A0A0
+}
+skinparam class {
+  BackgroundColor White
+  ArrowColor #202020
+  BorderColor #202020
+  FontColor #000000
+}
+skinparam note {
+  BackgroundColor White
+  FontColor #606060
+  BorderColor #C0C0C0
+}
+skinparam stereotypeIBackgroundColor Lavender
+hide empty members
+
+' ---- (diagram) ------------------------------
+
+package broker.scene {
+  left to right direction
+	class Scene {
+    update()
+  }
+	class SceneStack {
+    update()
+  }
+
+  SceneStack o-- "1..n" Scene
+
+  note left of SceneStack
+  Updates only
+  the top scene
+  end note
+}
+
+@enduml

@@ -30,10 +30,15 @@ and provides you an integrated virtual gamepad.
 
 ![Class diagram. Visit GitHub repo for details.](docs/gamepad.svg)
 
+### Scene
+
+Basic classes for managing game scenes.
+
+![Class diagram. Visit GitHub repo for details.](docs/scene.svg)
+
 
 ## Features to be added (maybe)
 
-- Scene manager
 - Asset manager
 - Sound manager
 
