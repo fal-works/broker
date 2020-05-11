@@ -8,7 +8,7 @@ class PlayScene extends Scene {
 
 	public function new(heapsScene: h2d.Scene) {
 		super(heapsScene);
-		this.world = new World(this.heapsScene);
+		this.world = new World(this.mainLayer);
 	}
 
 	override function update(): Void {

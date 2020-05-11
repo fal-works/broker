@@ -1,4 +1,4 @@
-package broker.scene.interfaces;
+package broker.scene;
 
 /**
 	Drawing layer.

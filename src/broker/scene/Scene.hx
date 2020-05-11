@@ -1,26 +1,41 @@
 package broker.scene;
 
 /**
-	Base class for implementing `broker.scene.interfaces.Scene`.
+	Game scene object.
 **/
-class Scene implements broker.scene.interfaces.Scene {
+interface Scene<T: Layer> {
+	/**
+		Background layer.
+	**/
+	final background: T;
+
+	/**
+		Main layer.
+	**/
+	final mainLayer: T;
+
+	/**
+		Surface layer.
+	**/
+	final surface: T;
+
 	/**
 		Updates `this` scene.
 	**/
-	public function update(): Void {}
+	function update(): Void;
 
 	/**
 		Called when `this` scene becomes the top in the scene stack.
 	**/
-	public function activate(): Void {}
+	function activate(): Void;
 
 	/**
 		Called when `this` scene is no more the top in the scene stack but is not immediately destroyed.
 	**/
-	public function deactivate(): Void {}
+	function deactivate(): Void;
 
 	/**
-		Destroyes `this` scene.
+		Destroys `this` scene.
 	**/
-	public function destroy(): Void {}
+	function destroy(): Void;
 }

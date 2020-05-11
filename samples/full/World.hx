@@ -21,9 +21,9 @@ class World {
 	final playerAabb: MutableAabb = new MutableAabb();
 	final foundDefenceCollision: Reference<Bool> = false;
 
-	public function new(scene: h2d.Scene) {
-		playerArmy = WorldBuilder.createPlayerArmy(scene);
-		enemyArmy = WorldBuilder.createEnemyArmy(scene);
+	public function new(parent: h2d.Object) {
+		playerArmy = WorldBuilder.createPlayerArmy(parent);
+		enemyArmy = WorldBuilder.createEnemyArmy(parent);
 
 		offenceCollisionDetector = CollisionDetector.createInterGroup(
 			Space.partitionLevel,
@@ -105,12 +105,12 @@ class World {
 **/
 @:access(full.World)
 private class WorldBuilder {
-	public static function createPlayerArmy(scene: h2d.Scene) {
+	public static function createPlayerArmy(parent: h2d.Object) {
 		final agentTile = h2d.Tile.fromColor(0xE0FFE0, 48, 48).center();
-		final agentBatch = new h2d.SpriteBatch(agentTile, scene);
+		final agentBatch = new h2d.SpriteBatch(agentTile, parent);
 
 		final bulletTile = h2d.Tile.fromColor(0xE0FFE0, 16, 16).center();
-		final bulletBatch = new h2d.SpriteBatch(bulletTile, scene);
+		final bulletBatch = new h2d.SpriteBatch(bulletTile, parent);
 
 		final bullets = ArmyBuilder.createNonPlayableActors(World.maxPlayerBulletCount, bulletBatch);
 		final onHitBullet = ArmyBuilder.createOnHitNonPlayable(bullets);
@@ -121,12 +121,12 @@ private class WorldBuilder {
 		return new Army.PlayableArmy(agents, onHitAgent, bullets, onHitBullet);
 	}
 
-	public static function createEnemyArmy(scene: h2d.Scene) {
+	public static function createEnemyArmy(parent: h2d.Object) {
 		final agentTile = h2d.Tile.fromColor(0xD0D0FF, 48, 48).center();
-		final agentBatch = new h2d.SpriteBatch(agentTile, scene);
+		final agentBatch = new h2d.SpriteBatch(agentTile, parent);
 
 		final bulletTile = h2d.Tile.fromColor(0xD0D0FF, 16, 16).center();
-		final bulletBatch = new h2d.SpriteBatch(bulletTile, scene);
+		final bulletBatch = new h2d.SpriteBatch(bulletTile, parent);
 
 		final bullets = ArmyBuilder.createNonPlayableActors(World.maxEnemyBulletCount, bulletBatch);
 		final onHitBullet = ArmyBuilder.createOnHitNonPlayable(bullets);

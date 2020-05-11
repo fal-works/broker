@@ -1,6 +1,6 @@
 package full;
 
-import broker.scene.SceneStack;
+import broker.scene.heaps.SceneStack;
 import full.scenes.PlayScene;
 
 class Main extends hxd.App {
