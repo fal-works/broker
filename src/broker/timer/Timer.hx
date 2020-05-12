@@ -8,7 +8,7 @@ interface Timer {
 
 	/**
 		Steps `this` timer.
-		@return `true` if not completed (i.e. this timer should still be alive). Otherwise `false`.
+		@return `true` if completed. Otherwise `false`.
 	**/
 	function step(): Bool;
 }

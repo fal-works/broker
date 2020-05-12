@@ -39,7 +39,7 @@ class TimerBase implements Timer {
 		Steps `this` timer.
 		- If not yet completed (`this.progress < 1.0`), runs `this.onProgress()` and then adds `this.progress`.
 		- If completed, runs `this.onComplete()`.
-		@return `true` if not completed (i.e. this timer should still be alive). Otherwise `false`.
+		@return `true` if completed. Otherwise `false`.
 	**/
 	public inline function step(): Bool {
 		final progress = this.progress;
@@ -47,10 +47,10 @@ class TimerBase implements Timer {
 		if (progress < 1.0) {
 			this.onProgress(progress);
 			this.progress = progress + this.progressChangeRate;
-			return true;
+			return false;
 		} else {
 			this.onComplete();
-			return false;
+			return true;
 		}
 	}
 
