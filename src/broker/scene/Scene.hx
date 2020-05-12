@@ -1,5 +1,7 @@
 package broker.scene;
 
+import broker.timer.Timers;
+
 /**
 	Game scene object.
 **/
@@ -18,6 +20,11 @@ interface Scene<T: Layer> {
 		Surface layer.
 	**/
 	final surface: T;
+
+	/**
+		Timers attached to `this` scene.
+	**/
+	final timers: Timers;
 
 	/**
 		Updates `this` scene.
