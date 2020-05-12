@@ -51,17 +51,27 @@ class Scene implements broker.scene.Scene<Layer> {
 		this.heapsScene = heapsScene;
 	}
 
+	/**
+		Updates `this` scene.
+		Has no effect but can be overridden for your own purpose.
+	**/
 	public function update(): Void {}
 
 	/**
+		Called when `this` scene becomes the top in the scene stack.
 		Calls `setScene()` on the `hxd.App` instance.
 	**/
 	public function activate(): Void
 		heapsApp.unwrap().setScene(this.heapsScene, false);
 
+	/**
+		Called when `this` scene is no more the top in the scene stack but is not immediately destroyed.
+		Has no effect but can be overridden for your own purpose.
+	**/
 	public function deactivate(): Void {}
 
 	/**
+		Destroys `this` scene.
 		Calls `dispose()` on the internal `h2d.Scene` instance.
 	**/
 	public function destroy(): Void
