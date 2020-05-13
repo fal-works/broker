@@ -69,6 +69,13 @@ class Scene implements broker.scene.Scene<Layer> {
 	}
 
 	/**
+		Returns the type id of `this`.
+		Override this method for returning any user-defined value.
+	**/
+	public function getTypeId(): SceneTypeId
+		return SceneTypeId.DEFAULT;
+
+	/**
 		Updates `this` scene.
 		Steps all `Timer` instances attached to `this`.
 	**/

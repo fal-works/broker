@@ -28,6 +28,11 @@ interface Scene<T: Layer> {
 	final timers: Timers;
 
 	/**
+		@return The type id of `this`.
+	**/
+	function getTypeId(): SceneTypeId;
+
+	/**
 		Updates `this` scene.
 	**/
 	function update(): Void;
