@@ -10,7 +10,7 @@ import sneaker.tag.Tagged;
 #if !broker_generic_disable
 @:generic
 #end
-class SceneStackBase<T: Layer> extends Tagged {
+class SceneStack<T: Layer> extends Tagged {
 	/**
 		The internal array of `Scene` instances.
 	**/
