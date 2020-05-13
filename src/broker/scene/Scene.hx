@@ -1,6 +1,7 @@
 package broker.scene;
 
 import broker.timer.Timers;
+import broker.color.ArgbColor;
 
 /**
 	Game scene object.
@@ -45,4 +46,11 @@ interface Scene<T: Layer> {
 		Destroys `this` scene.
 	**/
 	function destroy(): Void;
+
+	/**
+		Starts fade-in effect.
+		@param color The starting color.
+		@param duration The duration frame count.
+	**/
+	function fadeInFrom(color: ArgbColor, duration: Int): Void;
 }

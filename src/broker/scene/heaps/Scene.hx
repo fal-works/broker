@@ -2,6 +2,8 @@ package broker.scene.heaps;
 
 #if heaps
 import broker.timer.Timers;
+import broker.timer.builtin.FadeOutTimer;
+import broker.color.ArgbColor;
 
 /**
 	Base class that implements `broker.scene.Scene` and internally contains a `h2d.Scene` instance.
@@ -46,6 +48,11 @@ class Scene implements broker.scene.Scene<Layer> {
 	final heapsScene: h2d.Scene;
 
 	/**
+		Internal bitmap used for fade-in/fade-out effects.
+	**/
+	final surfaceBitmap = new h2d.Bitmap(h2d.Tile.fromColor(0xFFFFFF));
+
+	/**
 		@param heapsScene If not provided, creates a new one.
 		@param timersCapacity The max number of `Timer` instances. Defaults to `16`.
 	**/
@@ -87,5 +94,28 @@ class Scene implements broker.scene.Scene<Layer> {
 	**/
 	public function destroy(): Void
 		this.heapsScene.dispose();
+
+	/**
+		Starts fade-in effect.
+		@param color The starting color.
+		@param duration The duration frame count.
+	**/
+	@:access(h2d.Tile)
+	public function fadeInFrom(color: ArgbColor, duration: Int): Void {
+		@:nullSafety(Off)
+		final texture: h3d.mat.Texture = h3d.mat.Texture.fromColor(
+			color.getRGB().int(),
+			color.getAlpha().float()
+		);
+
+		final bitmap = this.surfaceBitmap;
+		final tile = bitmap.tile;
+		final heapsScene = this.heapsScene;
+		tile.setTexture(texture);
+		tile.setSize(heapsScene.width, heapsScene.height);
+
+		this.surface.addChild(bitmap);
+		this.timers.push(FadeOutTimer.use(surfaceBitmap, duration));
+	}
 }
 #end
