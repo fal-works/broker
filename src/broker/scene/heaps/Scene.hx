@@ -104,25 +104,37 @@ class Scene implements broker.scene.Scene<Layer> {
 
 	/**
 		Starts fade-in effect.
+		Has no effect if `this.surfaceBitmap` is already added to `this.surface`.
 		@param color The starting color.
 		@param duration The duration frame count.
 	**/
-	@:access(h2d.Tile)
 	public function fadeInFrom(color: ArgbColor, duration: Int): Void {
+		final bitmap = this.surfaceBitmap;
+		if (this.surface.getChildIndex(bitmap) >= 0) return;
+
+		this.resetCoverBitmap(bitmap, color);
+		this.surface.addChild(bitmap);
+		this.timers.push(FadeOutTimer.use(bitmap, duration));
+	}
+
+	/**
+		Resets `bitmap` so that it covers the entire area of `this` scene with `color`.
+	**/
+	@:access(h2d.Tile)
+	function resetCoverBitmap(bitmap: h2d.Bitmap, color: ArgbColor): h2d.Bitmap {
 		@:nullSafety(Off)
 		final texture: h3d.mat.Texture = h3d.mat.Texture.fromColor(
 			color.getRGB().int(),
 			color.getAlpha().float()
 		);
 
-		final bitmap = this.surfaceBitmap;
 		final tile = bitmap.tile;
-		final heapsScene = this.heapsScene;
 		tile.setTexture(texture);
+
+		final heapsScene = this.heapsScene;
 		tile.setSize(heapsScene.width, heapsScene.height);
 
-		this.surface.addChild(bitmap);
-		this.timers.push(FadeOutTimer.use(surfaceBitmap, duration));
+		return bitmap;
 	}
 }
 #end
