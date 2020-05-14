@@ -30,8 +30,6 @@ class PlayScene extends Scene {
 
 	function goToNextScene(): Void {
 		final nextScene = new PlayScene();
-		this.fadeOutTo(0xFF000000, 30);
-		this.switchTo(nextScene, 60, true);
-		nextScene.fadeInFrom(0xFF000000, 30);
+		Global.sceneTransitionTable.runTransition(this, nextScene);
 	}
 }

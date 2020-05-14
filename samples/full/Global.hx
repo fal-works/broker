@@ -3,8 +3,11 @@ package full;
 import broker.input.heaps.HeapsPadMultitap;
 import broker.geometry.MutablePoint;
 import broker.math.Random;
+import broker.scene.transition.SceneTransitionTable;
+import broker.scene.transition.FadeSceneTransition;
 import full.gamepad.GamepadBuilder;
 import full.particle.ParticleAosoa;
+import full.scenes.SceneType;
 
 class Global {
 	public static final defaultGamepadBuilder: GamepadBuilder = {
@@ -44,8 +47,20 @@ class Global {
 
 	public static var particles(default, null): ParticleAosoa;
 
+	public static final sceneTransitionTable = new SceneTransitionTable();
+
 	public static function initialize(s2d: h2d.Scene): Void {
 		resetParticles(s2d);
+
+		sceneTransitionTable.add(({
+			precedingSceneType: SceneType.play,
+			succeedingSceneType: SceneType.play,
+			color: 0xFF000000,
+			fadeOutDuration: 30,
+			intervalDuration: 30,
+			fadeInDuration: 30,
+			destroy: true
+		} : FadeSceneTransition));
 	}
 
 	public static function update(): Void {
