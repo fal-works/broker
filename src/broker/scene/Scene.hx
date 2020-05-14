@@ -33,6 +33,11 @@ interface Scene {
 	final timers: Timers;
 
 	/**
+		`true` if any scene transition is running.
+	**/
+	var isTransitioning: Bool;
+
+	/**
 		@return The type id of `this`.
 	**/
 	function getTypeId(): SceneTypeId;

@@ -50,6 +50,11 @@ class Scene implements broker.scene.Scene {
 	public final timers: Timers;
 
 	/**
+		`true` if any scene transition is running.
+	**/
+	public var isTransitioning: Bool;
+
+	/**
 		`true` if `this.initialize()` is already called.
 	**/
 	var isInitialized: Bool;
@@ -79,6 +84,7 @@ class Scene implements broker.scene.Scene {
 		this.surface = new Layer(heapsScene);
 
 		this.timers = new Timers(Nulls.coalesce(timersCapacity, 16));
+		this.isTransitioning = false;
 
 		this.heapsScene = heapsScene;
 	}
@@ -111,6 +117,7 @@ class Scene implements broker.scene.Scene {
 	**/
 	public function activate(): Void {
 		if (!this.isInitialized) this.initialize();
+		this.isTransitioning = false;
 		heapsApp.unwrap().setScene(this.heapsScene, false);
 	}
 
@@ -155,9 +162,12 @@ class Scene implements broker.scene.Scene {
 
 	/**
 		Switches to the next scene.
+		Has no effect if any transition is already running.
 		@param duration The delay duration frame count.
 	**/
 	public function switchTo(nextScene: broker.scene.Scene, duration: Int, destroy: Bool): Void {
+		if (this.isTransitioning) return;
+
 		final sceneStack = this.sceneStack.unwrap();
 		final timer = SwitchSceneTimer.use(
 			duration,
@@ -166,6 +176,7 @@ class Scene implements broker.scene.Scene {
 			destroy
 		);
 		this.timers.push(timer);
+		this.isTransitioning = true;
 	}
 
 	/**
