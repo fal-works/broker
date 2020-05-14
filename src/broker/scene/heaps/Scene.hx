@@ -2,6 +2,7 @@ package broker.scene.heaps;
 
 #if heaps
 import broker.timer.Timers;
+import broker.timer.builtin.FadeInTimer;
 import broker.timer.builtin.FadeOutTimer;
 import broker.color.ArgbColor;
 
@@ -104,17 +105,38 @@ class Scene implements broker.scene.Scene<Layer> {
 
 	/**
 		Starts fade-in effect.
-		Has no effect if `this.surfaceBitmap` is already added to `this.surface`.
 		@param color The starting color.
 		@param duration The duration frame count.
 	**/
 	public function fadeInFrom(color: ArgbColor, duration: Int): Void {
-		final bitmap = this.surfaceBitmap;
-		if (this.surface.getChildIndex(bitmap) >= 0) return;
+		final bitmap = this.setSurfaceBitmap(color);
 
-		this.resetCoverBitmap(bitmap, color);
+		// (fade-in the scene) = (fade-out the surface)
+		final timer = FadeOutTimer.use(bitmap, duration, true);
+		this.timers.push(timer);
+	}
+
+	/**
+		Starts fade-out effect.
+		@param color The ending color.
+		@param duration The duration frame count.
+	**/
+	public function fadeOutTo(color: ArgbColor, duration: Int): Void {
+		final bitmap = this.setSurfaceBitmap(color);
+
+		// (fade-out the scene) = (fade-in the surface)
+		final timer = FadeInTimer.use(bitmap, duration);
+		this.timers.push(timer);
+	}
+
+	/**
+		Resets `this.surfaceBitmap` with `color` and adds it to `this` scene.
+		@return `this.surfaceBitmap`.
+	**/
+	function setSurfaceBitmap(color: ArgbColor): h2d.Bitmap {
+		final bitmap = this.resetCoverBitmap(this.surfaceBitmap, color);
 		this.surface.addChild(bitmap);
-		this.timers.push(FadeOutTimer.use(bitmap, duration));
+		return bitmap;
 	}
 
 	/**

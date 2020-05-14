@@ -58,4 +58,11 @@ interface Scene<T: Layer> {
 		@param duration The duration frame count.
 	**/
 	function fadeInFrom(color: ArgbColor, duration: Int): Void;
+
+	/**
+		Starts fade-out effect.
+		@param color The ending color.
+		@param duration The duration frame count.
+	**/
+	function fadeOutTo(color: ArgbColor, duration: Int): Void;
 }
