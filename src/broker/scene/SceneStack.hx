@@ -7,38 +7,37 @@ import sneaker.tag.Tagged;
 	Base class for stack of `Scene` instances.
 	This only updates the top scene in `update()` method.
 **/
-#if !broker_generic_disable
-@:generic
-#end
-class SceneStack<T: Layer> extends Tagged {
+class SceneStack extends Tagged {
 	/**
 		The internal array of `Scene` instances.
 	**/
-	final scenes: Array<Scene<T>>;
+	final scenes: Array<Scene>;
 
 	/**
 		Creates a new stack instance with an `initialScene`.
 		This does not activate `initialScene` automatically.
 	**/
-	public function new(initialScene: Scene<T>, capacity: UInt) {
+	public function new(initialScene: Scene, capacity: UInt) {
 		super();
 		this.scenes = [initialScene];
+		initialScene.sceneStack = this;
 	}
 
 	/**
 		Pushes `scene` to `this` stack.
 	**/
-	public function push(scene: Scene<T>): Void {
+	public function push(scene: Scene): Void {
 		final scenes = this.scenes;
 		scenes.peek().deactivate();
 		scenes.push(scene);
+		scene.sceneStack = this;
 		scene.activate();
 	}
 
 	/**
 		@return The top/newest scene of `this` stack.
 	**/
-	public function peek(): Scene<T>
+	public function peek(): Scene
 		return this.scenes.peek();
 
 	/**
@@ -66,11 +65,12 @@ class SceneStack<T: Layer> extends Tagged {
 		Be sure to check that `this` has at least 2 scenes before calling this method.
 		@param destroy If `true`, calls `destroy()` on the popped scene.
 	**/
-	public function pop(destroy = true): Scene<T> {
+	public function pop(destroy = true): Scene {
 		final scenes = this.scenes;
 		assert(scenes.length > 1, this.tag, "SceneStack cannot be empty.");
 
 		final popped = scenes.pop().unwrap();
+		popped.sceneStack = Maybe.none();
 		if (destroy) popped.destroy(); else popped.deactivate();
 
 		scenes.peek().activate();
@@ -82,11 +82,16 @@ class SceneStack<T: Layer> extends Tagged {
 		Pops the current top/newest scene and then pushes `newScene` to `this`.
 		@param destroy If `true`, calls `destroy()` on the popped scene.
 	**/
-	public function switchTop(newScene: Scene<T>, destroy = true): Void {
-		final popped = this.scenes.pop().unwrap();
+	public function switchTop(newScene: Scene, destroy = true): Void {
+		final scenes = this.scenes;
+
+		final popped = scenes.pop().unwrap();
+		popped.sceneStack = Maybe.none();
 		if (destroy) popped.destroy(); else popped.deactivate();
 
-		this.push(newScene);
+		scenes.push(newScene);
+		newScene.sceneStack = this;
+		newScene.activate();
 	}
 
 	/**
@@ -99,17 +104,20 @@ class SceneStack<T: Layer> extends Tagged {
 		Removes and destroys all scenes in `this` stack and resets the stack with `bottomScene`.
 		@param bottomScene If not provided, preserves the existing bottom scene without destroying it.
 	**/
-	public function reset(?bottomScene: Scene<T>): Void {
+	public function reset(?bottomScene: Scene): Void {
 		final scenes = this.scenes;
 		var index = scenes.length.minusOne().unwrap();
 		while (index > UInt.zero) {
-			scenes[index].destroy();
+			final scene = scenes[index];
+			scene.destroy();
+			scene.sceneStack = Maybe.none();
 			--index;
 		}
 		scenes.resize(UInt.one);
 
 		if (bottomScene != null) {
 			scenes[UInt.zero].destroy();
+			scenes[UInt.zero].sceneStack = Maybe.none();
 			scenes[UInt.zero] = bottomScene;
 			bottomScene.activate();
 		}

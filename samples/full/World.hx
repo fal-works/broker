@@ -4,6 +4,7 @@ import full.actor.Army.PlayableArmy;
 import banker.types.Reference;
 import broker.geometry.MutableAabb;
 import broker.collision.*;
+import broker.scene.Layer;
 import full.actor.*;
 
 class World {

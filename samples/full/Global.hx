@@ -45,7 +45,7 @@ class Global {
 	public static var particles(default, null): ParticleAosoa;
 
 	public static function initialize(s2d: h2d.Scene): Void {
-		initializeParticles(s2d);
+		resetParticles(s2d);
 	}
 
 	public static function update(): Void {
@@ -69,7 +69,7 @@ class Global {
 		}
 	}
 
-	static function initializeParticles(scene: h2d.Scene): Void {
+	public static function resetParticles(scene: h2d.Scene): Void {
 		final tile = h2d.Tile.fromColor(0xFFFFFF, 12, 12).center();
 		final batch = new h2d.SpriteBatch(tile, scene);
 		batch.hasRotationScale = true;

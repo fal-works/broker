@@ -4,13 +4,14 @@ package broker.scene.heaps;
 import broker.timer.Timers;
 import broker.timer.builtin.FadeInTimer;
 import broker.timer.builtin.FadeOutTimer;
+import broker.timer.builtin.SwitchSceneTimer;
 import broker.color.ArgbColor;
 
 /**
 	Base class that implements `broker.scene.Scene` and internally contains a `h2d.Scene` instance.
 	Requires `Scene.initialize()` to be called before creating any instance.
 **/
-class Scene implements broker.scene.Scene<Layer> {
+class Scene implements broker.scene.Scene {
 	/**
 		The `hxd.App` instance to pass `heapsScene` of any `Scene` instance.
 	**/
@@ -22,6 +23,11 @@ class Scene implements broker.scene.Scene<Layer> {
 	public static function initialize(app: hxd.App): Void {
 		heapsApp = app;
 	}
+
+	/**
+		The stack to which `this` belongs.
+	**/
+	public var sceneStack: Maybe<broker.scene.SceneStack>;
 
 	/**
 		Background layer.
@@ -58,6 +64,8 @@ class Scene implements broker.scene.Scene<Layer> {
 		@param timersCapacity The max number of `Timer` instances. Defaults to `16`.
 	**/
 	public function new(?heapsScene: h2d.Scene, ?timersCapacity: UInt) {
+		this.sceneStack = Maybe.none();
+
 		final heapsScene = if (heapsScene != null) heapsScene else new h2d.Scene();
 
 		this.background = new Layer(heapsScene);
@@ -130,12 +138,27 @@ class Scene implements broker.scene.Scene<Layer> {
 	}
 
 	/**
+		Switches to the next scene.
+		@param duration The delay duration frame count.
+	**/
+	public function switchTo(nextScene: broker.scene.Scene, duration: Int, destroy: Bool): Void {
+		final sceneStack = this.sceneStack.unwrap();
+		final timer = SwitchSceneTimer.use(
+			duration,
+			nextScene,
+			sceneStack,
+			destroy
+		);
+		this.timers.push(timer);
+	}
+
+	/**
 		Resets `this.surfaceBitmap` with `color` and adds it to `this` scene.
 		@return `this.surfaceBitmap`.
 	**/
 	function setSurfaceBitmap(color: ArgbColor): h2d.Bitmap {
 		final bitmap = this.resetCoverBitmap(this.surfaceBitmap, color);
-		this.surface.addChild(bitmap);
+		this.surface.heapsObject.addChild(bitmap);
 		return bitmap;
 	}
 

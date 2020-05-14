@@ -6,21 +6,26 @@ import broker.color.ArgbColor;
 /**
 	Game scene object.
 **/
-interface Scene<T: Layer> {
+interface Scene {
+	/**
+		The stack to which `this` belongs.
+	**/
+	var sceneStack: Maybe<SceneStack>;
+
 	/**
 		Background layer.
 	**/
-	final background: T;
+	final background: Layer;
 
 	/**
 		Main layer.
 	**/
-	final mainLayer: T;
+	final mainLayer: Layer;
 
 	/**
 		Surface layer.
 	**/
-	final surface: T;
+	final surface: Layer;
 
 	/**
 		Timers attached to `this` scene.
@@ -65,4 +70,10 @@ interface Scene<T: Layer> {
 		@param duration The duration frame count.
 	**/
 	function fadeOutTo(color: ArgbColor, duration: Int): Void;
+
+	/**
+		Switches to the next scene.
+		@param duration The delay duration frame count.
+	**/
+	function switchTo(nextScene: Scene, duration: Int, destroy: Bool): Void;
 }

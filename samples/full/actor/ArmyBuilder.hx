@@ -51,13 +51,11 @@ class ArmyBuilder {
 		final tile = batch.tile;
 		final spriteFactory = () -> new h2d.SpriteBatch.BatchElement(tile);
 
-		final bulletAosoa = Nulls.coalesce(bullets, aosoa);
-		final fireCallback = (
-			x,
-			y,
-			speed,
-			direction
-		) -> bulletAosoa.emit(x, y, speed, direction);
+		final fireCallback = if (bullets != null) {
+			function(x, y, speed, direction) bullets.emit(x, y, speed, direction);
+		} else {
+			function(x, y, speed, direction) aosoa.emit(x, y, speed, direction);
+		};
 
 		aosoa = new NonPlayableActorAosoa(
 			chunkCapacity,
