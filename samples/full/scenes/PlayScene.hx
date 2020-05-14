@@ -5,19 +5,25 @@ import broker.scene.heaps.Scene;
 import full.World;
 
 class PlayScene extends Scene {
-	final world: World;
+	var world: World;
 
 	public function new(?heapsScene: h2d.Scene) {
 		super(if (heapsScene != null) heapsScene else new h2d.Scene());
-		this.world = new World(this.mainLayer.heapsObject);
+
+		@:nullSafety(Off) this.world = null;
 	}
 
 	override public inline function getTypeId(): SceneTypeId
 		return SceneType.play;
 
+	override function initialize(): Void {
+		super.initialize();
+		this.world = new World(this.mainLayer.heapsObject);
+	}
+
 	override function update(): Void {
 		super.update();
-		world.update();
+		this.world.update();
 
 		if (Global.gamepad.buttons.Y.isPressed)
 			this.goToNextScene();

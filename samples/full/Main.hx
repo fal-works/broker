@@ -12,7 +12,7 @@ class Main extends hxd.App {
 	override function init() {
 		broker.input.heaps.HeapsKeyTools.initialize();
 		broker.input.heaps.HeapsPadTools.initialize();
-		broker.scene.heaps.Scene.initialize(this);
+		broker.scene.heaps.Scene.setApplication(this);
 		Global.initialize(s2d);
 
 		final initialScene = new PlayScene(s2d);

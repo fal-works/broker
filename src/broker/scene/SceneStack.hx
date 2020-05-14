@@ -15,12 +15,13 @@ class SceneStack extends Tagged {
 
 	/**
 		Creates a new stack instance with an `initialScene`.
-		This does not activate `initialScene` automatically.
+		Also activates `initialScene`.
 	**/
 	public function new(initialScene: Scene, capacity: UInt) {
 		super();
 		this.scenes = [initialScene];
 		initialScene.sceneStack = this;
+		initialScene.activate();
 	}
 
 	/**

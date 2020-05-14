@@ -18,9 +18,9 @@ class Scene implements broker.scene.Scene {
 	static var heapsApp: Maybe<hxd.App> = Maybe.none();
 
 	/**
-		Registeres the `hxd.App` instance.
+		Registers the `hxd.App` instance.
 	**/
-	public static function initialize(app: hxd.App): Void {
+	public static function setApplication(app: hxd.App): Void {
 		heapsApp = app;
 	}
 
@@ -50,6 +50,11 @@ class Scene implements broker.scene.Scene {
 	public final timers: Timers;
 
 	/**
+		`true` if `this.initialize()` is already called.
+	**/
+	var isInitialized: Bool;
+
+	/**
 		`h2d.Scene` instance to be wrapped.
 	**/
 	final heapsScene: h2d.Scene;
@@ -64,6 +69,7 @@ class Scene implements broker.scene.Scene {
 		@param timersCapacity The max number of `Timer` instances. Defaults to `16`.
 	**/
 	public function new(?heapsScene: h2d.Scene, ?timersCapacity: UInt) {
+		this.isInitialized = false;
 		this.sceneStack = Maybe.none();
 
 		final heapsScene = if (heapsScene != null) heapsScene else new h2d.Scene();
@@ -85,6 +91,14 @@ class Scene implements broker.scene.Scene {
 		return SceneTypeId.DEFAULT;
 
 	/**
+		Called when `this.activate()` is called for the first time.
+		Can be overridden for your own purpose.
+	**/
+	public function initialize(): Void {
+		this.isInitialized = true;
+	}
+
+	/**
 		Updates `this` scene.
 		Steps all `Timer` instances attached to `this`.
 	**/
@@ -95,8 +109,10 @@ class Scene implements broker.scene.Scene {
 		Called when `this` scene becomes the top in the scene stack.
 		Calls `setScene()` on the `hxd.App` instance.
 	**/
-	public function activate(): Void
+	public function activate(): Void {
+		if (!this.isInitialized) this.initialize();
 		heapsApp.unwrap().setScene(this.heapsScene, false);
+	}
 
 	/**
 		Called when `this` scene is no more the top in the scene stack but is not immediately destroyed.

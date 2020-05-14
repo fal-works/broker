@@ -38,6 +38,11 @@ interface Scene {
 	function getTypeId(): SceneTypeId;
 
 	/**
+		Called when `this.activate()` is called for the first time.
+	**/
+	function initialize(): Void;
+
+	/**
 		Updates `this` scene.
 	**/
 	function update(): Void;
