@@ -1,6 +1,5 @@
 package broker.timer.builtin;
 
-import broker.timer.Timer;
 import broker.timer.TimerBase;
 
 class FadeTimerBase extends TimerBase {
@@ -14,15 +13,9 @@ class FadeTimerBase extends TimerBase {
 	**/
 	var object: h2d.Object;
 
-	/**
-		If `true`, calls `object.remove()` when completing.
-	**/
-	var removeOnComplete: Bool;
-
 	function new() {
 		super();
 		this.object = dummyObject;
-		this.removeOnComplete = true;
 	}
 
 	/**
@@ -30,11 +23,9 @@ class FadeTimerBase extends TimerBase {
 	**/
 	function reset(
 		object: h2d.Object,
-		duration: UInt,
-		removeOnComplete: Bool
+		duration: UInt
 	): Void {
 		this.object = object;
 		this.setDuration(duration);
-		this.removeOnComplete = removeOnComplete;
 	}
 }

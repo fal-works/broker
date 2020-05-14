@@ -27,7 +27,7 @@ class FadeInTimer extends FadeTimerBase {
 		duration: UInt
 	): FadeInTimer {
 		final timer = pool.get();
-		timer.reset(object, duration, false);
+		timer.reset(object, duration);
 		return timer;
 	}
 
