@@ -1,9 +1,8 @@
 package broker.timer.builtin;
 
 import banker.pool.SafeObjectPool;
-import broker.timer.TimerBase;
 
-class FadeOutTimer extends TimerBase {
+class FadeOutTimer extends FadeTimerBase {
 	/**
 		Object pool for `FadeOutTimer`.
 	**/
@@ -12,11 +11,6 @@ class FadeOutTimer extends TimerBase {
 		pool.newTag("FadeOutTimer pool");
 		pool;
 	}
-
-	/**
-		Dummy object to be assigned when insantiating `FadeOutTimer`.
-	**/
-	static final dummyObject = new h2d.Object();
 
 	/**
 		Returns a `FadeOutTimer` instance that is currently not in use.
@@ -34,29 +28,13 @@ class FadeOutTimer extends TimerBase {
 		duration: UInt,
 		removeOnComplete = true
 	): FadeOutTimer {
-		return pool.get().set(object, duration, removeOnComplete);
+		final timer = pool.get();
+		timer.reset(object, duration, removeOnComplete);
+		return timer;
 	}
 
-	var object: h2d.Object;
-	var removeOnComplete: Bool;
-
-	public function new() {
+	public function new()
 		super();
-		this.object = dummyObject;
-		this.removeOnComplete = true;
-	}
-
-	public function set(
-		object: h2d.Object,
-		duration: UInt,
-		removeOnComplete: Bool
-	): FadeOutTimer {
-		this.object = object;
-		this.setDuration(duration);
-		this.removeOnComplete = removeOnComplete;
-
-		return this;
-	}
 
 	override public function onProgress(progress: Float): Void {
 		this.object.alpha = 1.0 - progress;
