@@ -17,11 +17,10 @@ class TimerBase implements Timer {
 
 	/**
 		Creates a `Timer` instance.
-		@param duration Defaults to `1`. Infinite loop if zero.
 	**/
-	public function new(duration: UInt = UInt.one) {
+	public function new() {
 		this.progress = 0.0;
-		this.progressChangeRate = if (duration.isZero()) 0.0 else 1.0 / duration;
+		this.progressChangeRate = 1.0;
 	}
 
 	/**

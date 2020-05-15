@@ -49,8 +49,8 @@ class SwitchSceneTimer extends TimerBase {
 	**/
 	var destroy: Bool;
 
-	public function new(?duration: UInt) {
-		super(duration);
+	public function new() {
+		super();
 		this.nextScene = Maybe.none();
 		this.sceneStack = Maybe.none();
 		this.destroy = false;
