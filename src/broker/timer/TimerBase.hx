@@ -5,8 +5,8 @@ package broker.timer;
 	Extend this class for your own purpose.
 **/
 class TimerBase implements Timer {
+	static final dummyCallback = () -> {};
 	static final dummyOnProgressCallback = (progress: Float) -> {};
-	static final dummyOnCompleteCallback = () -> {};
 
 	/**
 		Current progress rate. Is increased in `this.step()`.
@@ -17,6 +17,11 @@ class TimerBase implements Timer {
 		Change rate of `this.progress`.
 	**/
 	public var progressChangeRate: Float;
+
+	/**
+		Function called in `this.onStart()`.
+	**/
+	public var onStartCallback: () -> Void;
 
 	/**
 		Function called in `this.onProgress()`.
@@ -34,8 +39,9 @@ class TimerBase implements Timer {
 	public function new() {
 		this.progress = 0.0;
 		this.progressChangeRate = 1.0;
+		this.onStartCallback = dummyCallback;
 		this.onProgressCallback = dummyOnProgressCallback;
-		this.onCompleteCallback = dummyOnCompleteCallback;
+		this.onCompleteCallback = dummyCallback;
 	}
 
 	/**
@@ -55,30 +61,41 @@ class TimerBase implements Timer {
 		@return `this`.
 	**/
 	public inline function setCallbacks(
+		?onStart: () -> Void,
 		?onProgress: (progress: Float) -> Void,
 		?onComplete: () -> Void
 	): Timer {
+		this.onStartCallback = Nulls.coalesce(
+			onStart,
+			dummyCallback
+		);
 		this.onProgressCallback = Nulls.coalesce(
 			onProgress,
 			dummyOnProgressCallback
 		);
 		this.onCompleteCallback = Nulls.coalesce(
 			onComplete,
-			dummyOnCompleteCallback
+			dummyCallback
 		);
 		return this;
 	}
 
 	/**
 		Steps `this` timer.
-		- If not yet completed (`this.progress < 1.0`), runs `this.onProgress()` and then adds `this.progress`.
-		- If completed, runs `this.onComplete()`.
+		- If not yet completed (`progress < 1.0`), runs `onProgress()` and then adds `progress`.
+		  If called for the first time, also calls `onStart()` before calling `onProgress()`.
+		- If completed, runs `onComplete()`.
 		@return `true` if completed. Otherwise `false`.
 	**/
 	public inline function step(): Bool {
 		final progress = this.progress;
 
-		if (progress < 1.0) {
+		if (progress == 0.0) {
+			this.onStart();
+			this.onProgress(progress);
+			this.progress = progress + this.progressChangeRate;
+			return false;
+		} else if (progress < 1.0) {
 			this.onProgress(progress);
 			this.progress = progress + this.progressChangeRate;
 			return false;
@@ -89,7 +106,15 @@ class TimerBase implements Timer {
 	}
 
 	/**
-		Called every time `this.step()` is called.
+		Called once when `this.step()` is called for the first time.
+		Override this method for your own purpose.
+	**/
+	public function onStart(): Void {
+		this.onStartCallback();
+	}
+
+	/**
+		Called in `this.step()` if this timer is not completed.
 		Override this method for your own purpose.
 	**/
 	public function onProgress(progress: Float): Void {
@@ -97,7 +122,7 @@ class TimerBase implements Timer {
 	}
 
 	/**
-		Called once when this timer is completed.
+		Called in `this.step()` if this timer is completed.
 		Override this method for your own purpose.
 	**/
 	public function onComplete(): Void {

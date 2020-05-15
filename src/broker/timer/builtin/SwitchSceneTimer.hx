@@ -28,11 +28,12 @@ class SwitchSceneTimer extends TimerBase {
 		nextScene: Scene,
 		sceneStack: SceneStack,
 		destroy: Bool,
+		?onStart: () -> Void,
 		?onProgress: (progress: Float) -> Void,
 		?onComplete: () -> Void
 	): SwitchSceneTimer {
 		final timer = pool.get();
-		timer.reset(duration, nextScene, sceneStack, destroy, onProgress, onComplete);
+		timer.reset(duration, nextScene, sceneStack, destroy, onStart, onProgress, onComplete);
 		return timer;
 	}
 
@@ -66,11 +67,12 @@ class SwitchSceneTimer extends TimerBase {
 		nextScene: Scene,
 		sceneStack: SceneStack,
 		destroy: Bool,
+		?onStart: () -> Void,
 		?onProgress: (progress: Float) -> Void,
 		?onComplete: () -> Void
 	): Void {
 		this.setDuration(duration);
-		this.setCallbacks(onProgress, onComplete);
+		this.setCallbacks(onStart, onProgress, onComplete);
 		this.nextScene = nextScene;
 		this.sceneStack = sceneStack;
 	}
