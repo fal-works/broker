@@ -77,7 +77,7 @@ class SwitchSceneTimer extends TimerBase {
 		this.sceneStack = sceneStack;
 	}
 
-	override public function onComplete(): Void {
+	override function onComplete(): Void {
 		super.onComplete();
 		final nextScene = this.nextScene.unwrap();
 		this.sceneStack.unwrap().switchTop(nextScene, this.destroy);

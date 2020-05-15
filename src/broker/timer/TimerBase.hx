@@ -16,27 +16,27 @@ class TimerBase implements Timer {
 	/**
 		Change rate of `this.progress`.
 	**/
-	public var progressChangeRate: Float;
+	var progressChangeRate: Float;
 
 	/**
 		Function called in `this.onStart()`.
 	**/
-	public var onStartCallback: () -> Void;
+	var onStartCallback: () -> Void;
 
 	/**
 		Function called in `this.onProgress()`.
 	**/
-	public var onProgressCallback: (progress: Float) -> Void;
+	var onProgressCallback: (progress: Float) -> Void;
 
 	/**
 		Function called in `this.onComplete()`.
 	**/
-	public var onCompleteCallback: () -> Void;
+	var onCompleteCallback: () -> Void;
 
 	/**
 		Creates a `Timer` instance.
 	**/
-	public function new() {
+	function new() {
 		this.progress = 0.0;
 		this.progressChangeRate = 1.0;
 		this.onStartCallback = dummyCallback;
@@ -49,7 +49,7 @@ class TimerBase implements Timer {
 		@param duration Infinite loop if zero.
 		@return `this`.
 	**/
-	public inline function setDuration(duration: UInt): Timer {
+	public function setDuration(duration: UInt): Timer {
 		this.progress = 0.0;
 		this.progressChangeRate = if (duration.isZero()) 0.0 else 1.0 / duration;
 		return this;
@@ -60,7 +60,7 @@ class TimerBase implements Timer {
 		Assigns dummy functions (which have no effects) if not provided.
 		@return `this`.
 	**/
-	public inline function setCallbacks(
+	public function setCallbacks(
 		?onStart: () -> Void,
 		?onProgress: (progress: Float) -> Void,
 		?onComplete: () -> Void
@@ -87,7 +87,7 @@ class TimerBase implements Timer {
 		- If completed, runs `onComplete()`.
 		@return `true` if completed. Otherwise `false`.
 	**/
-	public inline function step(): Bool {
+	public function step(): Bool {
 		final progress = this.progress;
 
 		if (progress == 0.0) {
@@ -109,7 +109,7 @@ class TimerBase implements Timer {
 		Called once when `this.step()` is called for the first time.
 		Override this method for your own purpose.
 	**/
-	public function onStart(): Void {
+	function onStart(): Void {
 		this.onStartCallback();
 	}
 
@@ -117,7 +117,7 @@ class TimerBase implements Timer {
 		Called in `this.step()` if this timer is not completed.
 		Override this method for your own purpose.
 	**/
-	public function onProgress(progress: Float): Void {
+	function onProgress(progress: Float): Void {
 		this.onProgressCallback(progress);
 	}
 
@@ -125,7 +125,7 @@ class TimerBase implements Timer {
 		Called in `this.step()` if this timer is completed.
 		Override this method for your own purpose.
 	**/
-	public function onComplete(): Void {
+	function onComplete(): Void {
 		this.onCompleteCallback();
 	}
 }

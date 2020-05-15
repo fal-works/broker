@@ -56,12 +56,12 @@ class FadeOutTimer extends FadeTimerBase {
 		this.removeOnComplete = false;
 	}
 
-	override public function onProgress(progress: Float): Void {
+	override function onProgress(progress: Float): Void {
 		super.onProgress(progress);
 		this.object.alpha = 1.0 - progress;
 	}
 
-	override public function onComplete(): Void {
+	override function onComplete(): Void {
 		super.onComplete();
 
 		final object = this.object;

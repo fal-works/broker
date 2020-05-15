@@ -21,7 +21,7 @@ class FadeTimerBase extends TimerBase {
 	/**
 		Resets variables of `this`.
 	**/
-	function reset(
+	public function reset(
 		object: h2d.Object,
 		duration: UInt,
 		?onStart: () -> Void,
