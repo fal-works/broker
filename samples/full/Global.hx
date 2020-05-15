@@ -49,8 +49,9 @@ class Global {
 
 	public static final sceneTransitionTable = new SceneTransitionTable();
 
-	public static function initialize(s2d: h2d.Scene): Void {
-		resetParticles(s2d, 1);
+	public static function initialize(): Void {
+		final dummyObject = new h2d.Object();
+		resetParticles(dummyObject, 1);
 
 		sceneTransitionTable.add(({
 			precedingSceneType: SceneType.play,
@@ -84,12 +85,12 @@ class Global {
 		}
 	}
 
-	public static function resetParticles(scene: h2d.Scene, maxEntityCount: UInt = 1024): Void {
+	public static function resetParticles(parent: h2d.Object, maxEntityCount: UInt = 1024): Void {
 		final chunkCapacity: UInt = 128;
 		final chunkCount: UInt = Math.ceil(maxEntityCount / chunkCapacity);
 
 		final tile = h2d.Tile.fromColor(0xFFFFFF, 12, 12).center();
-		final batch = new h2d.SpriteBatch(tile, scene);
+		final batch = new h2d.SpriteBatch(tile, parent);
 		batch.hasRotationScale = true;
 		final spriteFactory = () -> new h2d.SpriteBatch.BatchElement(tile);
 		particles = new ParticleAosoa(chunkCapacity, chunkCount, batch, spriteFactory);

@@ -31,7 +31,7 @@ class PlayScene extends Scene {
 
 	override function activate(): Void {
 		super.activate();
-		Global.resetParticles(this.heapsScene);
+		Global.resetParticles(this.mainLayer.heapsObject);
 	}
 
 	function goToNextScene(): Void {
