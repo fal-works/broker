@@ -26,10 +26,12 @@ class FadeOutTimer extends FadeTimerBase {
 	public static function use(
 		object: h2d.Object,
 		duration: UInt,
+		?onProgress: (progress: Float) -> Void,
+		?onComplete: () -> Void,
 		removeOnComplete = false
 	): FadeOutTimer {
 		final timer = pool.get();
-		timer.reset(object, duration);
+		timer.reset(object, duration, onProgress, onComplete);
 		timer.removeOnComplete = removeOnComplete;
 		return timer;
 	}
@@ -44,21 +46,28 @@ class FadeOutTimer extends FadeTimerBase {
 
 	override function reset(
 		object: h2d.Object,
-		duration: UInt
+		duration: UInt,
+		?onProgress: (progress: Float) -> Void,
+		?onComplete: () -> Void
 	): Void {
-		super.reset(object, duration);
+		super.reset(object, duration, onProgress, onComplete);
 		this.removeOnComplete = false;
 	}
 
 	override public function onProgress(progress: Float): Void {
+		super.onProgress(progress);
 		this.object.alpha = 1.0 - progress;
 	}
 
 	override public function onComplete(): Void {
+		super.onComplete();
+
+		final object = this.object;
+
 		if (this.removeOnComplete)
-			this.object.remove();
+			object.remove();
 		else
-			this.object.alpha = 0.0;
+			object.alpha = 0.0;
 
 		pool.put(this);
 	}

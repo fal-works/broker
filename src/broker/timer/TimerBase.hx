@@ -5,6 +5,9 @@ package broker.timer;
 	Extend this class for your own purpose.
 **/
 class TimerBase implements Timer {
+	static final dummyOnProgressCallback = (progress: Float) -> {};
+	static final dummyOnCompleteCallback = () -> {};
+
 	/**
 		Current progress rate. Is increased in `this.step()`.
 	**/
@@ -13,7 +16,17 @@ class TimerBase implements Timer {
 	/**
 		Change rate of `this.progress`.
 	**/
-	var progressChangeRate: Float;
+	public var progressChangeRate: Float;
+
+	/**
+		Function called in `this.onProgress()`.
+	**/
+	public var onProgressCallback: (progress: Float) -> Void;
+
+	/**
+		Function called in `this.onComplete()`.
+	**/
+	public var onCompleteCallback: () -> Void;
 
 	/**
 		Creates a `Timer` instance.
@@ -21,6 +34,8 @@ class TimerBase implements Timer {
 	public function new() {
 		this.progress = 0.0;
 		this.progressChangeRate = 1.0;
+		this.onProgressCallback = dummyOnProgressCallback;
+		this.onCompleteCallback = dummyOnCompleteCallback;
 	}
 
 	/**
@@ -31,6 +46,26 @@ class TimerBase implements Timer {
 	public inline function setDuration(duration: UInt): Timer {
 		this.progress = 0.0;
 		this.progressChangeRate = if (duration.isZero()) 0.0 else 1.0 / duration;
+		return this;
+	}
+
+	/**
+		Sets the callback functions of `this` timer.
+		Assigns dummy functions (which have no effects) if not provided.
+		@return `this`.
+	**/
+	public inline function setCallbacks(
+		?onProgress: (progress: Float) -> Void,
+		?onComplete: () -> Void
+	): Timer {
+		this.onProgressCallback = Nulls.coalesce(
+			onProgress,
+			dummyOnProgressCallback
+		);
+		this.onCompleteCallback = Nulls.coalesce(
+			onComplete,
+			dummyOnCompleteCallback
+		);
 		return this;
 	}
 
@@ -57,11 +92,15 @@ class TimerBase implements Timer {
 		Called every time `this.step()` is called.
 		Override this method for your own purpose.
 	**/
-	public function onProgress(progress: Float): Void {}
+	public function onProgress(progress: Float): Void {
+		this.onProgressCallback(progress);
+	}
 
 	/**
 		Called once when this timer is completed.
 		Override this method for your own purpose.
 	**/
-	public function onComplete(): Void {}
+	public function onComplete(): Void {
+		this.onCompleteCallback();
+	}
 }

@@ -24,10 +24,12 @@ class FadeInTimer extends FadeTimerBase {
 	**/
 	public static function use(
 		object: h2d.Object,
-		duration: UInt
+		duration: UInt,
+		?onProgress: (progress: Float) -> Void,
+		?onComplete: () -> Void
 	): FadeInTimer {
 		final timer = pool.get();
-		timer.reset(object, duration);
+		timer.reset(object, duration, onProgress, onComplete);
 		return timer;
 	}
 
@@ -35,10 +37,12 @@ class FadeInTimer extends FadeTimerBase {
 		super();
 
 	override public function onProgress(progress: Float): Void {
+		super.onProgress(progress);
 		this.object.alpha = progress;
 	}
 
 	override public function onComplete(): Void {
+		super.onComplete();
 		this.object.alpha = 1.0;
 		pool.put(this);
 	}
