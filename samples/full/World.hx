@@ -17,7 +17,7 @@ class World {
 	final playerArmy: PlayableArmy;
 	final enemyArmy: Army;
 	final offenceCollisionDetector: CollisionDetector;
-	final offenctCollisionHandler: Collider -> Collider -> Void;
+	final offenctCollisionHandler: Collider->Collider->Void;
 
 	final playerAabb: MutableAabb = new MutableAabb();
 	final foundDefenceCollision: Reference<Bool> = false;
@@ -80,22 +80,21 @@ class World {
 	function updatePlayerAabb(): Void {
 		final playerPosition = Global.playerPosition;
 		playerArmy.playerAosoa.assignPosition(playerPosition);
-		playerAabb.set(
-			playerPosition.x() - playerAgentHalfCollisionSize,
-			playerPosition.y() - playerAgentHalfCollisionSize,
-			playerPosition.x() + playerAgentHalfCollisionSize,
-			playerPosition.y() + playerAgentHalfCollisionSize
-		);
+		playerAabb.set(playerPosition.x()
+			- playerAgentHalfCollisionSize,
+			playerPosition.y()
+			- playerAgentHalfCollisionSize,
+			playerPosition.x()
+			+ playerAgentHalfCollisionSize,
+			playerPosition.y()
+			+ playerAgentHalfCollisionSize);
 	}
 
 	function playerHasCollided(): Bool {
 		updatePlayerAabb();
 
 		foundDefenceCollision.set(false);
-		enemyArmy.bullets.findOverlapped(
-			playerAabb,
-			foundDefenceCollision
-		);
+		enemyArmy.bullets.findOverlapped(playerAabb, foundDefenceCollision);
 
 		return foundDefenceCollision.get();
 	}
@@ -113,7 +112,10 @@ private class WorldBuilder {
 		final bulletTile = h2d.Tile.fromColor(0xE0FFE0, 16, 16).center();
 		final bulletBatch = new h2d.SpriteBatch(bulletTile, parent);
 
-		final bullets = ArmyBuilder.createNonPlayableActors(World.maxPlayerBulletCount, bulletBatch);
+		final bullets = ArmyBuilder.createNonPlayableActors(
+			World.maxPlayerBulletCount,
+			bulletBatch
+		);
 		final onHitBullet = ArmyBuilder.createOnHitNonPlayable(bullets);
 
 		final agents = ArmyBuilder.createPlayableActors(agentBatch, bullets);
@@ -129,10 +131,17 @@ private class WorldBuilder {
 		final bulletTile = h2d.Tile.fromColor(0xD0D0FF, 16, 16).center();
 		final bulletBatch = new h2d.SpriteBatch(bulletTile, parent);
 
-		final bullets = ArmyBuilder.createNonPlayableActors(World.maxEnemyBulletCount, bulletBatch);
+		final bullets = ArmyBuilder.createNonPlayableActors(
+			World.maxEnemyBulletCount,
+			bulletBatch
+		);
 		final onHitBullet = ArmyBuilder.createOnHitNonPlayable(bullets);
 
-		final agents = ArmyBuilder.createNonPlayableActors(World.maxEnemyAgentCount, agentBatch, bullets);
+		final agents = ArmyBuilder.createNonPlayableActors(
+			World.maxEnemyAgentCount,
+			agentBatch,
+			bullets
+		);
 		final onHitAgent = ArmyBuilder.createOnHitNonPlayable(agents);
 
 		return new Army.NonPlayableArmy(agents, onHitAgent, bullets, onHitBullet);

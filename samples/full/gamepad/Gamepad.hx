@@ -23,9 +23,7 @@ class Gamepad extends GamepadBase<Button, ButtonStatusMap, Stick> {
 
 		prm.updateButtonStatus();
 
-		final speed = if (prm.speedChangeButtonStatus.isPressed)
-			prm.alternativeSpeed
-		else
+		final speed = if (prm.speedChangeButtonStatus.isPressed) prm.alternativeSpeed else
 			prm.defaultSpeed;
 
 		prm.heapsPadPort.updateStick(stick);

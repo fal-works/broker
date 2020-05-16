@@ -85,7 +85,10 @@ class Global {
 		}
 	}
 
-	public static function resetParticles(parent: h2d.Object, maxEntityCount: UInt = 1024): Void {
+	public static function resetParticles(
+		parent: h2d.Object,
+		maxEntityCount: UInt = 1024
+	): Void {
 		final chunkCapacity: UInt = 128;
 		final chunkCount: UInt = Math.ceil(maxEntityCount / chunkCapacity);
 
@@ -93,7 +96,12 @@ class Global {
 		final batch = new h2d.SpriteBatch(tile, parent);
 		batch.hasRotationScale = true;
 		final spriteFactory = () -> new h2d.SpriteBatch.BatchElement(tile);
-		particles = new ParticleAosoa(chunkCapacity, chunkCount, batch, spriteFactory);
+		particles = new ParticleAosoa(
+			chunkCapacity,
+			chunkCount,
+			batch,
+			spriteFactory
+		);
 	}
 }
 

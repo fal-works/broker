@@ -6,14 +6,15 @@ class PlayableActor extends Actor {
 
 	var damageEffectCoolTime: Int = 0;
 
-	static function assignPosition(x: Float, y: Float, output: MutablePoint): Void {
+	static function assignPosition(
+		x: Float,
+		y: Float,
+		output: MutablePoint
+	): Void {
 		output.set(x, y);
 	}
 
-	static function damage(
-		damageEffectCoolTime: WritableVector<Int>,
-		i: UInt
-	): Void {
+	static function damage(damageEffectCoolTime: WritableVector<Int>, i: UInt): Void {
 		damageEffectCoolTime[i] = 60;
 	}
 

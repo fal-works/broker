@@ -51,7 +51,8 @@ class Particle extends BasicEntity {
 		final currentY = y[i];
 		final currentVisibilityRatio = visibilityRatio[i];
 
-		if (currentVisibilityRatio <= 0.02 || !HabitableZone.containsPoint(currentX, currentY)) {
+		if (currentVisibilityRatio <= 0.02
+			|| !HabitableZone.containsPoint(currentX, currentY)) {
 			visibilityRatio[i] = 1.0;
 			disuse = true;
 			disusedSprites[disusedCount] = sprite;
