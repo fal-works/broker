@@ -25,6 +25,7 @@ class SwitchSceneTimer extends TimerBase {
 	**/
 	public static function use(
 		duration: UInt,
+		currentScene: Scene,
 		nextScene: Scene,
 		sceneStack: SceneStack,
 		destroy: Bool,
@@ -33,9 +34,14 @@ class SwitchSceneTimer extends TimerBase {
 		?onComplete: () -> Void
 	): SwitchSceneTimer {
 		final timer = pool.get();
-		timer.reset(duration, nextScene, sceneStack, destroy, onStart, onProgress, onComplete);
+		timer.reset(duration, currentScene, nextScene, sceneStack, destroy, onStart, onProgress, onComplete);
 		return timer;
 	}
+
+	/**
+		The current scene.
+	**/
+	var currentScene: Maybe<Scene>;
 
 	/**
 		The next scene to start when `this` timer is completed.
@@ -54,6 +60,7 @@ class SwitchSceneTimer extends TimerBase {
 
 	public function new() {
 		super();
+		this.currentScene = Maybe.none();
 		this.nextScene = Maybe.none();
 		this.sceneStack = Maybe.none();
 		this.destroy = false;
@@ -64,6 +71,7 @@ class SwitchSceneTimer extends TimerBase {
 	**/
 	public function reset(
 		duration: UInt,
+		currentScene: Scene,
 		nextScene: Scene,
 		sceneStack: SceneStack,
 		destroy: Bool,
@@ -73,14 +81,21 @@ class SwitchSceneTimer extends TimerBase {
 	): Void {
 		this.setDuration(duration);
 		this.setCallbacks(onStart, onProgress, onComplete);
+		this.currentScene = currentScene;
 		this.nextScene = nextScene;
 		this.sceneStack = sceneStack;
+	}
+
+	override function onStart(): Void {
+		super.onStart();
+		this.currentScene.unwrap().isTransitioning = true;
 	}
 
 	override function onComplete(): Void {
 		super.onComplete();
 		final nextScene = this.nextScene.unwrap();
 		this.sceneStack.unwrap().switchTop(nextScene, this.destroy);
+		this.currentScene.unwrap().isTransitioning = false;
 		pool.put(this);
 	}
 }

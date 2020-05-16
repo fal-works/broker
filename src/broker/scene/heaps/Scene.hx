@@ -18,6 +18,11 @@ class Scene implements broker.scene.Scene {
 	static var heapsApp: Maybe<hxd.App> = Maybe.none();
 
 	/**
+		Dummy empty function.
+	**/
+	static final dummyCallback = () -> {};
+
+	/**
 		Registers the `hxd.App` instance.
 	**/
 	public static function setApplication(app: hxd.App): Void {
@@ -55,6 +60,16 @@ class Scene implements broker.scene.Scene {
 	public var isTransitioning: Bool;
 
 	/**
+		Callback function for running `this.isTransitioning = true`.
+	**/
+	public final setTransitionState: () -> Void;
+
+	/**
+		Callback function for running `this.isTransitioning = false`.
+	**/
+	public final unsetTransitionState: () -> Void;
+
+	/**
 		`true` if `this.initialize()` is already called.
 	**/
 	var isInitialized: Bool;
@@ -87,6 +102,12 @@ class Scene implements broker.scene.Scene {
 		this.isTransitioning = false;
 
 		this.heapsScene = heapsScene;
+
+		this.setTransitionState = dummyCallback;
+		this.unsetTransitionState = dummyCallback;
+
+		this.setTransitionState = () -> this.isTransitioning = true;
+		this.unsetTransitionState = () -> this.isTransitioning = false;
 	}
 
 	/**
@@ -139,11 +160,24 @@ class Scene implements broker.scene.Scene {
 		@param color The starting color.
 		@param duration The duration frame count.
 	**/
-	public function fadeInFrom(color: ArgbColor, duration: Int): Void {
+	public function fadeInFrom(
+		color: ArgbColor,
+		duration: Int,
+		?onStart: () -> Void,
+		?onProgress: (progress: Float) -> Void,
+		?onComplete: () -> Void
+	): Void {
 		final bitmap = this.setSurfaceBitmap(color);
 
 		// (fade-in the scene) = (fade-out the surface)
-		final timer = FadeOutTimer.use(bitmap, duration, true);
+		final timer = FadeOutTimer.use(
+			bitmap,
+			duration,
+			onStart,
+			onProgress,
+			onComplete,
+			true
+		);
 		this.timers.push(timer);
 	}
 
@@ -152,11 +186,23 @@ class Scene implements broker.scene.Scene {
 		@param color The ending color.
 		@param duration The duration frame count.
 	**/
-	public function fadeOutTo(color: ArgbColor, duration: Int): Void {
+	public function fadeOutTo(
+		color: ArgbColor,
+		duration: Int,
+		?onStart: () -> Void,
+		?onProgress: (progress: Float) -> Void,
+		?onComplete: () -> Void
+	): Void {
 		final bitmap = this.setSurfaceBitmap(color);
 
 		// (fade-out the scene) = (fade-in the surface)
-		final timer = FadeInTimer.use(bitmap, duration);
+		final timer = FadeInTimer.use(
+			bitmap,
+			duration,
+			onStart,
+			onProgress,
+			onComplete
+		);
 		this.timers.push(timer);
 	}
 
@@ -165,15 +211,26 @@ class Scene implements broker.scene.Scene {
 		Has no effect if any transition is already running.
 		@param duration The delay duration frame count.
 	**/
-	public function switchTo(nextScene: broker.scene.Scene, duration: Int, destroy: Bool): Void {
+	public function switchTo(
+		nextScene: broker.scene.Scene,
+		duration: Int,
+		destroy: Bool,
+		?onStart: () -> Void,
+		?onProgress: (progress: Float) -> Void,
+		?onComplete: () -> Void
+	): Void {
 		if (this.isTransitioning) return;
 
 		final sceneStack = this.sceneStack.unwrap();
 		final timer = SwitchSceneTimer.use(
 			duration,
+			this,
 			nextScene,
 			sceneStack,
-			destroy
+			destroy,
+			onStart,
+			onProgress,
+			onComplete
 		);
 		this.timers.push(timer);
 		this.isTransitioning = true;
@@ -207,6 +264,14 @@ class Scene implements broker.scene.Scene {
 		tile.setSize(heapsScene.width, heapsScene.height);
 
 		return bitmap;
+	}
+
+	static function createTransitionStateCallback(scene: Scene, value: Bool): () -> Void {
+		return if (value) function() {
+			scene.isTransitioning = true;
+		} else function() {
+			scene.isTransitioning = false;
+		};
 	}
 }
 #end

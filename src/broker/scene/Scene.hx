@@ -38,6 +38,16 @@ interface Scene {
 	var isTransitioning: Bool;
 
 	/**
+		Callback function for running `this.isTransitioning = true`.
+	**/
+	final setTransitionState: () -> Void;
+
+	/**
+		Callback function for running `this.isTransitioning = false`.
+	**/
+	final unsetTransitionState: () -> Void;
+
+	/**
 		@return The type id of `this`.
 	**/
 	function getTypeId(): SceneTypeId;
@@ -72,18 +82,37 @@ interface Scene {
 		@param color The starting color.
 		@param duration The duration frame count.
 	**/
-	function fadeInFrom(color: ArgbColor, duration: Int): Void;
+	function fadeInFrom(
+		color: ArgbColor,
+		duration: Int,
+		?onStart: () -> Void,
+		?onProgress: (progress: Float) -> Void,
+		?onComplete: () -> Void
+	): Void;
 
 	/**
 		Starts fade-out effect.
 		@param color The ending color.
 		@param duration The duration frame count.
 	**/
-	function fadeOutTo(color: ArgbColor, duration: Int): Void;
+	function fadeOutTo(
+		color: ArgbColor,
+		duration: Int,
+		?onStart: () -> Void,
+		?onProgress: (progress: Float) -> Void,
+		?onComplete: () -> Void
+	): Void;
 
 	/**
 		Switches to the next scene.
 		@param duration The delay duration frame count.
 	**/
-	function switchTo(nextScene: Scene, duration: Int, destroy: Bool): Void;
+	function switchTo(
+		nextScene: Scene,
+		duration: Int,
+		destroy: Bool,
+		?onStart: () -> Void,
+		?onProgress: (progress: Float) -> Void,
+		?onComplete: () -> Void
+	): Void;
 }
