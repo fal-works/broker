@@ -266,7 +266,13 @@ class IntraGroupCollisionDetector extends CollisionDetector {
 			quadtree;
 		} else new Quadtree(partitionLevel);
 
-		super(quadtree, quadtree, UInt.zero, maxColliderCount, partitionLevel);
+		super(
+			quadtree,
+			quadtree,
+			UInt.zero,
+			maxColliderCount,
+			partitionLevel
+		);
 	}
 
 	override inline function pushLeftColliders(

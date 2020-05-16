@@ -162,18 +162,11 @@ class Scene implements broker.scene.Scene {
 		@param duration The duration frame count.
 		@return A `Timer` instance.
 	**/
-	public function fadeInFrom(
-		color: ArgbColor,
-		duration: Int
-	): Timer {
+	public function fadeInFrom(color: ArgbColor, duration: Int): Timer {
 		final bitmap = this.setSurfaceBitmap(color);
 
 		// (fade-in the scene) = (fade-out the surface)
-		final timer = FadeOutTimer.use(
-			bitmap,
-			duration,
-			true
-		);
+		final timer = FadeOutTimer.use(bitmap, duration, true);
 		this.timers.push(timer);
 		return timer;
 	}
@@ -184,17 +177,11 @@ class Scene implements broker.scene.Scene {
 		@param duration The duration frame count.
 		@return A `Timer` instance.
 	**/
-	public function fadeOutTo(
-		color: ArgbColor,
-		duration: Int
-	): Timer {
+	public function fadeOutTo(color: ArgbColor, duration: Int): Timer {
 		final bitmap = this.setSurfaceBitmap(color);
 
 		// (fade-out the scene) = (fade-in the surface)
-		final timer = FadeInTimer.use(
-			bitmap,
-			duration
-		);
+		final timer = FadeInTimer.use(bitmap, duration);
 		this.timers.push(timer);
 		return timer;
 	}

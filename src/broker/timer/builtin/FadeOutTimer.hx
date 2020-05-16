@@ -42,10 +42,7 @@ class FadeOutTimer extends FadeTimerBase {
 	public function new()
 		super();
 
-	override function reset(
-		object: h2d.Object,
-		duration: UInt
-	): Void {
+	override function reset(object: h2d.Object, duration: UInt): Void {
 		super.reset(object, duration);
 		this.removeOnComplete = false;
 	}

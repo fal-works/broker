@@ -22,10 +22,7 @@ class FadeInTimer extends FadeTimerBase {
 		@param duration
 		@return A `FadeInTimer` instance.
 	**/
-	public static function use(
-		object: h2d.Object,
-		duration: UInt
-	): FadeInTimer {
+	public static function use(object: h2d.Object, duration: UInt): FadeInTimer {
 		final timer = pool.get();
 		timer.reset(object, duration);
 		return timer;

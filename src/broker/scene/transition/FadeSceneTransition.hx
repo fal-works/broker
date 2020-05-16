@@ -47,10 +47,7 @@ class FadeSceneTransition extends SceneTransitionBase implements SceneTransition
 			this.destroy
 		);
 
-		final fadeNextScene = nextScene.fadeInFrom(
-			this.color,
-			this.fadeInDuration
-		);
+		final fadeNextScene = nextScene.fadeInFrom(this.color, this.fadeInDuration);
 		fadeNextScene.setOnStart(nextScene.setTransitionState);
 		fadeNextScene.setOnComplete(nextScene.unsetTransitionState);
 	}

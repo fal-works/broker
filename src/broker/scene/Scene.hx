@@ -84,10 +84,7 @@ interface Scene {
 		@param duration The duration frame count.
 		@return A `Timer` instance.
 	**/
-	function fadeInFrom(
-		color: ArgbColor,
-		duration: Int
-	): Timer;
+	function fadeInFrom(color: ArgbColor, duration: Int): Timer;
 
 	/**
 		Starts fade-out effect.
@@ -95,10 +92,7 @@ interface Scene {
 		@param duration The duration frame count.
 		@return A `Timer` instance.
 	**/
-	function fadeOutTo(
-		color: ArgbColor,
-		duration: Int
-	): Timer;
+	function fadeOutTo(color: ArgbColor, duration: Int): Timer;
 
 	/**
 		Switches to the next scene.

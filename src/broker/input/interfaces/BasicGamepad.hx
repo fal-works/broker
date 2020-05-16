@@ -8,6 +8,7 @@ interface BasicGamepad<B, M:GenericButtonStatusMap<B>, S:Stick> {
 		Mapping from virtual buttons to their corresponding status.
 	**/
 	final buttons: M;
+
 	/**
 		A virtual analog stick.
 	**/

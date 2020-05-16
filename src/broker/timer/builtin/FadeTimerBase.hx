@@ -21,10 +21,7 @@ class FadeTimerBase extends TimerBase {
 	/**
 		Resets variables of `this`.
 	**/
-	public function reset(
-		object: h2d.Object,
-		duration: UInt
-	): Void {
+	public function reset(object: h2d.Object, duration: UInt): Void {
 		this.object = object;
 		this.setDuration(duration);
 		this.clearCallbacks();

@@ -82,7 +82,10 @@ class Collider {
 		@return `true` if `this` overlaps `other`.
 	**/
 	public extern inline function overlaps(other: Collider): Bool {
-		return (other.topY < this.bottomY) && (this.topY < other.bottomY) && (other.leftX < this.rightX) && (this.leftX < other.rightX);
+		return (other.topY < this.bottomY)
+			&& (this.topY < other.bottomY)
+			&& (other.leftX < this.rightX)
+			&& (this.leftX < other.rightX);
 	}
 
 	/**

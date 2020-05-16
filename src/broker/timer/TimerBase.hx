@@ -96,7 +96,7 @@ class TimerBase implements Timer {
 	/**
 		Steps `this` timer.
 		- If not yet completed (`progress < 1.0`), runs `onProgress()` and then adds `progress`.
-		  If called for the first time, also calls `onStart()` before calling `onProgress()`.
+			If called for the first time, also calls `onStart()` before calling `onProgress()`.
 		- If completed, runs `onComplete()`.
 		@return `true` if completed. Otherwise `false`.
 	**/
