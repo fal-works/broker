@@ -23,13 +23,10 @@ class FadeTimerBase extends TimerBase {
 	**/
 	public function reset(
 		object: h2d.Object,
-		duration: UInt,
-		?onStart: () -> Void,
-		?onProgress: (progress: Float) -> Void,
-		?onComplete: () -> Void
+		duration: UInt
 	): Void {
 		this.object = object;
 		this.setDuration(duration);
-		this.setCallbacks(onStart, onProgress, onComplete);
+		this.clearCallbacks();
 	}
 }

@@ -24,13 +24,10 @@ class FadeInTimer extends FadeTimerBase {
 	**/
 	public static function use(
 		object: h2d.Object,
-		duration: UInt,
-		?onStart: () -> Void,
-		?onProgress: (progress: Float) -> Void,
-		?onComplete: () -> Void
+		duration: UInt
 	): FadeInTimer {
 		final timer = pool.get();
-		timer.reset(object, duration, onStart, onProgress, onComplete);
+		timer.reset(object, duration);
 		return timer;
 	}
 

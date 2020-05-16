@@ -11,7 +11,7 @@ class TimerBase implements Timer {
 	/**
 		Current progress rate. Is increased in `this.step()`.
 	**/
-	public var progress: Float;
+	public var progress(default, null): Float;
 
 	/**
 		Change rate of `this.progress`.
@@ -56,27 +56,40 @@ class TimerBase implements Timer {
 	}
 
 	/**
-		Sets the callback functions of `this` timer.
-		Assigns dummy functions (which have no effects) if not provided.
+		Clears callback functions of `this` timer.
 		@return `this`.
 	**/
-	public function setCallbacks(
-		?onStart: () -> Void,
-		?onProgress: (progress: Float) -> Void,
-		?onComplete: () -> Void
-	): Timer {
-		this.onStartCallback = Nulls.coalesce(
-			onStart,
-			dummyCallback
-		);
-		this.onProgressCallback = Nulls.coalesce(
-			onProgress,
-			dummyOnProgressCallback
-		);
-		this.onCompleteCallback = Nulls.coalesce(
-			onComplete,
-			dummyCallback
-		);
+	public function clearCallbacks(): Timer {
+		this.onStartCallback = dummyCallback;
+		this.onProgressCallback = dummyOnProgressCallback;
+		this.onCompleteCallback = dummyCallback;
+		return this;
+	}
+
+	/**
+		Sets `onStart` callback function.
+		@return `this`.
+	**/
+	public function setOnStart(callback: () -> Void): Timer {
+		this.onStartCallback = callback;
+		return this;
+	}
+
+	/**
+		Sets `onProgress` callback function.
+		@return `this`.
+	**/
+	public function setOnProgress(callback: (progress: Float) -> Void): Timer {
+		this.onProgressCallback = callback;
+		return this;
+	}
+
+	/**
+		Sets `onComplete` callback function.
+		@return `this`.
+	**/
+	public function setOnComplete(callback: () -> Void): Timer {
+		this.onCompleteCallback = callback;
 		return this;
 	}
 

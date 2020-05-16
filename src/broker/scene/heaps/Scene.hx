@@ -164,10 +164,7 @@ class Scene implements broker.scene.Scene {
 	**/
 	public function fadeInFrom(
 		color: ArgbColor,
-		duration: Int,
-		?onStart: () -> Void,
-		?onProgress: (progress: Float) -> Void,
-		?onComplete: () -> Void
+		duration: Int
 	): Timer {
 		final bitmap = this.setSurfaceBitmap(color);
 
@@ -175,9 +172,6 @@ class Scene implements broker.scene.Scene {
 		final timer = FadeOutTimer.use(
 			bitmap,
 			duration,
-			onStart,
-			onProgress,
-			onComplete,
 			true
 		);
 		this.timers.push(timer);
@@ -192,20 +186,14 @@ class Scene implements broker.scene.Scene {
 	**/
 	public function fadeOutTo(
 		color: ArgbColor,
-		duration: Int,
-		?onStart: () -> Void,
-		?onProgress: (progress: Float) -> Void,
-		?onComplete: () -> Void
+		duration: Int
 	): Timer {
 		final bitmap = this.setSurfaceBitmap(color);
 
 		// (fade-out the scene) = (fade-in the surface)
 		final timer = FadeInTimer.use(
 			bitmap,
-			duration,
-			onStart,
-			onProgress,
-			onComplete
+			duration
 		);
 		this.timers.push(timer);
 		return timer;
@@ -220,10 +208,7 @@ class Scene implements broker.scene.Scene {
 	public function switchTo(
 		nextScene: broker.scene.Scene,
 		duration: Int,
-		destroy: Bool,
-		?onStart: () -> Void,
-		?onProgress: (progress: Float) -> Void,
-		?onComplete: () -> Void
+		destroy: Bool
 	): Maybe<Timer> {
 		if (this.isTransitioning) return Maybe.none();
 		this.isTransitioning = true;
@@ -234,10 +219,7 @@ class Scene implements broker.scene.Scene {
 			this,
 			nextScene,
 			sceneStack,
-			destroy,
-			onStart,
-			onProgress,
-			onComplete
+			destroy
 		);
 		this.timers.push(timer);
 		return Maybe.from(timer);

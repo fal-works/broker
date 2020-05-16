@@ -86,10 +86,7 @@ interface Scene {
 	**/
 	function fadeInFrom(
 		color: ArgbColor,
-		duration: Int,
-		?onStart: () -> Void,
-		?onProgress: (progress: Float) -> Void,
-		?onComplete: () -> Void
+		duration: Int
 	): Timer;
 
 	/**
@@ -100,10 +97,7 @@ interface Scene {
 	**/
 	function fadeOutTo(
 		color: ArgbColor,
-		duration: Int,
-		?onStart: () -> Void,
-		?onProgress: (progress: Float) -> Void,
-		?onComplete: () -> Void
+		duration: Int
 	): Timer;
 
 	/**
@@ -114,9 +108,6 @@ interface Scene {
 	function switchTo(
 		nextScene: Scene,
 		duration: Int,
-		destroy: Bool,
-		?onStart: () -> Void,
-		?onProgress: (progress: Float) -> Void,
-		?onComplete: () -> Void
+		destroy: Bool
 	): Maybe<Timer>;
 }
