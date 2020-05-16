@@ -75,6 +75,8 @@ class SwitchSceneTimer extends TimerBase {
 	): Void {
 		this.setDuration(duration);
 		this.clearCallbacks();
+		this.clearNext();
+		this.clearParent();
 		this.currentScene = currentScene;
 		this.nextScene = nextScene;
 		this.sceneStack = sceneStack;

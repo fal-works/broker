@@ -25,5 +25,7 @@ class FadeTimerBase extends TimerBase {
 		this.object = object;
 		this.setDuration(duration);
 		this.clearCallbacks();
+		this.clearNext();
+		this.clearParent();
 	}
 }
