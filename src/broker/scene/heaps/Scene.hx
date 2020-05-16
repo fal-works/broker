@@ -188,7 +188,7 @@ class Scene implements broker.scene.Scene {
 
 	/**
 		Switches to the next scene.
-		Has no effect if any transition is already running.
+		Has no effect if any transition is already running or `this` does not belong to any `SceneStack`.
 		@param duration The delay duration frame count.
 		@return A `Timer` instance.
 	**/
@@ -200,12 +200,14 @@ class Scene implements broker.scene.Scene {
 		if (this.isTransitioning) return Maybe.none();
 		this.isTransitioning = true;
 
-		final sceneStack = this.sceneStack.unwrap();
+		final sceneStack = this.sceneStack;
+		if (sceneStack.isNone()) return Maybe.none();
+
 		final timer: Timer = SwitchSceneTimer.use(
 			duration,
 			this,
 			nextScene,
-			sceneStack,
+			sceneStack.unwrap(),
 			destroy
 		);
 		this.timers.push(timer);
