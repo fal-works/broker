@@ -1,6 +1,7 @@
 package broker.scene.heaps;
 
 #if heaps
+import broker.timer.Timer;
 import broker.timer.Timers;
 import broker.timer.builtin.FadeInTimer;
 import broker.timer.builtin.FadeOutTimer;
@@ -159,6 +160,7 @@ class Scene implements broker.scene.Scene {
 		Starts fade-in effect.
 		@param color The starting color.
 		@param duration The duration frame count.
+		@return A `Timer` instance.
 	**/
 	public function fadeInFrom(
 		color: ArgbColor,
@@ -166,7 +168,7 @@ class Scene implements broker.scene.Scene {
 		?onStart: () -> Void,
 		?onProgress: (progress: Float) -> Void,
 		?onComplete: () -> Void
-	): Void {
+	): Timer {
 		final bitmap = this.setSurfaceBitmap(color);
 
 		// (fade-in the scene) = (fade-out the surface)
@@ -179,12 +181,14 @@ class Scene implements broker.scene.Scene {
 			true
 		);
 		this.timers.push(timer);
+		return timer;
 	}
 
 	/**
 		Starts fade-out effect.
 		@param color The ending color.
 		@param duration The duration frame count.
+		@return A `Timer` instance.
 	**/
 	public function fadeOutTo(
 		color: ArgbColor,
@@ -192,7 +196,7 @@ class Scene implements broker.scene.Scene {
 		?onStart: () -> Void,
 		?onProgress: (progress: Float) -> Void,
 		?onComplete: () -> Void
-	): Void {
+	): Timer {
 		final bitmap = this.setSurfaceBitmap(color);
 
 		// (fade-out the scene) = (fade-in the surface)
@@ -204,12 +208,14 @@ class Scene implements broker.scene.Scene {
 			onComplete
 		);
 		this.timers.push(timer);
+		return timer;
 	}
 
 	/**
 		Switches to the next scene.
 		Has no effect if any transition is already running.
 		@param duration The delay duration frame count.
+		@return A `Timer` instance.
 	**/
 	public function switchTo(
 		nextScene: broker.scene.Scene,
@@ -218,11 +224,12 @@ class Scene implements broker.scene.Scene {
 		?onStart: () -> Void,
 		?onProgress: (progress: Float) -> Void,
 		?onComplete: () -> Void
-	): Void {
-		if (this.isTransitioning) return;
+	): Maybe<Timer> {
+		if (this.isTransitioning) return Maybe.none();
+		this.isTransitioning = true;
 
 		final sceneStack = this.sceneStack.unwrap();
-		final timer = SwitchSceneTimer.use(
+		final timer: Timer = SwitchSceneTimer.use(
 			duration,
 			this,
 			nextScene,
@@ -233,7 +240,7 @@ class Scene implements broker.scene.Scene {
 			onComplete
 		);
 		this.timers.push(timer);
-		this.isTransitioning = true;
+		return Maybe.from(timer);
 	}
 
 	/**

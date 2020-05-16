@@ -1,5 +1,6 @@
 package broker.scene;
 
+import broker.timer.Timer;
 import broker.timer.Timers;
 import broker.color.ArgbColor;
 
@@ -81,6 +82,7 @@ interface Scene {
 		Starts fade-in effect.
 		@param color The starting color.
 		@param duration The duration frame count.
+		@return A `Timer` instance.
 	**/
 	function fadeInFrom(
 		color: ArgbColor,
@@ -88,12 +90,13 @@ interface Scene {
 		?onStart: () -> Void,
 		?onProgress: (progress: Float) -> Void,
 		?onComplete: () -> Void
-	): Void;
+	): Timer;
 
 	/**
 		Starts fade-out effect.
 		@param color The ending color.
 		@param duration The duration frame count.
+		@return A `Timer` instance.
 	**/
 	function fadeOutTo(
 		color: ArgbColor,
@@ -101,11 +104,12 @@ interface Scene {
 		?onStart: () -> Void,
 		?onProgress: (progress: Float) -> Void,
 		?onComplete: () -> Void
-	): Void;
+	): Timer;
 
 	/**
 		Switches to the next scene.
 		@param duration The delay duration frame count.
+		@return A `Timer` instance.
 	**/
 	function switchTo(
 		nextScene: Scene,
@@ -114,5 +118,5 @@ interface Scene {
 		?onStart: () -> Void,
 		?onProgress: (progress: Float) -> Void,
 		?onComplete: () -> Void
-	): Void;
+	): Maybe<Timer>;
 }
