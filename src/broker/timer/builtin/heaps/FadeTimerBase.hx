@@ -1,5 +1,6 @@
-package broker.timer.builtin;
+package broker.timer.builtin.heaps;
 
+#if heaps
 import broker.timer.TimerBase;
 
 class FadeTimerBase extends TimerBase {
@@ -29,3 +30,4 @@ class FadeTimerBase extends TimerBase {
 		this.clearParent();
 	}
 }
+#end

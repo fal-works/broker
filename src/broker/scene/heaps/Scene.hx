@@ -3,9 +3,9 @@ package broker.scene.heaps;
 #if heaps
 import broker.timer.Timer;
 import broker.timer.Timers;
-import broker.timer.builtin.FadeInTimer;
-import broker.timer.builtin.FadeOutTimer;
 import broker.timer.builtin.SwitchSceneTimer;
+import broker.timer.builtin.heaps.FadeInTimer;
+import broker.timer.builtin.heaps.FadeOutTimer;
 import broker.color.ArgbColor;
 
 /**

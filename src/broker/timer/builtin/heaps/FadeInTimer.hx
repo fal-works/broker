@@ -1,5 +1,6 @@
-package broker.timer.builtin;
+package broker.timer.builtin.heaps;
 
+#if heaps
 import banker.pool.SafeObjectPool;
 
 class FadeInTimer extends FadeTimerBase {
@@ -42,3 +43,4 @@ class FadeInTimer extends FadeTimerBase {
 		pool.put(this);
 	}
 }
+#end
