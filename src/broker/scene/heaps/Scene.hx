@@ -174,7 +174,7 @@ class Scene implements broker.scene.Scene {
 		bitmap.alpha = 0.0;
 
 		// (fade-in the scene) = (fade-out the surface)
-		final timer = FadeOutTimer.use(bitmap, duration, true);
+		final timer = FadeOutTimerTools.use(bitmap, duration, true);
 		timer.setOnCompleteObject(this.putBitmap);
 
 		if (startNow) this.timers.push(timer);
@@ -194,7 +194,7 @@ class Scene implements broker.scene.Scene {
 		bitmap.alpha = 0.0;
 
 		// (fade-out the scene) = (fade-in the surface)
-		final timer = FadeInTimer.use(bitmap, duration);
+		final timer = FadeInTimerTools.use(bitmap, duration);
 		timer.setOnCompleteObject(this.putBitmap);
 
 		if (startNow) this.timers.push(timer);

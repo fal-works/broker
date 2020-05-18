@@ -4,39 +4,11 @@ package broker.timer.builtin.heaps;
 import banker.pool.SafeObjectPool;
 import broker.timer.Timer;
 
-@:using(broker.timer.builtin.heaps.FadeOutTimer.FadeOutTimerExtension)
-class FadeOutTimer extends ObjectTimer<h2d.Object> {
+final class FadeOutTimer extends ObjectTimer<h2d.Object> {
 	/**
-		Object pool for `FadeOutTimer`.
+		The object pool to which `this` belongs.
 	**/
-	public static final pool = {
-		final pool = new SafeObjectPool(UInt.one, () -> new FadeOutTimer());
-		pool.newTag("FadeOutTimer pool");
-		pool;
-	}
-
-	/**
-		Returns a `FadeOutTimer` instance that is currently not in use.
-
-		The instance is automatically recycled when completed so that it can be reused again
-		(so `step()` should not be called again after completing).
-
-		@param object The object to change the alpha value.
-		@param duration
-		@param removeOnComplete If `true`, calls `object.remove()` when completing.
-		@return A `FadeOutTimer` instance.
-	**/
-	public static function use(
-		object: h2d.Object,
-		duration: UInt,
-		removeOnComplete = false
-	): FadeOutTimer {
-		final timer = pool.get();
-		TimerExtension.reset(timer, duration);
-		timer.object = object;
-		timer.removeOnComplete = removeOnComplete;
-		return timer;
-	}
+	var pool: Maybe<SafeObjectPool<FadeOutTimer>>;
 
 	/**
 		If `true`, calls `object.remove()` when completing.
@@ -60,25 +32,46 @@ class FadeOutTimer extends ObjectTimer<h2d.Object> {
 		else
 			object.alpha = 0.0;
 
-		pool.put(this);
+		final pool = this.pool;
+		if (pool.isSome()) {
+			pool.unwrap().put(this);
+			this.pool = Maybe.none();
+		}
 	}
 }
 
-@:access(broker.timer.builtin.heaps.FadeOutTimer)
-class FadeOutTimerExtension {
+class FadeOutTimerTools {
 	/**
-		Resets variables of `this`.
-		@return `this`.
+		Global object pool for `FadeOutTimer`.
 	**/
-	public static function reset(
-		_this: FadeOutTimer,
+	public static final pool = {
+		final pool = new SafeObjectPool(UInt.one, () -> new FadeOutTimer());
+		pool.newTag("FadeOutTimer pool");
+		pool;
+	}
+
+	/**
+		Returns a `FadeOutTimer` instance that is currently not in use.
+
+		The instance is automatically recycled when completed so that it can be reused again
+		(so `step()` should not be called again after completing).
+
+		@param object The object to change the alpha value.
+		@param duration
+		@param removeOnComplete If `true`, calls `object.remove()` when completing.
+		@return A `FadeOutTimer` instance.
+	**/
+	@:access(broker.timer.builtin.heaps.FadeOutTimer)
+	public static function use(
 		object: h2d.Object,
-		duration: UInt
+		duration: UInt,
+		removeOnComplete = false
 	): FadeOutTimer {
-		_this.object = object;
-		TimerExtension.reset(_this, duration);
-		_this.removeOnComplete = false;
-		return _this;
+		final timer = pool.get();
+		TimerExtension.reset(timer, duration);
+		timer.object = object;
+		timer.removeOnComplete = removeOnComplete;
+		return timer;
 	}
 }
 #end
