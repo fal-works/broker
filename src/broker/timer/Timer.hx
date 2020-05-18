@@ -7,7 +7,6 @@ package broker.timer;
 @:using(broker.timer.Timer.TimerExtension)
 class Timer {
 	static final dummyCallback = () -> {};
-	static final dummyOnProgressCallback = (progress: Float) -> {};
 
 	/**
 		Current progress rate. Is increased in `this.step()`.
@@ -23,11 +22,6 @@ class Timer {
 		Function called in `this.onStart()`.
 	**/
 	var onStartCallback: () -> Void;
-
-	/**
-		Function called in `this.onProgress()`.
-	**/
-	var onProgressCallback: (progress: Float) -> Void;
 
 	/**
 		Function called in `this.onComplete()`.
@@ -52,7 +46,6 @@ class Timer {
 		this.progress = 0.0;
 		this.progressChangeRate = 1.0;
 		this.onStartCallback = dummyCallback;
-		this.onProgressCallback = dummyOnProgressCallback;
 		this.onCompleteCallback = dummyCallback;
 		this.next = Maybe.none();
 		this.parent = Maybe.none();
@@ -89,7 +82,6 @@ class Timer {
 	**/
 	public function clearCallbacks(): Timer {
 		this.onStartCallback = dummyCallback;
-		this.onProgressCallback = dummyOnProgressCallback;
 		this.onCompleteCallback = dummyCallback;
 		return this;
 	}
@@ -100,15 +92,6 @@ class Timer {
 	**/
 	public function setOnStart(callback: () -> Void): Timer {
 		this.onStartCallback = callback;
-		return this;
-	}
-
-	/**
-		Sets `onProgress` callback function.
-		@return `this`.
-	**/
-	public function setOnProgress(callback: (progress: Float) -> Void): Timer {
-		this.onProgressCallback = callback;
 		return this;
 	}
 
@@ -180,9 +163,7 @@ class Timer {
 		Called in `this.step()` if this timer is not completed.
 		Override this method for your own purpose.
 	**/
-	function onProgress(progress: Float): Void {
-		this.onProgressCallback(progress);
-	}
+	function onProgress(progress: Float): Void {}
 
 	/**
 		Called in `this.step()` if this timer is completed.
