@@ -82,7 +82,7 @@ interface Scene {
 	**/
 	function fadeInFrom(
 		color: ArgbColor,
-		duration: Int,
+		duration: UInt,
 		startNow: Bool
 	): Timer;
 
@@ -95,7 +95,7 @@ interface Scene {
 	**/
 	function fadeOutTo(
 		color: ArgbColor,
-		duration: Int,
+		duration: UInt,
 		startNow: Bool
 	): Timer;
 
@@ -107,7 +107,7 @@ interface Scene {
 	**/
 	function switchTo(
 		nextScene: Scene,
-		duration: Int,
+		duration: UInt,
 		destroy: Bool,
 		startNow: Bool
 	): Maybe<Timer>;

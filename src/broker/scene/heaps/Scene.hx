@@ -147,7 +147,7 @@ class Scene implements broker.scene.Scene {
 		@param startNow If `true`, immediately adds the timer to `this`.
 		@return A `Timer` instance.
 	**/
-	public function fadeInFrom(color: ArgbColor, duration: Int, startNow: Bool): Timer {
+	public function fadeInFrom(color: ArgbColor, duration: UInt, startNow: Bool): Timer {
 		final bitmap = this.useSurfaceBitmap(color);
 		bitmap.alpha = 0.0;
 
@@ -167,7 +167,7 @@ class Scene implements broker.scene.Scene {
 		@param startNow If `true`, immediately adds the timer to `this`.
 		@return A `Timer` instance.
 	**/
-	public function fadeOutTo(color: ArgbColor, duration: Int, startNow: Bool): Timer {
+	public function fadeOutTo(color: ArgbColor, duration: UInt, startNow: Bool): Timer {
 		final bitmap = this.useSurfaceBitmap(color);
 		bitmap.alpha = 0.0;
 
@@ -188,7 +188,7 @@ class Scene implements broker.scene.Scene {
 	**/
 	public function switchTo(
 		nextScene: broker.scene.Scene,
-		duration: Int,
+		duration: UInt,
 		destroy: Bool,
 		startNow: Bool
 	): Maybe<Timer> {
