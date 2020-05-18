@@ -1,7 +1,6 @@
 package broker.scene.heaps;
 
 #if heaps
-import banker.pool.SafeObjectPool;
 import broker.timer.Timer;
 import broker.timer.Timers;
 import broker.color.ArgbColor;
@@ -10,14 +9,14 @@ import broker.scene.heaps.SceneStatics.*;
 
 /**
 	Base class that implements `broker.scene.Scene` and internally contains a `h2d.Scene` instance.
-	Requires `Scene.initialize()` to be called before creating any instance.
+	Requires `Scene.setApplication()` to be called before creating any instance.
 **/
 class Scene implements broker.scene.Scene {
 	/**
 		Registers the `hxd.App` instance.
 	**/
 	public static function setApplication(app: hxd.App): Void {
-		SceneStatics.heapsApp = app;
+		SceneStatics.setApplication(app);
 	}
 
 	/**
@@ -70,8 +69,6 @@ class Scene implements broker.scene.Scene {
 	**/
 	final heapsScene: h2d.Scene;
 
-	final bitmapPool: SafeObjectPool<h2d.Object>;
-
 	/**
 		@param heapsScene If not provided, creates a new one.
 		@param timersCapacity The max number of `Timer` instances. Defaults to `16`.
@@ -93,12 +90,6 @@ class Scene implements broker.scene.Scene {
 
 		this.setTransitionState = dummyCallback;
 		this.unsetTransitionState = dummyCallback;
-
-		final bitmapPool = new SafeObjectPool<h2d.Object>(
-			4,
-			() -> new h2d.Bitmap(h2d.Tile.fromColor(0xFFFFFF))
-		).newTag("Scene bitmap pool");
-		this.bitmapPool = bitmapPool;
 
 		this.setTransitionState = () -> this.isTransitioning = true;
 		this.unsetTransitionState = () -> this.isTransitioning = false;
@@ -133,7 +124,7 @@ class Scene implements broker.scene.Scene {
 	public function activate(): Void {
 		if (!this.isInitialized) this.initialize();
 		this.isTransitioning = false;
-		heapsApp.unwrap().setScene(this.heapsScene, false);
+		heapsApp.setScene(this.heapsScene, false);
 	}
 
 	/**
@@ -162,7 +153,7 @@ class Scene implements broker.scene.Scene {
 
 		// (fade-in the scene) = (fade-out the surface)
 		final timer = fadeOutTimerPool.use(bitmap, duration, true);
-		timer.setOnCompleteObject(this.bitmapPool.putCallback);
+		timer.setOnCompleteObject(bitmapPool.putCallback);
 
 		if (startNow) this.timers.push(timer);
 
@@ -182,7 +173,7 @@ class Scene implements broker.scene.Scene {
 
 		// (fade-out the scene) = (fade-in the surface)
 		final timer = fadeInTimerPool.use(bitmap, duration);
-		timer.setOnCompleteObject(this.bitmapPool.putCallback);
+		timer.setOnCompleteObject(bitmapPool.putCallback);
 
 		if (startNow) this.timers.push(timer);
 
@@ -218,11 +209,11 @@ class Scene implements broker.scene.Scene {
 	}
 
 	/**
-		Uses a bitmap from `this.bitmapPool`, resets it with `color` and adds it to `this.surface`.
+		Uses a bitmap from `bitmapPool`, resets it with `color` and adds it to `this.surface`.
 		@return `h2d.Bitmap` instance.
 	**/
 	function useSurfaceBitmap(color: ArgbColor): h2d.Bitmap {
-		final bitmap = this.resetCoverBitmap(cast this.bitmapPool.get(), color);
+		final bitmap = this.resetCoverBitmap(cast bitmapPool.get(), color);
 		this.surface.heapsObject.addChild(bitmap);
 		return bitmap;
 	}
