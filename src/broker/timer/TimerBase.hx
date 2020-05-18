@@ -4,6 +4,7 @@ package broker.timer;
 	Base class for implementing `broker.timer.Timer`.
 	Extend this class for your own purpose.
 **/
+@:using(broker.timer.TimerBase.TimerBaseExtension)
 class TimerBase implements Timer {
 	static final dummyCallback = () -> {};
 	static final dummyOnProgressCallback = (progress: Float) -> {};
@@ -193,5 +194,23 @@ class TimerBase implements Timer {
 		if (parent.isSome() && next.isSome()) parent.unwrap().push(next.unwrap());
 
 		this.onCompleteCallback();
+	}
+}
+
+@:access(broker.timer.builtin.heaps.TimerBase)
+class TimerBaseExtension {
+	/**
+		Resets variables of `this`.
+		@return `this`.
+	**/
+	public static function reset(
+		_this: TimerBase,
+		duration: UInt
+	): TimerBase {
+		_this.setDuration(duration);
+		_this.clearCallbacks();
+		_this.clearNext();
+		_this.clearParent();
+		return _this;
 	}
 }

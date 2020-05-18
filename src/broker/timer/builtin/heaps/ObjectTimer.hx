@@ -111,11 +111,9 @@ class ObjectTimerExtension {
 		object: T,
 		duration: UInt
 	): ObjectTimer<T> {
+		TimerBaseExtension.reset(_this, duration);
 		_this.object = object;
-		_this.setDuration(duration);
-		_this.clearCallbacks();
-		_this.clearNext();
-		_this.clearParent();
+
 		return _this;
 	}
 }
