@@ -47,7 +47,6 @@ class FadeOutTimer extends ObjectTimer<h2d.Object> {
 		super();
 
 	override function onProgress(progress: Float): Void {
-		super.onProgress(progress);
 		this.object.alpha = 1.0 - progress;
 	}
 
