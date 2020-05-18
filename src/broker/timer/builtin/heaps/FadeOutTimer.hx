@@ -2,6 +2,7 @@ package broker.timer.builtin.heaps;
 
 #if heaps
 import banker.pool.SafeObjectPool;
+import broker.timer.Timer;
 
 @:using(broker.timer.builtin.heaps.FadeOutTimer.FadeOutTimerExtension)
 class FadeOutTimer extends ObjectTimer<h2d.Object> {
@@ -31,7 +32,8 @@ class FadeOutTimer extends ObjectTimer<h2d.Object> {
 		removeOnComplete = false
 	): FadeOutTimer {
 		final timer = pool.get();
-		timer.reset(object, duration);
+		TimerExtension.reset(timer, duration);
+		timer.object = object;
 		timer.removeOnComplete = removeOnComplete;
 		return timer;
 	}
@@ -75,10 +77,7 @@ class FadeOutTimerExtension {
 		duration: UInt
 	): FadeOutTimer {
 		_this.object = object;
-		_this.setDuration(duration);
-		_this.clearCallbacks();
-		_this.clearNext();
-		_this.clearParent();
+		TimerExtension.reset(_this, duration);
 		_this.removeOnComplete = false;
 		return _this;
 	}

@@ -11,7 +11,9 @@ class ObjectTimerTools {
 	) {};
 }
 
-@:using(broker.timer.builtin.heaps.ObjectTimer.ObjectTimerExtension)
+#if !broker_generic_disable
+@:generic
+#end
 class ObjectTimer<T: h2d.Object> extends Timer {
 	/**
 		The object to which `this` timer refers.
@@ -97,24 +99,6 @@ class ObjectTimer<T: h2d.Object> extends Timer {
 	override function onComplete(): Void {
 		super.onComplete();
 		this.onCompleteObjectCallback(this.object);
-	}
-}
-
-@:access(broker.timer.builtin.heaps.ObjectTimer)
-class ObjectTimerExtension {
-	/**
-		Resets variables of `this`.
-		@return `this`.
-	**/
-	public static function reset<T: h2d.Object>(
-		_this: ObjectTimer<T>,
-		object: T,
-		duration: UInt
-	): ObjectTimer<T> {
-		TimerExtension.reset(_this, duration);
-		_this.object = object;
-
-		return _this;
 	}
 }
 #end

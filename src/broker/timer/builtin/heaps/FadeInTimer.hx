@@ -2,6 +2,8 @@ package broker.timer.builtin.heaps;
 
 #if heaps
 import banker.pool.SafeObjectPool;
+import broker.timer.Timer;
+import broker.timer.builtin.heaps.ObjectTimer;
 
 class FadeInTimer extends ObjectTimer<h2d.Object> {
 	/**
@@ -25,7 +27,8 @@ class FadeInTimer extends ObjectTimer<h2d.Object> {
 	**/
 	public static function use(object: h2d.Object, duration: UInt): FadeInTimer {
 		final timer = pool.get();
-		timer.reset(object, duration);
+		TimerExtension.reset(timer, duration);
+		timer.object = object;
 		return timer;
 	}
 
