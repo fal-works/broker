@@ -7,53 +7,24 @@ import broker.timer.Timer;
 
 class SwitchSceneTimer extends Timer {
 	/**
-		Object pool for `SwitchSceneTimer`.
-	**/
-	public static final pool = {
-		final pool = new SafeObjectPool(4, () -> new SwitchSceneTimer());
-		pool.newTag("SwitchSceneTimer pool");
-		pool;
-	}
-
-	/**
-		Returns a `SwitchSceneTimer` instance that is currently not in use.
-
-		The instance is automatically recycled when completed so that it can be reused again
-		(so `step()` should not be called again after completing).
-
-		@return A `SwitchSceneTimer` instance.
-	**/
-	public static function use(
-		duration: UInt,
-		currentScene: Scene,
-		nextScene: Scene,
-		sceneStack: SceneStack,
-		destroy: Bool
-	): SwitchSceneTimer {
-		final timer = pool.get();
-		timer.reset(duration, currentScene, nextScene, sceneStack, destroy);
-		return timer;
-	}
-
-	/**
 		The current scene.
 	**/
-	var currentScene: Maybe<Scene>;
+	public var currentScene: Maybe<Scene>;
 
 	/**
 		The next scene to start when `this` timer is completed.
 	**/
-	var nextScene: Maybe<Scene>;
+	public var nextScene: Maybe<Scene>;
 
 	/**
 		The scene stack that is holding the current scene.
 	**/
-	var sceneStack: Maybe<SceneStack>;
+	public var sceneStack: Maybe<SceneStack>;
 
 	/**
 		If `true`, destroys the old scene when switching.
 	**/
-	var destroy: Bool;
+	public var destroy: Bool;
 
 	public function new() {
 		super();
@@ -61,25 +32,6 @@ class SwitchSceneTimer extends Timer {
 		this.nextScene = Maybe.none();
 		this.sceneStack = Maybe.none();
 		this.destroy = false;
-	}
-
-	/**
-		Resets variables of `this`.
-	**/
-	public function reset(
-		duration: UInt,
-		currentScene: Scene,
-		nextScene: Scene,
-		sceneStack: SceneStack,
-		destroy: Bool
-	): Void {
-		this.setDuration(duration);
-		this.clearCallbacks();
-		this.clearNext();
-		this.clearParent();
-		this.currentScene = currentScene;
-		this.nextScene = nextScene;
-		this.sceneStack = sceneStack;
 	}
 
 	override function onStart(): Void {
@@ -92,6 +44,61 @@ class SwitchSceneTimer extends Timer {
 		final nextScene = this.nextScene.unwrap();
 		this.sceneStack.unwrap().switchTop(nextScene, this.destroy);
 		this.currentScene.unwrap().isTransitioning = false;
-		pool.put(this);
+	}
+}
+
+final class PooledSwitchSceneTimer extends SwitchSceneTimer {
+	/**
+		The object pool to which `this` belongs.
+	**/
+	var pool: SafeObjectPool<PooledSwitchSceneTimer>;
+
+	public function new(pool: SafeObjectPool<PooledSwitchSceneTimer>) {
+		super();
+		this.pool = pool;
+	}
+
+	override function onComplete(): Void {
+		super.onComplete();
+		this.pool.put(this);
+	}
+}
+
+class SwitchSceneTimerPool extends SafeObjectPool<PooledSwitchSceneTimer> {
+	public function new(capacity: UInt) {
+		super(capacity, () -> new PooledSwitchSceneTimer(this));
+	}
+
+	override public function get(): PooledSwitchSceneTimer {
+		throw "Not implemented. Call use() instead of get().";
+	}
+
+	/**
+		Gets a `PooledSwitchSceneTimer` instance that is currently not in use,
+		and also resets some variables. Use this method instead of `get()`.
+
+		The instance is automatically recycled when completed so that it can be reused again
+		(so `step()` should not be called again after completing).
+
+		@param duration The delay duration frame count.
+		@return A `PooledSwitchSceneTimer` instance.
+	**/
+	@:access(broker.timer.builtin.PooledSwitchSceneTimer)
+	public function use(
+		duration: UInt,
+		currentScene: Scene,
+		nextScene: Scene,
+		sceneStack: SceneStack,
+		destroy: Bool
+	): PooledSwitchSceneTimer {
+		final timer = super.get();
+		TimerExtension.reset(timer, duration);
+		timer.currentScene = currentScene;
+		timer.nextScene = nextScene;
+		timer.sceneStack = sceneStack;
+		timer.destroy = destroy;
+		final pool: SafeObjectPool<PooledSwitchSceneTimer> = this;
+		timer.pool = pool;
+		return timer;
 	}
 }

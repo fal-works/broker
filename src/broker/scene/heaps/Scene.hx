@@ -4,10 +4,9 @@ package broker.scene.heaps;
 import banker.pool.SafeObjectPool;
 import broker.timer.Timer;
 import broker.timer.Timers;
-import broker.timer.builtin.SwitchSceneTimer;
-import broker.timer.builtin.heaps.FadeInTimer;
-import broker.timer.builtin.heaps.FadeOutTimer;
 import broker.color.ArgbColor;
+import broker.scene.heaps.SceneStatics;
+import broker.scene.heaps.SceneStatics.*;
 
 /**
 	Base class that implements `broker.scene.Scene` and internally contains a `h2d.Scene` instance.
@@ -15,30 +14,10 @@ import broker.color.ArgbColor;
 **/
 class Scene implements broker.scene.Scene {
 	/**
-		The `hxd.App` instance to pass `heapsScene` of any `Scene` instance.
-	**/
-	static var heapsApp: Maybe<hxd.App> = Maybe.none();
-
-	/**
-		Dummy empty function.
-	**/
-	static final dummyCallback = () -> {};
-
-	/**
-		Object pool for `FadeInTimer`.
-	**/
-	static final fadeInTimerPool = new FadeInTimerPool(4);
-
-	/**
-		Object pool for `FadeOutTimer`.
-	**/
-	static final fadeOutTimerPool = new FadeOutTimerPool(4);
-
-	/**
 		Registers the `hxd.App` instance.
 	**/
 	public static function setApplication(app: hxd.App): Void {
-		heapsApp = app;
+		SceneStatics.heapsApp = app;
 	}
 
 	/**
@@ -225,7 +204,7 @@ class Scene implements broker.scene.Scene {
 		final sceneStack = this.sceneStack;
 		if (sceneStack.isNone()) return Maybe.none();
 
-		final timer: Timer = SwitchSceneTimer.use(
+		final timer: Timer = switchSceneTimerPool.use(
 			duration,
 			this,
 			nextScene,
