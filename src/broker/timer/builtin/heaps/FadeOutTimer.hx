@@ -40,14 +40,12 @@ final class FadeOutTimer extends ObjectTimer<h2d.Object> {
 	}
 }
 
-class FadeOutTimerTools {
-	/**
-		Global object pool for `FadeOutTimer`.
-	**/
-	public static final pool = {
-		final pool = new SafeObjectPool(UInt.one, () -> new FadeOutTimer());
-		pool.newTag("FadeOutTimer pool");
-		pool;
+class FadeOutTimerPool extends SafeObjectPool<FadeOutTimer> {
+	public final putCallback: (timer: FadeOutTimer) -> Void;
+
+	public function new() {
+		super(UInt.one, () -> new FadeOutTimer());
+		this.putCallback = (timer: FadeOutTimer) -> this.put(timer);
 	}
 
 	/**
@@ -62,14 +60,16 @@ class FadeOutTimerTools {
 		@return A `FadeOutTimer` instance.
 	**/
 	@:access(broker.timer.builtin.heaps.FadeOutTimer)
-	public static function use(
+	public function use(
 		object: h2d.Object,
 		duration: UInt,
 		removeOnComplete = false
 	): FadeOutTimer {
-		final timer = pool.get();
+		final timer = this.get();
 		TimerExtension.reset(timer, duration);
 		timer.object = object;
+		final pool: SafeObjectPool<FadeOutTimer> = this;
+		timer.pool = pool;
 		timer.removeOnComplete = removeOnComplete;
 		return timer;
 	}
