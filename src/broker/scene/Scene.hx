@@ -82,26 +82,38 @@ interface Scene {
 		Starts fade-in effect.
 		@param color The starting color.
 		@param duration The duration frame count.
+		@param startNow If `true`, immediately adds the timer to `this`.
 		@return A `Timer` instance.
 	**/
-	function fadeInFrom(color: ArgbColor, duration: Int): Timer;
+	function fadeInFrom(
+		color: ArgbColor,
+		duration: Int,
+		startNow: Bool
+	): Timer;
 
 	/**
 		Starts fade-out effect.
 		@param color The ending color.
 		@param duration The duration frame count.
+		@param startNow If `true`, immediately adds the timer to `this`.
 		@return A `Timer` instance.
 	**/
-	function fadeOutTo(color: ArgbColor, duration: Int): Timer;
+	function fadeOutTo(
+		color: ArgbColor,
+		duration: Int,
+		startNow: Bool
+	): Timer;
 
 	/**
 		Switches to the next scene.
 		@param duration The delay duration frame count.
+		@param startNow If `true`, immediately adds the timer to `this`.
 		@return A `Timer` instance.
 	**/
 	function switchTo(
 		nextScene: Scene,
 		duration: Int,
-		destroy: Bool
+		destroy: Bool,
+		startNow: Bool
 	): Maybe<Timer>;
 }

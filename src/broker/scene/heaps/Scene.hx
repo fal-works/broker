@@ -166,16 +166,19 @@ class Scene implements broker.scene.Scene {
 		Starts fade-in effect.
 		@param color The starting color.
 		@param duration The duration frame count.
+		@param startNow If `true`, immediately adds the timer to `this`.
 		@return A `Timer` instance.
 	**/
-	public function fadeInFrom(color: ArgbColor, duration: Int): Timer {
+	public function fadeInFrom(color: ArgbColor, duration: Int, startNow: Bool): Timer {
 		final bitmap = this.useSurfaceBitmap(color);
 		bitmap.alpha = 0.0;
 
 		// (fade-in the scene) = (fade-out the surface)
 		final timer = FadeOutTimer.use(bitmap, duration, true);
 		timer.setOnCompleteObject(this.putBitmap);
-		this.timers.push(timer);
+
+		if (startNow) this.timers.push(timer);
+
 		return timer;
 	}
 
@@ -183,16 +186,18 @@ class Scene implements broker.scene.Scene {
 		Starts fade-out effect.
 		@param color The ending color.
 		@param duration The duration frame count.
+		@param startNow If `true`, immediately adds the timer to `this`.
 		@return A `Timer` instance.
 	**/
-	public function fadeOutTo(color: ArgbColor, duration: Int): Timer {
+	public function fadeOutTo(color: ArgbColor, duration: Int, startNow: Bool): Timer {
 		final bitmap = this.useSurfaceBitmap(color);
 		bitmap.alpha = 0.0;
 
 		// (fade-out the scene) = (fade-in the surface)
 		final timer = FadeInTimer.use(bitmap, duration);
 		timer.setOnCompleteObject(this.putBitmap);
-		this.timers.push(timer);
+
+		if (startNow) this.timers.push(timer);
 
 		return timer;
 	}
@@ -201,12 +206,14 @@ class Scene implements broker.scene.Scene {
 		Switches to the next scene.
 		Has no effect if any transition is already running or `this` does not belong to any `SceneStack`.
 		@param duration The delay duration frame count.
+		@param startNow If `true`, immediately adds the timer to `this`.
 		@return A `Timer` instance.
 	**/
 	public function switchTo(
 		nextScene: broker.scene.Scene,
 		duration: Int,
-		destroy: Bool
+		destroy: Bool,
+		startNow: Bool
 	): Maybe<Timer> {
 		if (this.isTransitioning) return Maybe.none();
 		this.isTransitioning = true;
@@ -221,7 +228,9 @@ class Scene implements broker.scene.Scene {
 			sceneStack.unwrap(),
 			destroy
 		);
-		this.timers.push(timer);
+
+		if (startNow) this.timers.push(timer);
+
 		return Maybe.from(timer);
 	}
 
