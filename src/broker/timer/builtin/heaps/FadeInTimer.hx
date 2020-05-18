@@ -3,12 +3,12 @@ package broker.timer.builtin.heaps;
 #if heaps
 import banker.pool.SafeObjectPool;
 
-class FadeInTimer extends FadeTimerBase {
+class FadeInTimer extends ObjectTimer<h2d.Object> {
 	/**
 		Object pool for `FadeInTimer`.
 	**/
 	public static final pool = {
-		final pool = new SafeObjectPool(UInt.one, () -> new FadeInTimer());
+		final pool: SafeObjectPool<FadeInTimer> = new SafeObjectPool(UInt.one, () -> new FadeInTimer());
 		pool.newTag("FadeInTimer pool");
 		pool;
 	}

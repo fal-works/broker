@@ -3,7 +3,8 @@ package broker.timer.builtin.heaps;
 #if heaps
 import banker.pool.SafeObjectPool;
 
-class FadeOutTimer extends FadeTimerBase {
+@:using(broker.timer.builtin.heaps.FadeOutTimer.FadeOutTimerExtension)
+class FadeOutTimer extends ObjectTimer<h2d.Object> {
 	/**
 		Object pool for `FadeOutTimer`.
 	**/
@@ -43,11 +44,6 @@ class FadeOutTimer extends FadeTimerBase {
 	public function new()
 		super();
 
-	override function reset(object: h2d.Object, duration: UInt): Void {
-		super.reset(object, duration);
-		this.removeOnComplete = false;
-	}
-
 	override function onProgress(progress: Float): Void {
 		super.onProgress(progress);
 		this.object.alpha = 1.0 - progress;
@@ -64,6 +60,27 @@ class FadeOutTimer extends FadeTimerBase {
 			object.alpha = 0.0;
 
 		pool.put(this);
+	}
+}
+
+@:access(broker.timer.builtin.heaps.FadeOutTimer)
+class FadeOutTimerExtension {
+	/**
+		Resets variables of `this`.
+		@return `this`.
+	**/
+	public static function reset(
+		_this: FadeOutTimer,
+		object: h2d.Object,
+		duration: UInt
+	): FadeOutTimer {
+		_this.object = object;
+		_this.setDuration(duration);
+		_this.clearCallbacks();
+		_this.clearNext();
+		_this.clearParent();
+		_this.removeOnComplete = false;
+		return _this;
 	}
 }
 #end

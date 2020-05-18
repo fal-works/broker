@@ -188,10 +188,10 @@ class TimerBase implements Timer {
 		Override this method for your own purpose.
 	**/
 	function onComplete(): Void {
-		this.onCompleteCallback();
-
 		final parent = this.parent;
 		final next = this.next;
 		if (parent.isSome() && next.isSome()) parent.unwrap().push(next.unwrap());
+
+		this.onCompleteCallback();
 	}
 }

@@ -1,6 +1,7 @@
 package broker.scene.heaps;
 
 #if heaps
+import banker.pool.SafeObjectPool;
 import broker.timer.Timer;
 import broker.timer.Timers;
 import broker.timer.builtin.SwitchSceneTimer;
@@ -80,10 +81,8 @@ class Scene implements broker.scene.Scene {
 	**/
 	final heapsScene: h2d.Scene;
 
-	/**
-		Internal bitmap used for fade-in/fade-out effects.
-	**/
-	final surfaceBitmap = new h2d.Bitmap(h2d.Tile.fromColor(0xFFFFFF));
+	final bitmapPool: SafeObjectPool<h2d.Object>;
+	final putBitmap: (h2d.Object) -> Void;
 
 	/**
 		@param heapsScene If not provided, creates a new one.
@@ -106,6 +105,13 @@ class Scene implements broker.scene.Scene {
 
 		this.setTransitionState = dummyCallback;
 		this.unsetTransitionState = dummyCallback;
+
+		final bitmapPool = new SafeObjectPool<h2d.Object>(
+			UInt.one,
+			() -> new h2d.Bitmap(h2d.Tile.fromColor(0xFFFFFF))
+		);
+		this.bitmapPool = bitmapPool;
+		this.putBitmap = (bitmap: h2d.Object) -> bitmapPool.put(bitmap);
 
 		this.setTransitionState = () -> this.isTransitioning = true;
 		this.unsetTransitionState = () -> this.isTransitioning = false;
@@ -164,9 +170,11 @@ class Scene implements broker.scene.Scene {
 	**/
 	public function fadeInFrom(color: ArgbColor, duration: Int): Timer {
 		final bitmap = this.setSurfaceBitmap(color);
+		bitmap.alpha = 0.0;
 
 		// (fade-in the scene) = (fade-out the surface)
 		final timer = FadeOutTimer.use(bitmap, duration, true);
+		timer.setOnCompleteObject(this.putBitmap);
 		this.timers.push(timer);
 		return timer;
 	}
@@ -182,7 +190,9 @@ class Scene implements broker.scene.Scene {
 
 		// (fade-out the scene) = (fade-in the surface)
 		final timer = FadeInTimer.use(bitmap, duration);
+		timer.setOnCompleteObject(this.putBitmap);
 		this.timers.push(timer);
+
 		return timer;
 	}
 
@@ -219,7 +229,7 @@ class Scene implements broker.scene.Scene {
 		@return `this.surfaceBitmap`.
 	**/
 	function setSurfaceBitmap(color: ArgbColor): h2d.Bitmap {
-		final bitmap = this.resetCoverBitmap(this.surfaceBitmap, color);
+		final bitmap = this.resetCoverBitmap(cast this.bitmapPool.get(), color);
 		this.surface.heapsObject.addChild(bitmap);
 		return bitmap;
 	}
