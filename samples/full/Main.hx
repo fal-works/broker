@@ -16,7 +16,7 @@ class Main extends hxd.App {
 		Global.initialize();
 
 		final initialScene = new PlayScene(s2d);
-		initialScene.fadeInFrom(ArgbColor.WHITE, 60);
+		initialScene.fadeInFrom(ArgbColor.WHITE, 60, true);
 		sceneStack = new SceneStack(initialScene, 16).newTag("scene stack");
 	}
 

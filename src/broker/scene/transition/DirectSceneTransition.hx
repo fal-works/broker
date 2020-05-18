@@ -28,6 +28,6 @@ class DirectSceneTransition extends SceneTransitionBase implements SceneTransiti
 	**/
 	public function run(currentScene: Scene, nextScene: Scene): Void {
 		if (currentScene.isTransitioning) return;
-		currentScene.switchTo(nextScene, this.delayDuration, this.destroy);
+		currentScene.switchTo(nextScene, this.delayDuration, this.destroy, true);
 	}
 }
