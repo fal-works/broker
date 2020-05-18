@@ -27,12 +27,12 @@ class Scene implements broker.scene.Scene {
 	/**
 		Object pool for `FadeInTimer`.
 	**/
-	static final fadeInTimerPool = new FadeInTimerPool();
+	static final fadeInTimerPool = new FadeInTimerPool(4);
 
 	/**
 		Object pool for `FadeOutTimer`.
 	**/
-	static final fadeOutTimerPool = new FadeOutTimerPool();
+	static final fadeOutTimerPool = new FadeOutTimerPool(4);
 
 	/**
 		Registers the `hxd.App` instance.
@@ -92,7 +92,6 @@ class Scene implements broker.scene.Scene {
 	final heapsScene: h2d.Scene;
 
 	final bitmapPool: SafeObjectPool<h2d.Object>;
-	final putBitmap: (h2d.Object) -> Void;
 
 	/**
 		@param heapsScene If not provided, creates a new one.
@@ -121,7 +120,6 @@ class Scene implements broker.scene.Scene {
 			() -> new h2d.Bitmap(h2d.Tile.fromColor(0xFFFFFF))
 		).newTag("Scene bitmap pool");
 		this.bitmapPool = bitmapPool;
-		this.putBitmap = (bitmap: h2d.Object) -> bitmapPool.put(bitmap);
 
 		this.setTransitionState = () -> this.isTransitioning = true;
 		this.unsetTransitionState = () -> this.isTransitioning = false;
@@ -185,7 +183,7 @@ class Scene implements broker.scene.Scene {
 
 		// (fade-in the scene) = (fade-out the surface)
 		final timer = fadeOutTimerPool.use(bitmap, duration, true);
-		timer.setOnCompleteObject(this.putBitmap);
+		timer.setOnCompleteObject(this.bitmapPool.putCallback);
 
 		if (startNow) this.timers.push(timer);
 
@@ -205,7 +203,7 @@ class Scene implements broker.scene.Scene {
 
 		// (fade-out the scene) = (fade-in the surface)
 		final timer = fadeInTimerPool.use(bitmap, duration);
-		timer.setOnCompleteObject(this.putBitmap);
+		timer.setOnCompleteObject(this.bitmapPool.putCallback);
 
 		if (startNow) this.timers.push(timer);
 

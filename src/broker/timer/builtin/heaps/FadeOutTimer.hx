@@ -41,15 +41,17 @@ final class FadeOutTimer extends ObjectTimer<h2d.Object> {
 }
 
 class FadeOutTimerPool extends SafeObjectPool<FadeOutTimer> {
-	public final putCallback: (timer: FadeOutTimer) -> Void;
+	public function new(capacity: UInt) {
+		super(capacity, () -> new FadeOutTimer());
+	}
 
-	public function new() {
-		super(UInt.one, () -> new FadeOutTimer());
-		this.putCallback = (timer: FadeOutTimer) -> this.put(timer);
+	override public function get(): FadeOutTimer {
+		throw "Not implemented. Call use() instead of get().";
 	}
 
 	/**
-		Returns a `FadeOutTimer` instance that is currently not in use.
+		Returns a `FadeOutTimer` instance that is currently not in use,
+		and also resets some variables. Use this method instead of `get()`.
 
 		The instance is automatically recycled when completed so that it can be reused again
 		(so `step()` should not be called again after completing).
@@ -65,7 +67,7 @@ class FadeOutTimerPool extends SafeObjectPool<FadeOutTimer> {
 		duration: UInt,
 		removeOnComplete = false
 	): FadeOutTimer {
-		final timer = this.get();
+		final timer = super.get();
 		TimerExtension.reset(timer, duration);
 		timer.object = object;
 		final pool: SafeObjectPool<FadeOutTimer> = this;
