@@ -187,6 +187,7 @@ class Scene implements broker.scene.Scene {
 	**/
 	public function fadeOutTo(color: ArgbColor, duration: Int): Timer {
 		final bitmap = this.useSurfaceBitmap(color);
+		bitmap.alpha = 0.0;
 
 		// (fade-out the scene) = (fade-in the surface)
 		final timer = FadeInTimer.use(bitmap, duration);
