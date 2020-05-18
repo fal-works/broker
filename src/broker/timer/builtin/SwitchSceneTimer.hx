@@ -10,7 +10,7 @@ class SwitchSceneTimer extends Timer {
 		Object pool for `SwitchSceneTimer`.
 	**/
 	public static final pool = {
-		final pool = new SafeObjectPool(UInt.one, () -> new SwitchSceneTimer());
+		final pool = new SafeObjectPool(4, () -> new SwitchSceneTimer());
 		pool.newTag("SwitchSceneTimer pool");
 		pool;
 	}

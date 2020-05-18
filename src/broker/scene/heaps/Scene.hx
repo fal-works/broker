@@ -116,7 +116,7 @@ class Scene implements broker.scene.Scene {
 		this.unsetTransitionState = dummyCallback;
 
 		final bitmapPool = new SafeObjectPool<h2d.Object>(
-			UInt.one,
+			4,
 			() -> new h2d.Bitmap(h2d.Tile.fromColor(0xFFFFFF))
 		).newTag("Scene bitmap pool");
 		this.bitmapPool = bitmapPool;
