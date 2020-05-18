@@ -253,13 +253,5 @@ class Scene implements broker.scene.Scene {
 
 		return bitmap;
 	}
-
-	static function createTransitionStateCallback(scene: Scene, value: Bool): () -> Void {
-		return if (value) function() {
-			scene.isTransitioning = true;
-		} else function() {
-			scene.isTransitioning = false;
-		};
-	}
 }
 #end
