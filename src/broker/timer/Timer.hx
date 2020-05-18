@@ -1,57 +1,216 @@
 package broker.timer;
 
-interface Timer {
+/**
+	Basic timer class.
+	Can be extended for your own purpose.
+**/
+@:using(broker.timer.Timer.TimerExtension)
+class Timer {
+	static final dummyCallback = () -> {};
+	static final dummyOnProgressCallback = (progress: Float) -> {};
+
+	/**
+		Current progress rate. Is increased in `this.step()`.
+	**/
+	public var progress(default, null): Float;
+
+	/**
+		Change rate of `this.progress`.
+	**/
+	var progressChangeRate: Float;
+
+	/**
+		Function called in `this.onStart()`.
+	**/
+	var onStartCallback: () -> Void;
+
+	/**
+		Function called in `this.onProgress()`.
+	**/
+	var onProgressCallback: (progress: Float) -> Void;
+
+	/**
+		Function called in `this.onComplete()`.
+	**/
+	var onCompleteCallback: () -> Void;
+
+	/**
+		The next timer that starts once `this` timer is completed
+		(i.e. it will be added to `parent` in `this.onComplete()`).
+	**/
+	var next: Maybe<Timer>;
+
+	/**
+		The `Timers` instance to which `this` belongs.
+	**/
+	var parent: Maybe<Timers>;
+
+	/**
+		Creates a `Timer` instance.
+	**/
+	function new() {
+		this.progress = 0.0;
+		this.progressChangeRate = 1.0;
+		this.onStartCallback = dummyCallback;
+		this.onProgressCallback = dummyOnProgressCallback;
+		this.onCompleteCallback = dummyCallback;
+		this.next = Maybe.none();
+		this.parent = Maybe.none();
+	}
+
 	/**
 		Steps `this` timer.
+		- If not yet completed (`progress < 1.0`), runs `onProgress()` and then adds `progress`.
+			If called for the first time, also calls `onStart()` before calling `onProgress()`.
+		- If completed, runs `onComplete()`.
 		@return `true` if completed. Otherwise `false`.
 	**/
-	function step(): Bool;
+	public function step(): Bool {
+		final progress = this.progress;
+
+		if (progress == 0.0) {
+			this.onStart();
+			this.onProgress(progress);
+			this.progress = progress + this.progressChangeRate;
+			return false;
+		} else if (progress < 1.0) {
+			this.onProgress(progress);
+			this.progress = progress + this.progressChangeRate;
+			return false;
+		} else {
+			this.onComplete();
+			return true;
+		}
+	}
 
 	/**
 		Clears callback functions of `this` timer.
 		@return `this`.
 	**/
-	function clearCallbacks(): Timer;
+	public function clearCallbacks(): Timer {
+		this.onStartCallback = dummyCallback;
+		this.onProgressCallback = dummyOnProgressCallback;
+		this.onCompleteCallback = dummyCallback;
+		return this;
+	}
 
 	/**
 		Sets `onStart` callback function.
 		@return `this`.
 	**/
-	public function setOnStart(callback: () -> Void): Timer;
+	public function setOnStart(callback: () -> Void): Timer {
+		this.onStartCallback = callback;
+		return this;
+	}
 
 	/**
 		Sets `onProgress` callback function.
 		@return `this`.
 	**/
-	public function setOnProgress(callback: (progress: Float) -> Void): Timer;
+	public function setOnProgress(callback: (progress: Float) -> Void): Timer {
+		this.onProgressCallback = callback;
+		return this;
+	}
 
 	/**
 		Sets `onComplete` callback function.
 		@return `this`.
 	**/
-	public function setOnComplete(callback: () -> Void): Timer;
+	public function setOnComplete(callback: () -> Void): Timer {
+		this.onCompleteCallback = callback;
+		return this;
+	}
 
 	/**
 		Clears the next `Timer` of `this`.
 		@return `this`.
 	**/
-	public function clearNext(): Timer;
+	public function clearNext(): Timer {
+		this.next = Maybe.none();
+		return this;
+	}
 
 	/**
 		Sets the next `Timer` of `this`.
 		@return `this`.
 	**/
-	public function setNext(timer: Timer): Timer;
+	public function setNext(timer: Timer): Timer {
+		this.next = Maybe.from(timer);
+		return this;
+	}
 
 	/**
 		Clears the `Timers` instance to which `this` belongs.
 		@return `this`.
 	**/
-	public function clearParent(): Timer;
+	public function clearParent(): Timer {
+		this.parent = Maybe.none();
+		return this;
+	}
 
 	/**
 		Sets the `Timers` instance to which `this` belongs.
 		@return `this`.
 	**/
-	public function setParent(parent: Timers): Timer;
+	public function setParent(parent: Timers): Timer {
+		this.parent = parent;
+		return this;
+	}
+
+	/**
+		Sets the duration of `this` timer and resets `this.progress`.
+		@param duration Infinite loop if zero.
+		@return `this`.
+	**/
+	public function setDuration(duration: UInt): Timer {
+		this.progress = 0.0;
+		this.progressChangeRate = if (duration.isZero()) 0.0 else 1.0 / duration;
+		return this;
+	}
+
+	/**
+		Called once when `this.step()` is called for the first time.
+		Override this method for your own purpose.
+	**/
+	function onStart(): Void {
+		this.onStartCallback();
+	}
+
+	/**
+		Called in `this.step()` if this timer is not completed.
+		Override this method for your own purpose.
+	**/
+	function onProgress(progress: Float): Void {
+		this.onProgressCallback(progress);
+	}
+
+	/**
+		Called in `this.step()` if this timer is completed.
+		Override this method for your own purpose.
+	**/
+	function onComplete(): Void {
+		final parent = this.parent;
+		final next = this.next;
+		if (parent.isSome() && next.isSome()) parent.unwrap().push(next.unwrap());
+
+		this.onCompleteCallback();
+	}
+}
+
+@:access(broker.timer.builtin.heaps.Timer)
+class TimerExtension {
+	/**
+		Resets variables of `this`.
+		@return `this`.
+	**/
+	public static function reset(
+		_this: Timer,
+		duration: UInt
+	): Timer {
+		_this.setDuration(duration);
+		_this.clearCallbacks();
+		_this.clearNext();
+		_this.clearParent();
+		return _this;
+	}
 }

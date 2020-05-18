@@ -3,9 +3,9 @@ package broker.timer.builtin;
 import banker.pool.SafeObjectPool;
 import broker.scene.Scene;
 import broker.scene.SceneStack;
-import broker.timer.TimerBase;
+import broker.timer.Timer;
 
-class SwitchSceneTimer extends TimerBase {
+class SwitchSceneTimer extends Timer {
 	/**
 		Object pool for `SwitchSceneTimer`.
 	**/

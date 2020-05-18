@@ -1,7 +1,7 @@
 package broker.timer.builtin.heaps;
 
 #if heaps
-import broker.timer.TimerBase;
+import broker.timer.Timer;
 
 class ObjectTimerTools {
 	public static final dummyObjectCallback = function(object: Dynamic) {};
@@ -12,7 +12,7 @@ class ObjectTimerTools {
 }
 
 @:using(broker.timer.builtin.heaps.ObjectTimer.ObjectTimerExtension)
-class ObjectTimer<T: h2d.Object> extends TimerBase {
+class ObjectTimer<T: h2d.Object> extends Timer {
 	/**
 		The object to which `this` timer refers.
 	**/
@@ -111,7 +111,7 @@ class ObjectTimerExtension {
 		object: T,
 		duration: UInt
 	): ObjectTimer<T> {
-		TimerBaseExtension.reset(_this, duration);
+		TimerExtension.reset(_this, duration);
 		_this.object = object;
 
 		return _this;
