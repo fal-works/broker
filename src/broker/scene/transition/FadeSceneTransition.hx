@@ -35,9 +35,12 @@ class FadeSceneTransition extends SceneTransitionBase implements SceneTransition
 
 	/**
 		Runs transition from `currentScene` to `nextScene`.
-		Has no effect if any transition from `currentScene` is already running.
+		Has no effect if `currentScene` does not belong to any `SceneStack`
+		or any transition from `currentScene` is already running.
 	**/
 	public function run(currentScene: Scene, nextScene: Scene): Void {
+		if (currentScene.isTransitioning) return;
+
 		final switchScene = currentScene.switchTo(
 			nextScene,
 			this.intervalDuration,
@@ -58,7 +61,9 @@ class FadeSceneTransition extends SceneTransitionBase implements SceneTransition
 			this.fadeInDuration,
 			true
 		);
-		fadeNextScene.setOnStart(nextScene.setTransitionState);
 		fadeNextScene.setOnComplete(nextScene.unsetTransitionState);
+
+		currentScene.isTransitioning = true;
+		nextScene.isTransitioning = true;
 	}
 }

@@ -204,10 +204,9 @@ class Scene implements broker.scene.Scene {
 
 	/**
 		Switches to the next scene.
-		Has no effect if any transition is already running or `this` does not belong to any `SceneStack`.
 		@param duration The delay duration frame count.
 		@param startNow If `true`, immediately adds the timer to `this`.
-		@return A `Timer` instance.
+		@return A `Timer` instance. `Maybe.none()` if `this` does not belong to any `SceneStack`.
 	**/
 	public function switchTo(
 		nextScene: broker.scene.Scene,
@@ -215,9 +214,6 @@ class Scene implements broker.scene.Scene {
 		destroy: Bool,
 		startNow: Bool
 	): Maybe<Timer> {
-		if (this.isTransitioning) return Maybe.none();
-		this.isTransitioning = true;
-
 		final sceneStack = this.sceneStack;
 		if (sceneStack.isNone()) return Maybe.none();
 

@@ -39,11 +39,6 @@ interface Scene {
 	var isTransitioning: Bool;
 
 	/**
-		Callback function for running `this.isTransitioning = true`.
-	**/
-	final setTransitionState: () -> Void;
-
-	/**
 		Callback function for running `this.isTransitioning = false`.
 	**/
 	final unsetTransitionState: () -> Void;
