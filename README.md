@@ -38,6 +38,12 @@ and provides you an integrated virtual gamepad.
 ![Class diagram. Visit GitHub repo for details.](docs/scene.svg)
 ![Class diagram. Visit GitHub repo for details.](docs/scene-transition.svg)
 
+### Timer
+
+Basic classes for pseudo-asynchronous processing.
+
+![Class diagram. Visit GitHub repo for details.](docs/timer.svg)
+
 
 ## Features to be added (maybe)
 

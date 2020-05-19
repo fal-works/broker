@@ -1,0 +1,49 @@
+@startuml timer
+
+' ---- (style) --------------------------------
+
+skinparam shadowing false
+skinparam backgroundColor White
+skinparam package {
+  BorderColor #A0A0A0
+  FontColor #A0A0A0
+}
+skinparam class {
+  BackgroundColor White
+  ArrowColor #202020
+  BorderColor #202020
+  FontColor #000000
+}
+skinparam note {
+  BackgroundColor White
+  FontColor #606060
+  BorderColor #C0C0C0
+}
+skinparam stereotypeIBackgroundColor Lavender
+hide empty members
+
+' ---- (diagram) ------------------------------
+
+package broker.timer {
+	class Timer {
+    +setDuration(duration)
+    +step()
+    #onStart()
+    #onProgress(progress: Float)
+    #onComplete()
+  }
+	class Timers {
+    push(timer)
+    step()
+  }
+
+  Timers *-- "1..n " Timer
+  Timer o-l- "0..1" Timer : next Timer to run (optional)
+
+  note right of Timers
+  Steps all timers and
+  removes completed ones
+  end note
+}
+
+@enduml
