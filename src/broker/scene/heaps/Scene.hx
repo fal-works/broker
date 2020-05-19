@@ -4,6 +4,7 @@ package broker.scene.heaps;
 import broker.timer.Timer;
 import broker.timer.Timers;
 import broker.color.ArgbColor;
+import broker.scene.Scene as IScene;
 import broker.scene.heaps.SceneStatics;
 import broker.scene.heaps.SceneStatics.*;
 
@@ -11,7 +12,7 @@ import broker.scene.heaps.SceneStatics.*;
 	Base class that implements `broker.scene.Scene` and internally contains a `h2d.Scene` instance.
 	Requires `Scene.setApplication()` to be called before creating any instance.
 **/
-class Scene implements broker.scene.Scene {
+class Scene implements IScene {
 	/**
 		Registers the `hxd.App` instance.
 	**/
@@ -22,7 +23,7 @@ class Scene implements broker.scene.Scene {
 	/**
 		The stack to which `this` belongs.
 	**/
-	public var sceneStack: Maybe<broker.scene.SceneStack>;
+	public var sceneStack: Maybe<SceneStack>;
 
 	/**
 		Background layer.
@@ -187,7 +188,7 @@ class Scene implements broker.scene.Scene {
 		@return A `Timer` instance. `Maybe.none()` if `this` does not belong to any `SceneStack`.
 	**/
 	public function switchTo(
-		nextScene: broker.scene.Scene,
+		nextScene: IScene,
 		duration: UInt,
 		destroy: Bool,
 		startNow: Bool
@@ -214,7 +215,7 @@ class Scene implements broker.scene.Scene {
 	**/
 	function useSurfaceBitmap(color: ArgbColor): h2d.Bitmap {
 		final bitmap = this.resetCoverBitmap(bitmapPool.get(), color);
-		this.surface.heapsObject.addChild(bitmap);
+		this.surface.addChild(bitmap);
 		return bitmap;
 	}
 
