@@ -4,7 +4,10 @@ package broker.timer.builtin.heaps;
 import banker.pool.SafeObjectPool;
 import broker.timer.Timer;
 
-class FadeOutTimer extends ObjectTimer<h2d.Object> {
+#if !broker_generic_disable
+@:generic
+#end
+class FadeOutTimer<T: h2d.Object> extends ObjectTimer<T> {
 	/**
 		If `true`, calls `object.remove()` when completing.
 	**/
@@ -29,13 +32,19 @@ class FadeOutTimer extends ObjectTimer<h2d.Object> {
 	}
 }
 
-final class PooledFadeOutTimer extends FadeOutTimer {
+/**
+	Extended `FadeOutTimer` that is automatically recycled when completed.
+**/
+#if !broker_generic_disable
+@:generic
+#end
+final class PooledFadeOutTimer<T: h2d.Object> extends FadeOutTimer<T> {
 	/**
 		The object pool to which `this` belongs.
 	**/
-	var pool: SafeObjectPool<PooledFadeOutTimer>;
+	var pool: SafeObjectPool<PooledFadeOutTimer<T>>;
 
-	public function new(pool: SafeObjectPool<PooledFadeOutTimer>) {
+	public function new(pool: SafeObjectPool<PooledFadeOutTimer<T>>) {
 		super();
 		this.pool = pool;
 	}
@@ -46,12 +55,18 @@ final class PooledFadeOutTimer extends FadeOutTimer {
 	}
 }
 
-class FadeOutTimerPool extends SafeObjectPool<PooledFadeOutTimer> {
+#if !broker_generic_disable
+@:generic
+#end
+class FadeOutTimerPool<T: h2d.Object> extends SafeObjectPool<PooledFadeOutTimer<T>> {
 	public function new(capacity: UInt) {
 		super(capacity, () -> new PooledFadeOutTimer(this));
 	}
 
-	override public function get(): PooledFadeOutTimer {
+	/**
+		This operation is not supported. Call `use()` instead.
+	**/
+	override public function get(): PooledFadeOutTimer<T> {
 		throw "Not implemented. Call use() instead of get().";
 	}
 
@@ -69,14 +84,14 @@ class FadeOutTimerPool extends SafeObjectPool<PooledFadeOutTimer> {
 	**/
 	@:access(broker.timer.builtin.heaps.PooledFadeOutTimer)
 	public function use(
-		object: h2d.Object,
+		object: T,
 		duration: UInt,
 		removeOnComplete = false
-	): PooledFadeOutTimer {
+	): PooledFadeOutTimer<T> {
 		final timer = super.get();
 		TimerExtension.reset(timer, duration);
 		timer.object = object;
-		final pool: SafeObjectPool<PooledFadeOutTimer> = this;
+		final pool: SafeObjectPool<PooledFadeOutTimer<T>> = this;
 		timer.pool = pool;
 		timer.removeOnComplete = removeOnComplete;
 		return timer;

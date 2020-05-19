@@ -25,22 +25,22 @@ class SceneStatics {
 		Object pool for `Bitmap`.
 	**/
 	@:nullSafety(Off)
-	public static var bitmapPool(default, null): SafeObjectPool<h2d.Object> = null;
+	public static var bitmapPool(default, null): SafeObjectPool<h2d.Bitmap> = null;
 
 	/**
-		Object pool for `FadeInTimer`.
+		Object pool for `FadeInTimer<Bitmap>`.
 	**/
-	public static final fadeInTimerPool = {
-		final pool = new FadeInTimerPool(4);
+	public static final bitmapFadeInTimerPool = {
+		final pool = new FadeInTimerPool<h2d.Bitmap>(4);
 		pool.newTag("Scene FadeInTimer pool");
 		pool;
 	}
 
 	/**
-		Object pool for `FadeOutTimer`.
+		Object pool for `FadeOutTimer<Bitmap>`.
 	**/
-	public static final fadeOutTimerPool = {
-		final pool = new FadeOutTimerPool(4);
+	public static final bitmapFadeOutTimerPool = {
+		final pool = new FadeOutTimerPool<h2d.Bitmap>(4);
 		pool.newTag("Scene FadeOutTimer pool");
 		pool;
 	}
@@ -57,7 +57,7 @@ class SceneStatics {
 	public static function setApplication(app: hxd.App) {
 		heapsApp = app;
 
-		final pool = new SafeObjectPool<h2d.Object>(
+		final pool = new SafeObjectPool(
 			4,
 			() -> new h2d.Bitmap(h2d.Tile.fromColor(0xFFFFFF))
 		);

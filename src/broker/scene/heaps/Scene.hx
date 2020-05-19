@@ -152,7 +152,7 @@ class Scene implements broker.scene.Scene {
 		bitmap.alpha = 0.0;
 
 		// (fade-in the scene) = (fade-out the surface)
-		final timer = fadeOutTimerPool.use(bitmap, duration, true);
+		final timer = bitmapFadeOutTimerPool.use(bitmap, duration, true);
 		timer.setOnCompleteObject(bitmapPool.putCallback);
 
 		if (startNow) this.timers.push(timer);
@@ -172,7 +172,7 @@ class Scene implements broker.scene.Scene {
 		bitmap.alpha = 0.0;
 
 		// (fade-out the scene) = (fade-in the surface)
-		final timer = fadeInTimerPool.use(bitmap, duration);
+		final timer = bitmapFadeInTimerPool.use(bitmap, duration);
 		timer.setOnCompleteObject(bitmapPool.putCallback);
 
 		if (startNow) this.timers.push(timer);
@@ -213,7 +213,7 @@ class Scene implements broker.scene.Scene {
 		@return `h2d.Bitmap` instance.
 	**/
 	function useSurfaceBitmap(color: ArgbColor): h2d.Bitmap {
-		final bitmap = this.resetCoverBitmap(cast bitmapPool.get(), color);
+		final bitmap = this.resetCoverBitmap(bitmapPool.get(), color);
 		this.surface.heapsObject.addChild(bitmap);
 		return bitmap;
 	}
