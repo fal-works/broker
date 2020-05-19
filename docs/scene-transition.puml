@@ -1,4 +1,4 @@
-@startuml scene
+@startuml scene-transition
 
 ' ---- (style) --------------------------------
 
@@ -24,24 +24,22 @@ hide empty members
 
 ' ---- (diagram) ------------------------------
 
-package broker.scene {
-	class Scene {
-    update()
-    getTypeId(): SceneTypeId
-  }
-	class SceneStack {
-    update()
-  }
-  class Layer {
+package broker.scene.transition {
+  class SceneTransitionTable {
+    runTransition(currentScene, nextScene)
   }
 
-  SceneStack o-- "1..n " Scene
-  Scene o-r- "3" Layer
+  class SceneTransitionRecord {
+    precedingType: SceneTypeId
+    succeedingType: SceneTypeId
+  }
 
-  note right of SceneStack
-  Updates only
-  the top scene
-  end note
+  class SceneTransition {
+    run(currentScene, nextScene)
+  }
+
+  SceneTransitionTable *-- "1..n" SceneTransitionRecord
+  SceneTransitionRecord o-r- "1" SceneTransition
 }
 
 @enduml

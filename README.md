@@ -32,9 +32,11 @@ and provides you an integrated virtual gamepad.
 
 ### Scene
 
-Basic classes for managing game scenes.
+- Basic classes for game scenes.
+- Classes for managing transition between game scenes.
 
 ![Class diagram. Visit GitHub repo for details.](docs/scene.svg)
+![Class diagram. Visit GitHub repo for details.](docs/scene-transition.svg)
 
 
 ## Features to be added (maybe)

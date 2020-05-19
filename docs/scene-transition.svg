@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentScriptType="application/ecmascript" contentStyleType="text/css" height="270px" preserveAspectRatio="none" style="width:433px;height:270px;" version="1.1" viewBox="0 0 433 270" width="433px" zoomAndPan="magnify"><defs/><g><!--cluster broker.scene.transition--><polygon fill="#FFFFFF" points="22,24,193,24,200,47.6094,411,47.6094,411,258,22,258,22,24" style="stroke: #A0A0A0; stroke-width: 1.5;"/><line style="stroke: #A0A0A0; stroke-width: 1.5;" x1="22" x2="200" y1="47.6094" y2="47.6094"/><text fill="#A0A0A0" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacingAndGlyphs" textLength="165" x="26" y="40.5332">broker.scene.transition</text><!--class SceneTransitionTable--><rect fill="#FFFFFF" height="53.8359" id="SceneTransitionTable" style="stroke: #202020; stroke-width: 1.5;" width="207" x="38.5" y="60"/><ellipse cx="77.8" cy="76" fill="#ADD1B2" rx="11" ry="11" style="stroke: #202020; stroke-width: 1.0;"/><path d="M81.4875,77.2031 Q81.2375,80.6875 80.0969,81.8438 Q79.0656,82.8594 77.6594,82.8594 Q76.2531,82.8594 75.2219,81.8438 Q73.4719,80.0781 73.4719,76.4063 Q73.4719,72.1563 75.3469,70.25 Q76.3938,69.2344 77.7219,69.2344 Q79.1281,69.2344 79.9719,70.0469 Q81.4563,71.5625 81.3781,74.4375 L79.2531,74.4375 Q79.175,72.1094 78.5344,71.4688 Q78.2531,71.1719 77.7219,71.1719 Q77.2688,71.1719 76.9094,71.5469 Q75.675,72.7656 75.675,76.2813 Q75.675,79.3281 76.7219,80.3438 Q77.1438,80.7813 77.6594,80.7813 Q78.1125,80.7813 78.55,80.3438 Q79.1125,79.7969 79.1906,77.2031 L81.4875,77.2031 Z "/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="121" x="97.2" y="80.9102">SceneTransitionTable</text><line style="stroke: #202020; stroke-width: 1.5;" x1="39.5" x2="244.5" y1="92" y2="92"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="195" x="44.5" y="107.4189">runTransition(currentScene, nextScene)</text><!--class SceneTransitionRecord--><rect fill="#FFFFFF" height="67.6719" id="SceneTransitionRecord" style="stroke: #202020; stroke-width: 1.5;" width="162" x="38" y="174"/><ellipse cx="53" cy="190" fill="#ADD1B2" rx="11" ry="11" style="stroke: #202020; stroke-width: 1.0;"/><path d="M56.6875,191.2031 Q56.4375,194.6875 55.2969,195.8438 Q54.2656,196.8594 52.8594,196.8594 Q51.4531,196.8594 50.4219,195.8438 Q48.6719,194.0781 48.6719,190.4063 Q48.6719,186.1563 50.5469,184.25 Q51.5938,183.2344 52.9219,183.2344 Q54.3281,183.2344 55.1719,184.0469 Q56.6563,185.5625 56.5781,188.4375 L54.4531,188.4375 Q54.375,186.1094 53.7344,185.4688 Q53.4531,185.1719 52.9219,185.1719 Q52.4688,185.1719 52.1094,185.5469 Q50.875,186.7656 50.875,190.2813 Q50.875,193.3281 51.9219,194.3438 Q52.3438,194.7813 52.8594,194.7813 Q53.3125,194.7813 53.75,194.3438 Q54.3125,193.7969 54.3906,191.2031 L56.6875,191.2031 Z "/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="130" x="67" y="194.9102">SceneTransitionRecord</text><line style="stroke: #202020; stroke-width: 1.5;" x1="39" x2="199" y1="206" y2="206"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="141" x="44" y="221.4189">precedingType: SceneTypeId</text><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="149" x="44" y="235.2549">succeedingType: SceneTypeId</text><!--class SceneTransition--><rect fill="#FFFFFF" height="53.8359" id="SceneTransition" style="stroke: #202020; stroke-width: 1.5;" width="160" x="235" y="181"/><ellipse cx="267.1" cy="197" fill="#ADD1B2" rx="11" ry="11" style="stroke: #202020; stroke-width: 1.0;"/><path d="M270.7875,198.2031 Q270.5375,201.6875 269.3969,202.8438 Q268.3656,203.8594 266.9594,203.8594 Q265.5531,203.8594 264.5219,202.8438 Q262.7719,201.0781 262.7719,197.4063 Q262.7719,193.1563 264.6469,191.25 Q265.6938,190.2344 267.0219,190.2344 Q268.4281,190.2344 269.2719,191.0469 Q270.7563,192.5625 270.6781,195.4375 L268.5531,195.4375 Q268.475,193.1094 267.8344,192.4688 Q267.5531,192.1719 267.0219,192.1719 Q266.5688,192.1719 266.2094,192.5469 Q264.975,193.7656 264.975,197.2813 Q264.975,200.3281 266.0219,201.3438 Q266.4438,201.7813 266.9594,201.7813 Q267.4125,201.7813 267.85,201.3438 Q268.4125,200.7969 268.4906,198.2031 L270.7875,198.2031 Z "/><text fill="#000000" font-family="sans-serif" font-size="12" lengthAdjust="spacingAndGlyphs" textLength="90" x="284.9" y="201.9102">SceneTransition</text><line style="stroke: #202020; stroke-width: 1.5;" x1="236" x2="394" y1="213" y2="213"/><text fill="#000000" font-family="sans-serif" font-size="11" lengthAdjust="spacingAndGlyphs" textLength="148" x="241" y="228.4189">run(currentScene, nextScene)</text><!--reverse link SceneTransitionTable to SceneTransitionRecord--><path d="M134.416,127.241 C131.51,142.274 128.226,159.267 125.437,173.694 " fill="none" id="SceneTransitionTable&lt;-SceneTransitionRecord" style="stroke: #202020; stroke-width: 1.0;"/><polygon fill="#202020" points="136.953,114.115,131.8871,119.2469,134.6757,125.8969,139.7417,120.7651,136.953,114.115" style="stroke: #202020; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="22" x="102.5677" y="163.1893">1..n</text><!--reverse link SceneTransitionRecord to SceneTransition--><path d="M213.38,208 C220.486,208 227.593,208 234.699,208 " fill="none" id="SceneTransitionRecord&lt;-SceneTransition" style="stroke: #202020; stroke-width: 1.0;"/><polygon fill="#FFFFFF" points="200.156,208,206.156,212,212.156,208,206.156,204,200.156,208" style="stroke: #202020; stroke-width: 1.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacingAndGlyphs" textLength="7" x="219.9736" y="204.7814">1</text><!--
+@startuml scene-transition
+
+
+skinparam shadowing false
+skinparam backgroundColor White
+skinparam package {
+  BorderColor #A0A0A0
+  FontColor #A0A0A0
+}
+skinparam class {
+  BackgroundColor White
+  ArrowColor #202020
+  BorderColor #202020
+  FontColor #000000
+}
+skinparam note {
+  BackgroundColor White
+  FontColor #606060
+  BorderColor #C0C0C0
+}
+skinparam stereotypeIBackgroundColor Lavender
+hide empty members
+
+
+package broker.scene.transition {
+  class SceneTransitionTable {
+    runTransition(currentScene, nextScene)
+  }
+
+  class SceneTransitionRecord {
+    precedingType: SceneTypeId
+    succeedingType: SceneTypeId
+  }
+
+  class SceneTransition {
+    run(currentScene, nextScene)
+  }
+
+  SceneTransitionTable *- - "1..n" SceneTransitionRecord
+  SceneTransitionRecord o-r- "1" SceneTransition
+}
+
+@enduml
+
+PlantUML version 1.2019.09(Tue Aug 27 01:19:51 GMT+09:00 2019)
+(GPL source distribution)
+Java Runtime: OpenJDK Runtime Environment
+JVM: OpenJDK 64-Bit Server VM
+Java Version: 1.8.0_252-b09
+Operating System: Windows 10
+OS Version: 10.0
+Default Encoding: MS932
+Language: ja
+Country: JP
+--></g></svg>
