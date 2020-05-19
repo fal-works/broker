@@ -1,7 +1,14 @@
 package broker.scene.transition;
 
 class SceneTransitionTable {
-	final records: Array<SceneTransition>;
+	/**
+		List of registered records.
+	**/
+	final records: Array<SceneTransitionRecord>;
+
+	/**
+		The transition that is returned from `findTransition()` if no specific record is found.
+	**/
 	final defaultTransition: SceneTransition;
 
 	public function new(?defaultTransition: SceneTransition) {
@@ -9,8 +16,6 @@ class SceneTransitionTable {
 
 		this.defaultTransition = if (defaultTransition != null) defaultTransition else {
 			final transition: DirectSceneTransition = {
-				precedingSceneType: SceneTypeId.ALL,
-				succeedingSceneType: SceneTypeId.ALL,
 				delayDuration: UInt.zero,
 				destroy: true
 			};
@@ -19,19 +24,19 @@ class SceneTransitionTable {
 	}
 
 	/**
-		Adds `transition` to `this` graph.
-		Throws error if any transition with same keys is already registered.
+		Adds `record` to `this` table.
+		Throws error if any record with same keys is already registered.
 	**/
-	public function add(transition: SceneTransition): Void {
+	public function add(record: SceneTransitionRecord): Void {
 		final records = this.records;
 		final len = records.length;
 		for (i in 0...len) {
 			final record = records[i];
-			if (record.hasSameKeys(transition))
+			if (record.hasSameKeys(record))
 				throw "Duplicate keys.";
 		}
 
-		records.push(transition);
+		records.push(record);
 	}
 
 	/**
@@ -46,37 +51,56 @@ class SceneTransitionTable {
 	}
 
 	/**
-		Finds the corresponding transition from `currentScene` to `nextScene`.
+		@return Corresponding transition for provided scene types.
 	**/
 	public function findTransition(
-		precedingSceneType: SceneTypeId,
-		succeedingSceneType: SceneTypeId
+		precedingType: SceneTypeId,
+		succeedingType: SceneTypeId
 	): SceneTransition {
+		final record = findRecord(precedingType, succeedingType);
+
+		return if (record.isSome()) record.unwrap().transition else this.defaultTransition;
+	}
+
+	/**
+		@return Record that matches provided scene types.
+	**/
+	public function findRecord(
+		precedingType: SceneTypeId,
+		succeedingType: SceneTypeId
+	): Maybe<SceneTransitionRecord> {
 		final records = this.records;
 		final len = records.length;
 
 		for (i in 0...len) {
 			final record = records[i];
-			if (record.precedingSceneType == precedingSceneType
-				&& record.succeedingSceneType == succeedingSceneType) {
+			if (record.precedingType == precedingType
+				&& record.succeedingType == succeedingType) {
 				return record;
 			}
 		}
 		for (i in 0...len) {
 			final record = records[i];
-			if (record.precedingSceneType == SceneTypeId.ALL
-				&& record.succeedingSceneType == succeedingSceneType) {
+			if (record.precedingType == SceneTypeId.ALL
+				&& record.succeedingType == succeedingType) {
 				return record;
 			}
 		}
 		for (i in 0...len) {
 			final record = records[i];
-			if (record.precedingSceneType == precedingSceneType
-				&& record.succeedingSceneType == SceneTypeId.ALL) {
+			if (record.precedingType == precedingType
+				&& record.succeedingType == SceneTypeId.ALL) {
+				return record;
+			}
+		}
+		for (i in 0...len) {
+			final record = records[i];
+			if (record.precedingType == SceneTypeId.ALL
+				&& record.succeedingType == SceneTypeId.ALL) {
 				return record;
 			}
 		}
 
-		return this.defaultTransition;
+		return Maybe.none();
 	}
 }

@@ -6,7 +6,7 @@ import broker.color.ArgbColor;
 	Transition with fade-out/fade-in effects.
 **/
 @:structInit
-class FadeSceneTransition extends SceneTransitionBase implements SceneTransition {
+class FadeSceneTransition implements SceneTransition implements ripper.Data {
 	public final color: ArgbColor;
 	public final fadeOutDuration: UInt;
 	public final intervalDuration: UInt;
@@ -16,22 +16,7 @@ class FadeSceneTransition extends SceneTransitionBase implements SceneTransition
 	/**
 		@param destroy If `true`, destroys the old scene when switching.
 	**/
-	public function new(
-		precedingSceneType: SceneTypeId,
-		succeedingSceneType: SceneTypeId,
-		color: ArgbColor,
-		fadeOutDuration: UInt,
-		intervalDuration: UInt,
-		fadeInDuration: UInt,
-		destroy: Bool
-	) {
-		super(precedingSceneType, succeedingSceneType);
-		this.color = color;
-		this.fadeOutDuration = fadeOutDuration;
-		this.intervalDuration = intervalDuration;
-		this.fadeInDuration = fadeInDuration;
-		this.destroy = destroy;
-	}
+	public function new() {}
 
 	/**
 		Runs transition from `currentScene` to `nextScene`.

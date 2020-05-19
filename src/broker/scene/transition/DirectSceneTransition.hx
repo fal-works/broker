@@ -4,23 +4,14 @@ package broker.scene.transition;
 	Transition without any effect.
 **/
 @:structInit
-class DirectSceneTransition extends SceneTransitionBase implements SceneTransition {
+class DirectSceneTransition implements SceneTransition implements ripper.Data {
 	public final delayDuration: UInt;
 	public final destroy: Bool;
 
 	/**
 		@param destroy If `true`, destroys the old scene when switching.
 	**/
-	public function new(
-		precedingSceneType: SceneTypeId,
-		succeedingSceneType: SceneTypeId,
-		delayDuration: UInt,
-		destroy: Bool
-	) {
-		super(precedingSceneType, succeedingSceneType);
-		this.delayDuration = delayDuration;
-		this.destroy = destroy;
-	}
+	public function new() {}
 
 	/**
 		Runs transition from `currentScene` to `nextScene`.

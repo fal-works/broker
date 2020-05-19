@@ -53,15 +53,17 @@ class Global {
 		final dummyObject = new h2d.Object();
 		resetParticles(dummyObject, 1);
 
-		sceneTransitionTable.add(({
-			precedingSceneType: SceneType.play,
-			succeedingSceneType: SceneType.play,
-			color: 0xFF000000,
-			fadeOutDuration: 30,
-			intervalDuration: 30,
-			fadeInDuration: 30,
-			destroy: true
-		} : FadeSceneTransition));
+		sceneTransitionTable.add({
+			precedingType: SceneType.play,
+			succeedingType: SceneType.play,
+			transition: ({
+				color: 0xFF000000,
+				fadeOutDuration: 30,
+				intervalDuration: 30,
+				fadeInDuration: 30,
+				destroy: true
+			} : FadeSceneTransition)
+		});
 	}
 
 	public static function update(): Void {
