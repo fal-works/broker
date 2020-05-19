@@ -54,6 +54,10 @@ class SceneStatics {
 		pool;
 	}
 
+	/**
+		Sets `hxd.App` instance.
+		This method must be called before using the class `broker.scene.heaps.Scene`.
+	**/
 	public static function setApplication(app: hxd.App) {
 		heapsApp = app;
 
