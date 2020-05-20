@@ -1,6 +1,7 @@
 package broker.timer.builtin.heaps;
 
 #if heaps
+import banker.pool.interfaces.ObjectPool;
 import banker.pool.SafeObjectPool;
 import broker.timer.Timer;
 
@@ -42,9 +43,9 @@ final class PooledFadeOutTimer<T: h2d.Object> extends FadeOutTimer<T> {
 	/**
 		The object pool to which `this` belongs.
 	**/
-	var pool: SafeObjectPool<PooledFadeOutTimer<T>>;
+	var pool: ObjectPool<PooledFadeOutTimer<T>>;
 
-	public function new(pool: SafeObjectPool<PooledFadeOutTimer<T>>) {
+	public function new(pool: ObjectPool<PooledFadeOutTimer<T>>) {
 		super();
 		this.pool = pool;
 	}
@@ -92,8 +93,7 @@ class FadeOutTimerPool<T: h2d.Object> extends SafeObjectPool<PooledFadeOutTimer<
 		final timer = super.get();
 		TimerExtension.reset(timer, duration);
 		timer.object = object;
-		final pool: SafeObjectPool<PooledFadeOutTimer<T>> = this;
-		timer.pool = pool;
+		timer.pool = this;
 		timer.removeOnComplete = removeOnComplete;
 		return timer;
 	}
