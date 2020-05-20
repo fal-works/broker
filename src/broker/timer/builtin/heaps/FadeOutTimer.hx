@@ -58,6 +58,7 @@ final class PooledFadeOutTimer<T: h2d.Object> extends FadeOutTimer<T> {
 #if !broker_generic_disable
 @:generic
 #end
+@:ripper_verified
 class FadeOutTimerPool<T: h2d.Object> extends SafeObjectPool<PooledFadeOutTimer<T>> {
 	public function new(capacity: UInt) {
 		super(capacity, () -> new PooledFadeOutTimer(this));

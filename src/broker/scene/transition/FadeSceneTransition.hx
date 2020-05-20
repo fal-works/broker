@@ -6,6 +6,7 @@ import broker.color.ArgbColor;
 	Transition with fade-out/fade-in effects.
 **/
 @:structInit
+@:ripper_verified
 class FadeSceneTransition implements SceneTransition implements ripper.Data {
 	public final color: ArgbColor;
 	public final fadeOutDuration: UInt;

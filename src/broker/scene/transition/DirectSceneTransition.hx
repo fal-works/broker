@@ -4,6 +4,7 @@ package broker.scene.transition;
 	Transition without any effect.
 **/
 @:structInit
+@:ripper_verified
 class DirectSceneTransition implements SceneTransition implements ripper.Data {
 	public final delayDuration: UInt;
 	public final destroy: Bool;
