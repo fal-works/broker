@@ -1,10 +1,14 @@
 package broker.timer.builtin;
 
+import banker.pool.interfaces.ObjectPool;
 import banker.pool.SafeObjectPool;
 import broker.scene.Scene;
 import broker.scene.SceneStack;
 import broker.timer.Timer;
 
+/**
+	`Timer` that switches the game scene when completed.
+**/
 class SwitchSceneTimer extends Timer {
 	/**
 		The current scene.
@@ -47,13 +51,16 @@ class SwitchSceneTimer extends Timer {
 	}
 }
 
+/**
+	Extended `SwitchSceneTimer` that is automatically recycled when completed.
+**/
 final class PooledSwitchSceneTimer extends SwitchSceneTimer {
 	/**
 		The object pool to which `this` belongs.
 	**/
-	var pool: SafeObjectPool<PooledSwitchSceneTimer>;
+	var pool: ObjectPool<PooledSwitchSceneTimer>;
 
-	public function new(pool: SafeObjectPool<PooledSwitchSceneTimer>) {
+	public function new(pool: ObjectPool<PooledSwitchSceneTimer>) {
 		super();
 		this.pool = pool;
 	}
@@ -69,6 +76,9 @@ class SwitchSceneTimerPool extends SafeObjectPool<PooledSwitchSceneTimer> {
 		super(capacity, () -> new PooledSwitchSceneTimer(this));
 	}
 
+	/**
+		This operation is not supported. Call `use()` instead.
+	**/
 	override public function get(): PooledSwitchSceneTimer {
 		throw "Not implemented. Call use() instead of get().";
 	}
@@ -97,8 +107,7 @@ class SwitchSceneTimerPool extends SafeObjectPool<PooledSwitchSceneTimer> {
 		timer.nextScene = nextScene;
 		timer.sceneStack = sceneStack;
 		timer.destroy = destroy;
-		final pool: SafeObjectPool<PooledSwitchSceneTimer> = this;
-		timer.pool = pool;
+		timer.pool = this;
 		return timer;
 	}
 }
