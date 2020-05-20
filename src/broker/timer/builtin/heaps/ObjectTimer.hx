@@ -3,10 +3,6 @@ package broker.timer.builtin.heaps;
 #if heaps
 import broker.timer.Timer;
 
-class ObjectTimerTools {
-	public static final dummyObjectCallback = function(object: Dynamic) {};
-}
-
 #if !broker_generic_disable
 @:generic
 #end
@@ -29,8 +25,8 @@ class ObjectTimer<T: h2d.Object> extends Timer {
 
 	function new() {
 		super();
-		this.onStartObjectCallback = ObjectTimerTools.dummyObjectCallback;
-		this.onCompleteObjectCallback = ObjectTimerTools.dummyObjectCallback;
+		this.onStartObjectCallback = ObjectTimerStatics.dummyObjectCallback;
+		this.onCompleteObjectCallback = ObjectTimerStatics.dummyObjectCallback;
 	}
 
 	/**
@@ -39,8 +35,8 @@ class ObjectTimer<T: h2d.Object> extends Timer {
 	**/
 	override public function clearCallbacks(): Timer {
 		super.clearCallbacks();
-		this.onStartObjectCallback = ObjectTimerTools.dummyObjectCallback;
-		this.onCompleteObjectCallback = ObjectTimerTools.dummyObjectCallback;
+		this.onStartObjectCallback = ObjectTimerStatics.dummyObjectCallback;
+		this.onCompleteObjectCallback = ObjectTimerStatics.dummyObjectCallback;
 		return this;
 	}
 
@@ -73,5 +69,9 @@ class ObjectTimer<T: h2d.Object> extends Timer {
 		super.onComplete();
 		this.onCompleteObjectCallback(this.object);
 	}
+}
+
+private class ObjectTimerStatics {
+	public static final dummyObjectCallback = function(object: Dynamic) {};
 }
 #end
