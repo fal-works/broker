@@ -5,6 +5,9 @@ import banker.pool.interfaces.ObjectPool;
 import banker.pool.SafeObjectPool;
 import broker.timer.Timer;
 
+/**
+	`Timer` that applies fade-out effect on any `h2d.Object` instance.
+**/
 #if !broker_generic_disable
 @:generic
 #end

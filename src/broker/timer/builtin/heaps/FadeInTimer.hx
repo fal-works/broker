@@ -6,6 +6,9 @@ import banker.pool.SafeObjectPool;
 import broker.timer.Timer;
 import broker.timer.builtin.heaps.ObjectTimer;
 
+/**
+	`Timer` that applies fade-in effect on any `h2d.Object` instance.
+**/
 #if !broker_generic_disable
 @:generic
 #end

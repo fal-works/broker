@@ -3,6 +3,9 @@ package broker.timer.builtin.heaps;
 #if heaps
 import broker.timer.Timer;
 
+/**
+	`Timer` that works on any `h2d.Object` instance.
+**/
 #if !broker_generic_disable
 @:generic
 #end
