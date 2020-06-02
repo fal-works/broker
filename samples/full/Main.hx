@@ -7,6 +7,12 @@ class Main extends hxd.App {
 	static function main()
 		new Main();
 
+	static function profileGc() {
+		final gcFlags = hl.Gc.flags;
+		gcFlags.set(hl.Gc.GcFlag.Profile);
+		hl.Gc.flags = gcFlags;
+	}
+
 	var sceneStack: SceneStack;
 
 	override function init() {
@@ -18,6 +24,8 @@ class Main extends hxd.App {
 		final initialScene = new PlayScene(s2d);
 		initialScene.fadeInFrom(ArgbColor.WHITE, 60, true);
 		sceneStack = new SceneStack(initialScene, 16).newTag("scene stack");
+
+		// profileGc();
 	}
 
 	override function update(dt: Float) {
