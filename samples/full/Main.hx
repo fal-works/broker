@@ -1,17 +1,12 @@
 package full;
 
 import broker.scene.SceneStack;
+import broker.tools.Gc;
 import full.scenes.PlayScene;
 
 class Main extends hxd.App {
 	static function main()
 		new Main();
-
-	static function profileGc() {
-		final gcFlags = hl.Gc.flags;
-		gcFlags.set(hl.Gc.GcFlag.Profile);
-		hl.Gc.flags = gcFlags;
-	}
 
 	var sceneStack: SceneStack;
 
@@ -25,11 +20,13 @@ class Main extends hxd.App {
 		initialScene.fadeInFrom(ArgbColor.WHITE, 60, true);
 		sceneStack = new SceneStack(initialScene, 16).newTag("scene stack");
 
-		// profileGc();
+		Gc.startLogging(100);
 	}
 
 	override function update(dt: Float) {
 		Global.update();
 		sceneStack.update();
+
+		Gc.update();
 	}
 }
