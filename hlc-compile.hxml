@@ -1,1 +1,2 @@
---cmd haxelib run hlc-compiler --srcDir out/c/ --outFile out/bin/main --exFiles C:\Windows\System32\dbghelp.dll --copyDlls --saveCmd out/c/compile.bat --verbose -w -mwindows
+--cmd haxelib run hlc-compiler --srcDir out/c/ --outDir out/bin/ --copyRuntimeFiles --saveCmd out/compile-hlc --verbose -w -mwindows --exFiles C:\Windows\System32\dbghelp.dll
+--cmd haxelib run hlc-compiler --srcDir out/c/ --outDir out/bin/ --copyRuntimeFiles --saveCmd out/compile-hlc --verbose -w -mwindows
