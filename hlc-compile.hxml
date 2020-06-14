@@ -1,5 +1,5 @@
 # Windows
---cmd haxelib run hlc-compiler --srcDir out/c/ --outDir out/bin/ --copyRuntimeFiles --saveCmd out/compile-hlc --verbose -w -mwindows --exFiles C:\Windows\System32\dbghelp.dll
+--cmd haxelib run hlc-compiler --srcDir out/c/ --outDir out/bin/ --copyRuntimeFiles --saveCmd out/compile-hlc --verbose -w -mwindows --exFile C:\Windows\System32\dbghelp.dll
 
 # Mac
 # --cmd haxelib run hlc-compiler --srcDir out/c/ --outDir out/bin/ --copyRuntimeFiles --saveCmd out/compile-hlc --verbose -w -mwindows
