@@ -4,9 +4,9 @@
 	"license": "MIT",
 	"tags": ["game"],
 	"description": "Utility for game programming. Currently provides: Basic entity class, 2D AABB collision detection, gamepad input abstraction, game scenes and timers.",
-	"version": "0.3.0",
+	"version": "0.4.0-alpha",
 	"classPath": "src/",
-	"releasenote": "Add packages: scene, timer",
+	"releasenote": "Add tools package",
 	"contributors": [
 		"fal-works"
 	],
