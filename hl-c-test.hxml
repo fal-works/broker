@@ -1,7 +1,7 @@
 hl-c.hxml
 
 # Windows
---cmd rmdir /s /q out\bin
+--cmd if exist out\bin rmdir /s /q out\bin
 --cmd haxelib run hlc-compiler --srcDir out\c --outDir out\bin --copyRuntimeFiles --saveCmd out\compile-hlc --verbose -w -mwindows --exFile C:\Windows\System32\dbghelp.dll
 --cmd out\bin\main
 
