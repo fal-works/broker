@@ -17,5 +17,3 @@
 # -lib hlsdl
 
 --debug
-
--D resourcespath="test/res"

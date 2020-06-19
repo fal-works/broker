@@ -6,6 +6,8 @@ Mainly intended for use with [heaps](http://heaps.io/), but can also be used wit
 
 **Requires Haxe 4** (developed with v4.1.0).
 
+See also [https://github.com/fal-works/broker-sample](https://github.com/fal-works/broker-sample) for a usage example.
+
 
 ## Features
 

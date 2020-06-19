@@ -6,7 +6,6 @@ class Main {
 
 		// new entities.Main();
 		// new gamepad.Main();
-		// new collision.Main();
-		new full.Main();
+		new collision.Main();
 	}
 }
