@@ -1,4 +1,4 @@
 # Build and Test with HL/JIT
 
-hl-jit.hxml
+heaps-hl-jit.hxml
 -cmd hl out/main.hl

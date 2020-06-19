@@ -1,12 +1,10 @@
 {
-// tasks.json 形式の詳細についての資料は、
-  // https://go.microsoft.com/fwlink/?LinkId=733558 をご覧ください
   "version": "2.0.0",
   "tasks": [
     {
       "label": "Build and Test",
       "type": "hxml",
-      "file": "hl-jit-test.hxml",
+      "file": "heaps-hl-jit-test.hxml",
       "problemMatcher": [
         "$haxe-absolute",
         "$haxe",
@@ -21,19 +19,7 @@
     {
       "label": "Build",
       "type": "hxml",
-      "file": "hl-jit.hxml",
-      "problemMatcher": [
-        "$haxe-absolute",
-        "$haxe",
-        "$haxe-error",
-        "$haxe-trace"
-      ],
-      "group": "build"
-    },
-    {
-      "label": "Eval",
-      "type": "hxml",
-      "file": "eval-test.hxml",
+      "file": "heaps-hl-jit.hxml",
       "problemMatcher": [
         "$haxe-absolute",
         "$haxe",

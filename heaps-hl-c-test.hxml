@@ -1,4 +1,6 @@
-hl-c.hxml
+# Build and Test with HL/C
+
+heaps-hl-c.hxml
 
 # Windows
 --cmd if exist out\bin rmdir /s /q out\bin

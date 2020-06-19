@@ -13,7 +13,5 @@
 -lib ripper
 -lib banker
 -lib heaps
--lib hldx
-# -lib hlsdl
 
 --debug
