@@ -44,11 +44,14 @@ Basic classes for pseudo-asynchronous processing.
 
 ![Class diagram. Visit GitHub repo for details.](docs/timer.svg)
 
+### Sound
+
+Some classes for abstracting sound features from heaps.
+
 
 ## Features to be added (maybe)
 
 - Asset manager
-- Sound manager
 
 
 ## Caveats
