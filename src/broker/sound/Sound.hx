@@ -38,7 +38,7 @@ class Sound {
 	/**
 		If `true`, the last played channel is stopped when playing `this` sound again.
 	**/
-	public final preventsLayered: Bool;
+	public final allowsLayered: Bool;
 
 	/**
 		Sound channel used at the time `this` was last played.
@@ -60,13 +60,13 @@ class Sound {
 		defaultVolume: Float = 1.0,
 		minInterval: UInt = UInt.one,
 		isLooped: Bool = false,
-		preventsLayered: Bool = false
+		allowsLayered: Bool = false
 	) {
 		this.data = data;
 		this.defaultVolume = defaultVolume;
 		this.minInterval = minInterval;
 		this.isLooped = isLooped;
-		this.preventsLayered = preventsLayered;
+		this.allowsLayered = allowsLayered;
 		this.lastPlayedChannel = Maybe.none();
 		this.lastPlayedFrameCount = UInt.zero;
 	}
@@ -84,7 +84,7 @@ class Sound {
 			if (currentFrameCount - this.lastPlayedFrameCount < this.minInterval)
 				return Maybe.none();
 
-			if (this.preventsLayered)
+			if (!this.allowsLayered)
 				lastChannel.unwrap().stop();
 		}
 
