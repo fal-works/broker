@@ -2,7 +2,7 @@ package broker.sound.heaps;
 
 #if heaps
 /**
-	Static fiels for managing all the sounds used in the program.
+	Static fields for managing all the sounds used in the program.
 **/
 @:access(hxd.snd.Manager)
 class SoundManager {
