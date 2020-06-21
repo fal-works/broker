@@ -7,34 +7,28 @@ private typedef SoundData = broker.sound.heaps.SoundData;
 private abstract SoundData(Dynamic) {
 	public extern inline function play(
 		defaultVolume: Float,
-		minInterval: Float,
-		isLooped: Bool,
-		preventsLayered: Bool
-	): Maybe<SoundChannel> {
-		return Maybe.none();
+		isLooped: Bool
+	): SoundChannel {
+		return null;
 	}
 }
 #end
 
 /**
 	Sound data object.
+	Be sure to call `Global.tick()` every frame if you use this class.
 **/
 @:structInit
 class Sound {
-	/**
-		Default value for `minInterval`.
-	**/
-	static inline final epsilonSeconds = 1.0 / 120.0;
-
 	/**
 		Default volume of channels created by `this` sound.
 	**/
 	public final defaultVolume: Float;
 
 	/**
-		The minimum interval duration in seconds after the last play.
+		The minimum interval frame count after the last play.
 	**/
-	public final minInterval: Float;
+	public final minInterval: UInt;
 
 	/**
 		If `true`, loops at the end.
@@ -47,6 +41,16 @@ class Sound {
 	public final preventsLayered: Bool;
 
 	/**
+		Sound channel used at the time `this` was last played.
+	**/
+	public var lastPlayedChannel: Maybe<SoundChannel>;
+
+	/**
+		The value of `Sound.frameCount` at the time `this` was last played.
+	**/
+	public var lastPlayedFrameCount: UInt;
+
+	/**
 		The internal data.
 	**/
 	final data: SoundData;
@@ -54,7 +58,7 @@ class Sound {
 	public function new(
 		data: SoundData,
 		defaultVolume: Float = 1.0,
-		minInterval: Float = epsilonSeconds,
+		minInterval: UInt = UInt.one,
 		isLooped: Bool = false,
 		preventsLayered: Bool = false
 	) {
@@ -63,6 +67,8 @@ class Sound {
 		this.minInterval = minInterval;
 		this.isLooped = isLooped;
 		this.preventsLayered = preventsLayered;
+		this.lastPlayedChannel = Maybe.none();
+		this.lastPlayedFrameCount = UInt.zero;
 	}
 
 	/**
@@ -71,11 +77,22 @@ class Sound {
 		@return `SoundChannel` instance. `Maybe.none()` if not played.
 	**/
 	public function play(): Maybe<SoundChannel> {
-		return this.data.play(
-			this.defaultVolume,
-			this.minInterval,
-			this.isLooped,
-			this.preventsLayered
-		);
+		final currentFrameCount = Global.frameCount;
+
+		final lastChannel = this.lastPlayedChannel;
+		if (lastChannel.isSome()) {
+			if (currentFrameCount - this.lastPlayedFrameCount < this.minInterval)
+				return Maybe.none();
+
+			if (this.preventsLayered)
+				lastChannel.unwrap().stop();
+		}
+
+		final newChannel = Maybe.from(this.data.play(this.defaultVolume, this.isLooped));
+
+		this.lastPlayedChannel = newChannel;
+		this.lastPlayedFrameCount = currentFrameCount;
+
+		return newChannel;
 	}
 }
