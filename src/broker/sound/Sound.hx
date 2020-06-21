@@ -21,6 +21,11 @@ private abstract SoundData(Dynamic) {
 @:structInit
 class Sound {
 	/**
+		Empty function used as a default value for `this.onPlay()`.
+	**/
+	static final emptyOnPlay = (sound: Sound, channel: SoundChannel) -> {};
+
+	/**
 		Default volume of channels created by `this` sound.
 	**/
 	public final defaultVolume: Float;
@@ -39,6 +44,11 @@ class Sound {
 		If `true`, the last played channel is stopped when playing `this` sound again.
 	**/
 	public final allowsLayered: Bool;
+
+	/**
+		Function called every time `this` is played.
+	**/
+	public final onPlay: (sound: Sound, channel: SoundChannel) -> Void;
 
 	/**
 		Sound channel used at the time `this` was last played.
@@ -60,13 +70,17 @@ class Sound {
 		defaultVolume: Float = 1.0,
 		minInterval: UInt = UInt.one,
 		isLooped: Bool = false,
-		allowsLayered: Bool = false
+		allowsLayered: Bool = false,
+		?onPlay: (sound: Sound, channel: SoundChannel) -> Void
 	) {
 		this.data = data;
+
 		this.defaultVolume = defaultVolume;
 		this.minInterval = minInterval;
 		this.isLooped = isLooped;
 		this.allowsLayered = allowsLayered;
+		this.onPlay = Nulls.coalesce(onPlay, emptyOnPlay);
+
 		this.lastPlayedChannel = Maybe.none();
 		this.lastPlayedFrameCount = UInt.zero;
 	}
@@ -88,9 +102,10 @@ class Sound {
 				lastChannel.unwrap().stop();
 		}
 
-		final newChannel = Maybe.from(this.data.play(this.defaultVolume, this.isLooped));
+		final newChannel = this.data.play(this.defaultVolume, this.isLooped);
+		this.onPlay(this, newChannel);
 
-		this.lastPlayedChannel = newChannel;
+		this.lastPlayedChannel = Maybe.from(newChannel);
 		this.lastPlayedFrameCount = currentFrameCount;
 
 		return newChannel;
