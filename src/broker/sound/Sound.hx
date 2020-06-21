@@ -16,7 +16,6 @@ private abstract SoundData(Dynamic) {
 
 /**
 	Sound data object.
-	Be sure to call `Global.tick()` every frame if you use this class.
 **/
 @:structInit
 class Sound {
@@ -39,6 +38,16 @@ class Sound {
 		If `true`, loops at the end.
 	**/
 	public final isLooped: Bool;
+
+	/**
+		At default `play()` has no effect if `this` is not playable.
+		However if `this.maxQueueCount` is greater than zero, the playback is delayed (instead of being ignored)
+		until a sufficient number of frames (i.e. `this.minInterval`) have passed,
+		unless the queue count reaches `maxQueueCount`.
+
+		Be sure to call `SoundManager.update()` every frame if you set `maxQueueCount` to any non-zero value.
+	**/
+	public final maxQueueCount: UInt;
 
 	/**
 		If `true`, the last played channel is not stopped when playing `this` sound again.
@@ -70,6 +79,7 @@ class Sound {
 		defaultVolume: Float = 1.0,
 		minInterval: UInt = UInt.one,
 		isLooped: Bool = false,
+		maxQueueCount: UInt = UInt.zero,
 		allowsLayered: Bool = false,
 		?onPlay: (sound: Sound, channel: SoundChannel) -> Void
 	) {
@@ -78,6 +88,7 @@ class Sound {
 		this.defaultVolume = defaultVolume;
 		this.minInterval = minInterval;
 		this.isLooped = isLooped;
+		this.maxQueueCount = maxQueueCount;
 		this.allowsLayered = allowsLayered;
 		this.onPlay = Nulls.coalesce(onPlay, emptyOnPlay);
 
@@ -87,16 +98,17 @@ class Sound {
 
 	/**
 		Plays `this` sound.
-		No effect if the time elapsed from the last play is equal or less than `this.minInterval`.
-		@return `SoundChannel` instance. `Maybe.none()` if not played.
+		@return `SoundChannel` instance. `Maybe.none()` if not immediately played.
 	**/
 	public function play(): Maybe<SoundChannel> {
-		final currentFrameCount = Global.frameCount;
+		final currentFrameCount = SoundManager.frameCount;
 
 		final lastChannel = this.lastPlayedChannel;
 		if (lastChannel.isSome()) {
-			if (currentFrameCount - this.lastPlayedFrameCount < this.minInterval)
+			if (currentFrameCount - this.lastPlayedFrameCount < this.minInterval) {
+				SoundManager.enqueue(this);
 				return Maybe.none();
+			}
 
 			if (!this.allowsLayered)
 				lastChannel.unwrap().stop();
