@@ -22,6 +22,11 @@ private abstract SoundData(Dynamic) {
 @:structInit
 class Sound {
 	/**
+		Default value for `minInterval`.
+	**/
+	static inline final epsilonSeconds = 1.0 / 120.0;
+
+	/**
 		Default volume of channels created by `this` sound.
 	**/
 	public final defaultVolume: Float;
@@ -49,7 +54,7 @@ class Sound {
 	public function new(
 		data: SoundData,
 		defaultVolume: Float = 1.0,
-		minInterval: Float = 0.0,
+		minInterval: Float = epsilonSeconds,
 		isLooped: Bool = false,
 		preventsLayered: Bool = false
 	) {
