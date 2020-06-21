@@ -9,6 +9,10 @@ typedef SoundManager = broker.sound.heaps.SoundManager;
 class SoundManager {
 	public static var masterVolume(get, set): Float;
 
+	public static function update(): Void {}
+
+	public static function enqueue(sound: Sound): Void {}
+
 	public static extern inline function stopAll(): Void {}
 
 	public static extern inline function pauseAll(): Void {}
