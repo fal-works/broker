@@ -4,7 +4,7 @@ Utility library for game programming.
 
 Mainly intended for use with [heaps](http://heaps.io/), but can also be used with any other engines (maybe).
 
-**Requires Haxe 4** (developed with v4.1.0).
+**Requires Haxe 4** (developed with v4.1.1).
 
 See also [https://github.com/fal-works/broker-sample](https://github.com/fal-works/broker-sample) for a usage example.
 
