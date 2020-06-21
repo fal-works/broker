@@ -41,7 +41,7 @@ class Sound {
 	public final isLooped: Bool;
 
 	/**
-		If `true`, the last played channel is stopped when playing `this` sound again.
+		If `true`, the last played channel is not stopped when playing `this` sound again.
 	**/
 	public final allowsLayered: Bool;
 
