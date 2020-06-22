@@ -72,7 +72,7 @@ class Sound {
 	/**
 		The internal data.
 	**/
-	final data: SoundData;
+	public final data: SoundData;
 
 	public function new(
 		data: SoundData,
