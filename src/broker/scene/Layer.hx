@@ -1,6 +1,7 @@
 package broker.scene;
 
-/**
-	Drawing layer.
-**/
-interface Layer {}
+#if heaps
+typedef Layer = broker.scene.heaps.Layer;
+#else
+typedef Layer = Dynamic;
+#end

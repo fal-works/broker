@@ -80,9 +80,9 @@ class Scene implements IScene {
 
 		final heapsScene = if (heapsScene != null) heapsScene else new h2d.Scene();
 
-		this.background = new Layer(heapsScene);
-		this.mainLayer = new Layer(heapsScene);
-		this.surface = new Layer(heapsScene);
+		this.background = new h2d.Object(heapsScene);
+		this.mainLayer = new h2d.Object(heapsScene);
+		this.surface = new h2d.Object(heapsScene);
 
 		this.timers = new Timers(Nulls.coalesce(timersCapacity, 16));
 		this.isTransitioning = false;
@@ -215,7 +215,7 @@ class Scene implements IScene {
 	**/
 	function useSurfaceBitmap(color: ArgbColor): h2d.Bitmap {
 		final bitmap = this.resetCoverBitmap(bitmapPool.get(), color);
-		this.surface.addChild(bitmap);
+		this.surface.add(bitmap);
 		return bitmap;
 	}
 
