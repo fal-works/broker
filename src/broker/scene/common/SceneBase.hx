@@ -143,16 +143,13 @@ class SceneBase implements Scene {
 	/**
 		@param timersCapacity The max number of `Timer` instances. Defaults to `16`.
 	**/
-	function new(
-		layers: Layers,
-		?timersCapacity: UInt
-	) {
+	function new(layers: Layers, timersCapacity: UInt = 16) {
 		this.isInitialized = false;
 		this.sceneStack = Maybe.none();
 
 		this.layers = layers;
 
-		this.timers = new Timers(Nulls.coalesce(timersCapacity, 16));
+		this.timers = new Timers(timersCapacity);
 		this.isTransitioning = false;
 
 		this.setTransitionState = SceneStatics.dummyCallback;
