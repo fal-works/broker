@@ -28,14 +28,11 @@ class Scene extends SceneBase {
 		@param timersCapacity The max number of `Timer` instances. Defaults to `16`.
 	**/
 	public function new(?heapsScene: h2d.Scene, ?timersCapacity: UInt) {
-		super(
-			new Layers(() -> new h2d.Object(heapsScene)),
-			timersCapacity
-		);
+		final hScene = if (heapsScene != null) heapsScene else new h2d.Scene();
 
-		final heapsScene = if (heapsScene != null) heapsScene else new h2d.Scene();
+		super(new Layers(() -> new h2d.Object(hScene)), timersCapacity);
 
-		this.heapsScene = heapsScene;
+		this.heapsScene = hScene;
 	}
 
 	/**
