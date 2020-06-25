@@ -14,19 +14,9 @@ interface Scene {
 	var sceneStack: Maybe<SceneStack>;
 
 	/**
-		Background layer.
+		Drawing layers of `this` scene.
 	**/
-	final background: Layer;
-
-	/**
-		Main layer.
-	**/
-	final mainLayer: Layer;
-
-	/**
-		Surface layer.
-	**/
-	final surface: Layer;
+	public final layers: Layers;
 
 	/**
 		Timers attached to `this` scene.

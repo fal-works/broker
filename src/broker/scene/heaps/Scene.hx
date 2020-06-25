@@ -29,9 +29,7 @@ class Scene extends SceneBase {
 	**/
 	public function new(?heapsScene: h2d.Scene, ?timersCapacity: UInt) {
 		super(
-			new h2d.Object(heapsScene),
-			new h2d.Object(heapsScene),
-			new h2d.Object(heapsScene),
+			new Layers(() -> new h2d.Object(heapsScene)),
 			timersCapacity
 		);
 
@@ -111,12 +109,12 @@ class Scene extends SceneBase {
 	}
 
 	/**
-		Uses a bitmap from `bitmapPool`, resets it with `color` and adds it to `this.surface`.
+		Uses a bitmap from `bitmapPool`, resets it with `color` and adds it to the surface layer.
 		@return `h2d.Bitmap` instance.
 	**/
 	function useSurfaceBitmap(color: ArgbColor): h2d.Bitmap {
 		final bitmap = this.resetCoverBitmap(SceneStatics.bitmapPool.get(), color);
-		this.surface.add(bitmap);
+		this.layers.surface.add(bitmap);
 		return bitmap;
 	}
 

@@ -16,19 +16,9 @@ class SceneBase implements Scene {
 	public var sceneStack: Maybe<SceneStack>;
 
 	/**
-		Background layer.
+		Drawing layers of `this` scene.
 	**/
-	public final background: Layer;
-
-	/**
-		Main layer.
-	**/
-	public final mainLayer: Layer;
-
-	/**
-		Surface layer.
-	**/
-	public final surface: Layer;
+	public final layers: Layers;
 
 	/**
 		Timers attached to `this` scene.
@@ -154,17 +144,13 @@ class SceneBase implements Scene {
 		@param timersCapacity The max number of `Timer` instances. Defaults to `16`.
 	**/
 	function new(
-		background: Layer,
-		main: Layer,
-		surface: Layer,
+		layers: Layers,
 		?timersCapacity: UInt
 	) {
 		this.isInitialized = false;
 		this.sceneStack = Maybe.none();
 
-		this.background = background;
-		this.mainLayer = main;
-		this.surface = surface;
+		this.layers = layers;
 
 		this.timers = new Timers(Nulls.coalesce(timersCapacity, 16));
 		this.isTransitioning = false;
