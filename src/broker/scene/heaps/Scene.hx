@@ -3,8 +3,7 @@ package broker.scene.heaps;
 #if heaps
 import broker.timer.Timer;
 import broker.color.ArgbColor;
-import broker.scene.common.SceneBase;
-import broker.scene.heaps.SceneStatics;
+import broker.scene.common.Scene as SceneBase;
 
 /**
 	Base class for `broker.scene.Scene` that internally contains a `h2d.Scene` instance.
@@ -14,9 +13,8 @@ class Scene extends SceneBase {
 	/**
 		Registers the `hxd.App` instance.
 	**/
-	public static function setApplication(app: hxd.App): Void {
+	public static function setApplication(app: hxd.App): Void
 		SceneStatics.setApplication(app);
-	}
 
 	/**
 		`h2d.Scene` instance to be wrapped.

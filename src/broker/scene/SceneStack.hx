@@ -2,6 +2,7 @@ package broker.scene;
 
 import sneaker.assertion.Asserter.assert;
 import sneaker.tag.Tagged;
+import broker.scene.common.Scene;
 
 /**
 	Base class for stack of `Scene` instances.

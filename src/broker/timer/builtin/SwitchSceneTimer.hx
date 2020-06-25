@@ -2,7 +2,7 @@ package broker.timer.builtin;
 
 import banker.pool.interfaces.ObjectPool;
 import banker.pool.SafeObjectPool;
-import broker.scene.Scene;
+import broker.scene.common.Scene;
 import broker.scene.SceneStack;
 import broker.timer.Timer;
 

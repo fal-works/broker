@@ -1,17 +1,19 @@
 package broker.scene.common;
 
+import sneaker.exception.NotOverriddenException;
 import broker.timer.Timer;
 import broker.timer.Timers;
+import broker.timer.builtin.SwitchSceneTimer;
 import broker.color.ArgbColor;
 
 /**
-	Interface for defining methods of `broker.scene.Scene`.
+	Base class for `broker.scene.Scene`.
 **/
-interface Scene {
+class Scene {
 	/**
 		The stack to which `this` belongs.
 	**/
-	var sceneStack: Maybe<SceneStack>;
+	public var sceneStack: Maybe<SceneStack>;
 
 	/**
 		Drawing layers of `this` scene.
@@ -21,47 +23,66 @@ interface Scene {
 	/**
 		Timers attached to `this` scene.
 	**/
-	final timers: Timers;
+	public final timers: Timers;
 
 	/**
 		`true` if any scene transition is running.
 	**/
-	var isTransitioning: Bool;
+	public var isTransitioning: Bool;
+
+	/**
+		Callback function for running `this.isTransitioning = true`.
+	**/
+	public final setTransitionState: () -> Void;
 
 	/**
 		Callback function for running `this.isTransitioning = false`.
 	**/
-	final unsetTransitionState: () -> Void;
+	public final unsetTransitionState: () -> Void;
 
 	/**
-		@return The type id of `this`.
+		`true` if `this.initialize()` is already called.
 	**/
-	function getTypeId(): SceneTypeId;
+	var isInitialized: Bool;
+
+	/**
+		Returns the type id of `this`.
+		Override this method for returning any user-defined value.
+	**/
+	public function getTypeId(): SceneTypeId
+		return SceneTypeId.DEFAULT;
 
 	/**
 		Called when `this.activate()` is called for the first time.
 	**/
-	function initialize(): Void;
+	public function initialize(): Void {
+		this.isInitialized = true;
+	}
 
 	/**
 		Updates `this` scene.
+		Steps all `Timer` instances attached to `this`.
 	**/
-	function update(): Void;
+	public function update(): Void
+		this.timers.step();
 
 	/**
 		Called when `this` scene becomes the top in the scene stack.
 	**/
-	function activate(): Void;
+	public function activate(): Void {
+		if (!this.isInitialized) this.initialize();
+		this.isTransitioning = false;
+	}
 
 	/**
 		Called when `this` scene is no more the top in the scene stack but is not immediately destroyed.
 	**/
-	function deactivate(): Void;
+	public function deactivate(): Void {}
 
 	/**
 		Destroys `this` scene.
 	**/
-	function destroy(): Void;
+	public function destroy(): Void {}
 
 	/**
 		Starts fade-in effect.
@@ -70,11 +91,12 @@ interface Scene {
 		@param startNow If `true`, immediately adds the timer to `this`.
 		@return A `Timer` instance.
 	**/
-	function fadeInFrom(
+	public function fadeInFrom(
 		color: ArgbColor,
 		duration: UInt,
 		startNow: Bool
-	): Timer;
+	): Timer
+		throw new NotOverriddenException();
 
 	/**
 		Starts fade-out effect.
@@ -83,22 +105,76 @@ interface Scene {
 		@param startNow If `true`, immediately adds the timer to `this`.
 		@return A `Timer` instance.
 	**/
-	function fadeOutTo(
+	public function fadeOutTo(
 		color: ArgbColor,
 		duration: UInt,
 		startNow: Bool
-	): Timer;
+	): Timer
+		throw new NotOverriddenException();
 
 	/**
 		Switches to the next scene.
 		@param duration The delay duration frame count.
 		@param startNow If `true`, immediately adds the timer to `this`.
-		@return A `Timer` instance.
+		@return A `Timer` instance. `Maybe.none()` if `this` does not belong to any `SceneStack`.
 	**/
-	function switchTo(
+	public function switchTo(
 		nextScene: broker.scene.Scene,
 		duration: UInt,
 		destroy: Bool,
 		startNow: Bool
-	): Maybe<Timer>;
+	): Maybe<Timer> {
+		final sceneStack = this.sceneStack;
+		if (sceneStack.isNone()) return Maybe.none();
+
+		final timer: Timer = SceneStatics.switchSceneTimerPool.use(
+			duration,
+			this,
+			nextScene,
+			sceneStack.unwrap(),
+			destroy
+		);
+
+		if (startNow) this.timers.push(timer);
+
+		return Maybe.from(timer);
+	}
+
+	/**
+		@param timersCapacity The max number of `Timer` instances. Defaults to `16`.
+	**/
+	function new(layers: Layers, timersCapacity: UInt = 16) {
+		this.isInitialized = false;
+		this.sceneStack = Maybe.none();
+
+		this.layers = layers;
+
+		this.timers = new Timers(timersCapacity);
+		this.isTransitioning = false;
+
+		this.setTransitionState = SceneStatics.dummyCallback;
+		this.unsetTransitionState = SceneStatics.dummyCallback;
+
+		this.setTransitionState = () -> this.isTransitioning = true;
+		this.unsetTransitionState = () -> this.isTransitioning = false;
+	}
+}
+
+/**
+	Static variables used in `Scene`.
+**/
+private class SceneStatics {
+	/**
+		Dummy empty function.
+	**/
+	public static final dummyCallback = () -> {};
+
+	/**
+		Object pool for `SwitchSceneTimer`.
+	**/
+	public static final switchSceneTimerPool = {
+		final pool = new SwitchSceneTimerPool(4);
+		pool.newTag("Scene SwitchSceneTimer pool");
+		pool;
+	}
 }
