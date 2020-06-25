@@ -72,6 +72,8 @@ class Scene {
 	public function activate(): Void {
 		if (!this.isInitialized) this.initialize();
 		this.isTransitioning = false;
+
+		this.update(); // Update for the first frame after activating.
 	}
 
 	/**
