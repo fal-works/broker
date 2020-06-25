@@ -2,68 +2,21 @@ package broker.scene.heaps;
 
 #if heaps
 import broker.timer.Timer;
-import broker.timer.Timers;
 import broker.color.ArgbColor;
-import broker.scene.Scene as IScene;
+import broker.scene.common.SceneBase;
 import broker.scene.heaps.SceneStatics;
-import broker.scene.heaps.SceneStatics.*;
 
 /**
-	Base class that implements `broker.scene.Scene` and internally contains a `h2d.Scene` instance.
+	Base class for `broker.scene.Scene` that internally contains a `h2d.Scene` instance.
 	Requires `Scene.setApplication()` to be called before creating any instance.
 **/
-class Scene implements IScene {
+class Scene extends SceneBase {
 	/**
 		Registers the `hxd.App` instance.
 	**/
 	public static function setApplication(app: hxd.App): Void {
 		SceneStatics.setApplication(app);
 	}
-
-	/**
-		The stack to which `this` belongs.
-	**/
-	public var sceneStack: Maybe<SceneStack>;
-
-	/**
-		Background layer.
-	**/
-	public final background: Layer;
-
-	/**
-		Main layer.
-	**/
-	public final mainLayer: Layer;
-
-	/**
-		Surface layer.
-	**/
-	public final surface: Layer;
-
-	/**
-		Timers attached to `this` scene.
-	**/
-	public final timers: Timers;
-
-	/**
-		`true` if any scene transition is running.
-	**/
-	public var isTransitioning: Bool;
-
-	/**
-		Callback function for running `this.isTransitioning = true`.
-	**/
-	public final setTransitionState: () -> Void;
-
-	/**
-		Callback function for running `this.isTransitioning = false`.
-	**/
-	public final unsetTransitionState: () -> Void;
-
-	/**
-		`true` if `this.initialize()` is already called.
-	**/
-	var isInitialized: Bool;
 
 	/**
 		`h2d.Scene` instance to be wrapped.
@@ -75,71 +28,35 @@ class Scene implements IScene {
 		@param timersCapacity The max number of `Timer` instances. Defaults to `16`.
 	**/
 	public function new(?heapsScene: h2d.Scene, ?timersCapacity: UInt) {
-		this.isInitialized = false;
-		this.sceneStack = Maybe.none();
+		super(
+			new h2d.Object(heapsScene),
+			new h2d.Object(heapsScene),
+			new h2d.Object(heapsScene),
+			timersCapacity
+		);
 
 		final heapsScene = if (heapsScene != null) heapsScene else new h2d.Scene();
 
-		this.background = new h2d.Object(heapsScene);
-		this.mainLayer = new h2d.Object(heapsScene);
-		this.surface = new h2d.Object(heapsScene);
-
-		this.timers = new Timers(Nulls.coalesce(timersCapacity, 16));
-		this.isTransitioning = false;
-
 		this.heapsScene = heapsScene;
-
-		this.setTransitionState = dummyCallback;
-		this.unsetTransitionState = dummyCallback;
-
-		this.setTransitionState = () -> this.isTransitioning = true;
-		this.unsetTransitionState = () -> this.isTransitioning = false;
 	}
-
-	/**
-		Returns the type id of `this`.
-		Override this method for returning any user-defined value.
-	**/
-	public function getTypeId(): SceneTypeId
-		return SceneTypeId.DEFAULT;
-
-	/**
-		Called when `this.activate()` is called for the first time.
-		Can be overridden for your own purpose.
-	**/
-	public function initialize(): Void {
-		this.isInitialized = true;
-	}
-
-	/**
-		Updates `this` scene.
-		Steps all `Timer` instances attached to `this`.
-	**/
-	public function update(): Void
-		this.timers.step();
 
 	/**
 		Called when `this` scene becomes the top in the scene stack.
 		Calls `setScene()` on the `hxd.App` instance.
 	**/
-	public function activate(): Void {
-		if (!this.isInitialized) this.initialize();
-		this.isTransitioning = false;
-		heapsApp.setScene(this.heapsScene, false);
+	override public function activate(): Void {
+		super.activate();
+		SceneStatics.heapsApp.setScene(this.heapsScene, false);
 	}
-
-	/**
-		Called when `this` scene is no more the top in the scene stack but is not immediately destroyed.
-		Has no effect but can be overridden for your own purpose.
-	**/
-	public function deactivate(): Void {}
 
 	/**
 		Destroys `this` scene.
 		Calls `dispose()` on the internal `h2d.Scene` instance.
 	**/
-	public function destroy(): Void
+	override public function destroy(): Void {
+		super.destroy();
 		this.heapsScene.dispose();
+	}
 
 	/**
 		Starts fade-in effect.
@@ -148,13 +65,21 @@ class Scene implements IScene {
 		@param startNow If `true`, immediately adds the timer to `this`.
 		@return A `Timer` instance.
 	**/
-	public function fadeInFrom(color: ArgbColor, duration: UInt, startNow: Bool): Timer {
+	override public function fadeInFrom(
+		color: ArgbColor,
+		duration: UInt,
+		startNow: Bool
+	): Timer {
 		final bitmap = this.useSurfaceBitmap(color);
 		bitmap.alpha = 0.0;
 
 		// (fade-in the scene) = (fade-out the surface)
-		final timer = bitmapFadeOutTimerPool.use(bitmap, duration, true);
-		timer.setOnCompleteObject(bitmapPool.putCallback);
+		final timer = SceneStatics.bitmapFadeOutTimerPool.use(
+			bitmap,
+			duration,
+			true
+		);
+		timer.setOnCompleteObject(SceneStatics.bitmapPool.putCallback);
 
 		if (startNow) this.timers.push(timer);
 
@@ -168,13 +93,17 @@ class Scene implements IScene {
 		@param startNow If `true`, immediately adds the timer to `this`.
 		@return A `Timer` instance.
 	**/
-	public function fadeOutTo(color: ArgbColor, duration: UInt, startNow: Bool): Timer {
+	override public function fadeOutTo(
+		color: ArgbColor,
+		duration: UInt,
+		startNow: Bool
+	): Timer {
 		final bitmap = this.useSurfaceBitmap(color);
 		bitmap.alpha = 0.0;
 
 		// (fade-out the scene) = (fade-in the surface)
-		final timer = bitmapFadeInTimerPool.use(bitmap, duration);
-		timer.setOnCompleteObject(bitmapPool.putCallback);
+		final timer = SceneStatics.bitmapFadeInTimerPool.use(bitmap, duration);
+		timer.setOnCompleteObject(SceneStatics.bitmapPool.putCallback);
 
 		if (startNow) this.timers.push(timer);
 
@@ -182,39 +111,11 @@ class Scene implements IScene {
 	}
 
 	/**
-		Switches to the next scene.
-		@param duration The delay duration frame count.
-		@param startNow If `true`, immediately adds the timer to `this`.
-		@return A `Timer` instance. `Maybe.none()` if `this` does not belong to any `SceneStack`.
-	**/
-	public function switchTo(
-		nextScene: IScene,
-		duration: UInt,
-		destroy: Bool,
-		startNow: Bool
-	): Maybe<Timer> {
-		final sceneStack = this.sceneStack;
-		if (sceneStack.isNone()) return Maybe.none();
-
-		final timer: Timer = switchSceneTimerPool.use(
-			duration,
-			this,
-			nextScene,
-			sceneStack.unwrap(),
-			destroy
-		);
-
-		if (startNow) this.timers.push(timer);
-
-		return Maybe.from(timer);
-	}
-
-	/**
 		Uses a bitmap from `bitmapPool`, resets it with `color` and adds it to `this.surface`.
 		@return `h2d.Bitmap` instance.
 	**/
 	function useSurfaceBitmap(color: ArgbColor): h2d.Bitmap {
-		final bitmap = this.resetCoverBitmap(bitmapPool.get(), color);
+		final bitmap = this.resetCoverBitmap(SceneStatics.bitmapPool.get(), color);
 		this.surface.add(bitmap);
 		return bitmap;
 	}

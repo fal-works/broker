@@ -2,7 +2,6 @@ package broker.scene.heaps;
 
 #if heaps
 import banker.pool.SafeObjectPool;
-import broker.timer.builtin.SwitchSceneTimer;
 import broker.timer.builtin.heaps.FadeInTimer;
 import broker.timer.builtin.heaps.FadeOutTimer;
 
@@ -15,11 +14,6 @@ class SceneStatics {
 	**/
 	@:nullSafety(Off)
 	public static var heapsApp: hxd.App = null;
-
-	/**
-		Dummy empty function.
-	**/
-	public static final dummyCallback = () -> {};
 
 	/**
 		Object pool for `Bitmap`.
@@ -42,15 +36,6 @@ class SceneStatics {
 	public static final bitmapFadeOutTimerPool = {
 		final pool = new FadeOutTimerPool<h2d.Bitmap>(4);
 		pool.newTag("Scene FadeOutTimer pool");
-		pool;
-	}
-
-	/**
-		Object pool for `SwitchSceneTimer`.
-	**/
-	public static final switchSceneTimerPool = {
-		final pool = new SwitchSceneTimerPool(4);
-		pool.newTag("Scene SwitchSceneTimer pool");
 		pool;
 	}
 
