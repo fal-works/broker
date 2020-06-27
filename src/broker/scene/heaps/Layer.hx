@@ -20,6 +20,9 @@ abstract Layer(h2d.Object) from h2d.Object to h2d.Object to SceneObject {
 	public extern inline function clear(): Void
 		this.removeChildren();
 
+	public extern inline function setFilter(filter: Filter): Void
+		this.filter = filter;
+
 	extern inline function get_data()
 		return this;
 }
