@@ -7,7 +7,7 @@ class Global {
 	/**
 		Total frame count elapsed.
 	**/
-	public static var frameCount: UInt;
+	public static var frameCount = UInt.zero;
 
 	/**
 		Increments `frameCount`.
