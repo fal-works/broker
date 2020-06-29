@@ -1,11 +1,12 @@
 package broker.image.common;
 
-import broker.image.FrameTiles;
+import haxe.ds.StringMap;
+import broker.image.FrameTiles; // do not use broker.image.common.FrameTiles
 
 class Atlas {
-	final frameTilesMap: Map<String, FrameTiles>;
+	final frameTilesMap: StringMap<FrameTiles>;
 
-	public function new(frameTilesMap: Map<String, FrameTiles>) {
+	public function new(frameTilesMap: StringMap<FrameTiles>) {
 		this.frameTilesMap = frameTilesMap;
 	}
 

@@ -1,5 +1,7 @@
 package broker.image.heaps;
 
+import haxe.ds.StringMap;
+import h3d.mat.Texture;
 import broker.image.common.Atlas as AtlasBase;
 
 class Atlas extends AtlasBase {
@@ -9,25 +11,19 @@ class Atlas extends AtlasBase {
 	**/
 	public static function from(imageDataList: ImageDataList): Atlas {
 		final entireSize = imageDataList.getBoundSize();
-		final entirePixels = hxd.Pixels.alloc(
-			entireSize.width,
-			entireSize.height,
-			BGRA
-		);
-		final frameTilesBuilderMap = new Map<String, (
-			texture: h3d.mat.Texture
-		) -> FrameTiles>();
+		final entireBitmap = new Bitmap(entireSize.width, entireSize.height);
+		final frameTilesBuilderMap = new StringMap<(texture: Texture) -> FrameTiles>();
 
 		processImageDataList(
 			imageDataList,
 			UInt.zero,
 			UInt.zero,
-			entirePixels,
+			entireBitmap,
 			frameTilesBuilderMap
 		);
 
-		final texture = h3d.mat.Texture.fromPixels(entirePixels);
-		final frameTilesMap = new Map<String, FrameTiles>();
+		final texture = Texture.fromPixels(entireBitmap);
+		final frameTilesMap = new StringMap<FrameTiles>();
 		for (name => build in frameTilesBuilderMap)
 			frameTilesMap.set(name, build(texture));
 
@@ -38,8 +34,8 @@ class Atlas extends AtlasBase {
 		imageDataList: ImageDataList,
 		destX: UInt,
 		destY: UInt,
-		entirePixels: Bitmap,
-		frameTilesBuilderMap: Map<String, (texture: h3d.mat.Texture) -> FrameTiles>
+		entireBitmap: Bitmap,
+		frameTilesBuilderMap: StringMap<(texture: Texture) -> FrameTiles>
 	): { width: UInt, height: UInt} {
 		switch imageDataList {
 			case Vertical(elements):
@@ -50,7 +46,7 @@ class Atlas extends AtlasBase {
 						element,
 						destX,
 						destY,
-						entirePixels,
+						entireBitmap,
 						frameTilesBuilderMap
 					);
 					if (width < size.width) width = size.width;
@@ -66,7 +62,7 @@ class Atlas extends AtlasBase {
 						element,
 						destX,
 						destY,
-						entirePixels,
+						entireBitmap,
 						frameTilesBuilderMap
 					);
 					width += size.width;
@@ -75,11 +71,11 @@ class Atlas extends AtlasBase {
 				}
 				return { width: width, height: height };
 			case Unit(data):
-				final srcPixels = data.pixels;
-				final width = srcPixels.width;
-				final height = srcPixels.height;
-				Bitmap.blit(srcPixels, 0, 0, entirePixels, destX, destY, width, height);
-				srcPixels.dispose();
+				final srcBitmap = data.bitmap;
+				final width = srcBitmap.width;
+				final height = srcBitmap.height;
+				Bitmap.blit(srcBitmap, 0, 0, entireBitmap, destX, destY, width, height);
+				srcBitmap.dispose();
 				frameTilesBuilderMap.set(
 					data.name,
 					(texture) -> broker.image.heaps.FrameTiles.fromData(
@@ -96,9 +92,9 @@ class Atlas extends AtlasBase {
 		}
 	}
 
-	public final texture: h3d.mat.Texture;
+	public final texture: Texture;
 
-	public function new(frameTilesMap: Map<String, FrameTiles>, texture: h3d.mat.Texture) {
+	public function new(frameTilesMap: StringMap<FrameTiles>, texture: Texture) {
 		super(frameTilesMap);
 		this.texture = texture;
 	}

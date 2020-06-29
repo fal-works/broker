@@ -20,6 +20,9 @@ abstract Bitmap(hxd.Pixels) from hxd.Pixels to hxd.Pixels {
 	public var width(get, never): UInt;
 	public var height(get, never): UInt;
 
+	public extern inline function new(width: UInt, height: UInt)
+		this = hxd.Pixels.alloc(width, height, BGRA);
+
 	public extern inline function dispose(): Void
 		this.dispose();
 

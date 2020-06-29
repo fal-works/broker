@@ -32,8 +32,8 @@ class ImageDataListExtension {
 				}
 				return { width: width, height: height };
 			case Unit(data):
-				final pixels = data.pixels;
-				return { width: pixels.width, height: pixels.height };
+				final bitmap = data.bitmap;
+				return { width: bitmap.width, height: bitmap.height };
 		}
 	}
 }
