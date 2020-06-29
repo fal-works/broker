@@ -1,8 +1,6 @@
 package broker.image.common;
 
 class FrameTiles {
-	public static final tileSizeRegexp = ~/[_](\d+)px[_\.]/i;
-
 	/**
 		The entire tile from which `frames` are created.
 	**/
