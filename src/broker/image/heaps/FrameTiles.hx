@@ -1,9 +1,6 @@
 package broker.image.heaps;
 
 import broker.image.common.FrameTiles as FrameTilesBase;
-import broker.image.common.Tools;
-import broker.image.common.PixelSize;
-import banker.vector.Vector;
 
 class FrameTiles extends FrameTilesBase {
 	/**
@@ -62,7 +59,7 @@ class FrameTiles extends FrameTilesBase {
 			UInt.zero,
 			imageSize.width,
 			imageSize.height,
-			Tools.getFrameSize(image.name),
+			Tools.parseImageFileName(image.name).frameSize,
 			center
 		);
 	}
