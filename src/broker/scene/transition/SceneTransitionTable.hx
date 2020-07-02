@@ -16,7 +16,7 @@ class SceneTransitionTable {
 
 		this.defaultTransition = if (defaultTransition != null) defaultTransition else {
 			final transition: DirectSceneTransition = {
-				delayDuration: UInt.zero,
+				delayDuration: UInt.one,
 				destroy: true
 			};
 			transition;
