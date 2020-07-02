@@ -100,7 +100,7 @@ class SceneStack extends Tagged {
 		Updates the top/newest scene of `this` stack.
 	**/
 	public function update(): Void
-		this.peek().update();
+		this.peek().step();
 
 	/**
 		Removes and destroys all scenes in `this` stack and resets the stack with `bottomScene`.

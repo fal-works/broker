@@ -26,6 +26,16 @@ class Scene {
 	public final timers: Timers;
 
 	/**
+		`true` if active.
+
+		Automatically set in `activate()`/`deactivate()`,
+		but can also be set manually (e.g. set to `false` for preventing update).
+
+		Does not affect `this.timers`.
+	**/
+	public var isActive: Bool;
+
+	/**
 		`true` if any scene transition is running.
 	**/
 	public var isTransitioning: Bool;
@@ -61,10 +71,18 @@ class Scene {
 
 	/**
 		Updates `this` scene.
-		Steps all `Timer` instances attached to `this`.
 	**/
-	public function update(): Void
+	public function update(): Void {}
+
+	/**
+		Called in `SceneStack.update()` and does the below:
+		- Calls `this.update()` if active.
+		- Steps all `Timer` instances attached to `this`.
+	**/
+	public function step(): Void {
+		if (this.isActive) this.update();
 		this.timers.step();
+	}
 
 	/**
 		Called when `this` scene becomes the top in the scene stack.
@@ -72,19 +90,24 @@ class Scene {
 	public function activate(): Void {
 		if (!this.isInitialized) this.initialize();
 		this.isTransitioning = false;
+		this.isActive = true;
 
-		this.update(); // Update for the first frame after activating.
+		this.step(); // Update and step timers for the first frame after activating.
 	}
 
 	/**
 		Called when `this` scene is no more the top in the scene stack but is not immediately destroyed.
 	**/
-	public function deactivate(): Void {}
+	public function deactivate(): Void {
+		this.isActive = false;
+	}
 
 	/**
 		Destroys `this` scene.
 	**/
-	public function destroy(): Void {}
+	public function destroy(): Void {
+		this.isActive = false;
+	}
 
 	/**
 		Starts fade-in effect.
@@ -152,6 +175,7 @@ class Scene {
 		this.layers = layers;
 
 		this.timers = new Timers(timersCapacity);
+		this.isActive = false;
 		this.isTransitioning = false;
 
 		this.setTransitionState = SceneStatics.dummyCallback;

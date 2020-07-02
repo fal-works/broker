@@ -40,6 +40,7 @@ class FadeSceneTransition implements SceneTransition implements ripper.Data {
 			this.fadeOutDuration,
 			true
 		);
+		fadeCurrentScene.setOnComplete(() -> currentScene.isActive = false);
 		fadeCurrentScene.setNext(switchScene.unwrap());
 
 		final fadeNextScene = nextScene.fadeInFrom(
