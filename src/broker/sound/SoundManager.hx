@@ -1,6 +1,9 @@
 package broker.sound;
 
 import banker.map.ArrayMap;
+import broker.timer.Timer;
+import broker.timer.Timer.TimerExtension;
+import broker.timer.TimerReference;
 
 #if heaps
 private typedef SoundManagerData = broker.sound.heaps.SoundManagerData;
@@ -33,9 +36,25 @@ class SoundManager {
 	public static var masterVolume(get, set): Float;
 
 	/**
+		The value to which `masterVolume` should be set if `resetMasterVolume()` is called.
+		No effect if the driver does not have master volume feature.
+	**/
+	public static var defaultMasterVolume(default, set): Float = 1.0;
+
+	/**
 		Total frame count elapsed. Incremented in `update()`.
 	**/
 	public static var frameCount(default, null): UInt = UInt.zero;
+
+	/**
+		Timer that is currently running for changing `masterVolume`.
+	**/
+	static var masterVolumeChangeTimer = new TimerReference();
+
+	/**
+		Timer instance for `masterVolumeChangeTimer`. Reused every time `changeMasterVolume()` is called.
+	**/
+	static var masterVolumeChangeTimerInstance = new MasterVolumeTimer();
 
 	/**
 		Mapping from `Sound` instance to its queue count.
@@ -63,8 +82,31 @@ class SoundManager {
 		Call this method every frame if you use `Sound` class.
 	**/
 	public static function update(): Void {
+		masterVolumeChangeTimer.step();
 		queuedSounds.removeAll(updateQueues); // Remove if queue count is decreased to zero.
 		++frameCount;
+	}
+
+	/**
+		Sets `masterVolume` to `defaultMasterVolume`.
+	**/
+	public static function resetMasterVolume(): Void
+		masterVolume = defaultMasterVolume;
+
+	/**
+		Starts to change `masterVolume` gradually.
+		@param startVolume If not provided, starts with the current value of `masterVolume`.
+	**/
+	public static function changeMasterVolume(
+		duration: UInt,
+		endVolume: Float,
+		startVolume: Float = -1.0
+	): Void {
+		masterVolumeChangeTimer.set(masterVolumeChangeTimerInstance.reset(
+			duration,
+			if (startVolume < 0.0) masterVolume else startVolume,
+			endVolume
+		));
 	}
 
 	/**
@@ -117,4 +159,39 @@ class SoundManager {
 
 	static extern inline function set_masterVolume(v: Float)
 		return SoundManagerData.setMasterVolume(v);
+
+	static extern inline function set_defaultMasterVolume(v: Float)
+		return masterVolume = defaultMasterVolume = v;
+}
+
+/**
+	Timer for changing `SoundManager.masterVolume`.
+**/
+private class MasterVolumeTimer extends Timer {
+	var startVolume: Float = 0.0;
+	var volumeChange: Float = 0.0;
+
+	public function new()
+		super();
+
+	/**
+		@param start If negative, starts with the current value of `SoundManager.masterVolume`.
+	**/
+	public function reset(
+		duration: UInt,
+		start: Float,
+		end: Float
+	): MasterVolumeTimer {
+		TimerExtension.reset(this, duration);
+
+		final startVolume = if (start < 0.0) SoundManager.masterVolume else start;
+		this.startVolume = startVolume;
+		this.volumeChange = end - startVolume;
+
+		return this;
+	}
+
+	override public function onProgress(progress: Float): Void {
+		SoundManager.masterVolume = this.startVolume + progress * this.volumeChange;
+	}
 }
