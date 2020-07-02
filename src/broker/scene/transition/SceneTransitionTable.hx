@@ -31,8 +31,7 @@ class SceneTransitionTable {
 		final records = this.records;
 		final len = records.length;
 		for (i in 0...len) {
-			final record = records[i];
-			if (record.hasSameKeys(record))
+			if (record.hasSameKeys(records[i]))
 				throw "Duplicate keys.";
 		}
 
