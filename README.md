@@ -50,10 +50,9 @@ Basic classes for pseudo-asynchronous processing.
 
 Some classes for abstracting sound features from heaps.
 
+### Menu
 
-## Features to be added (maybe)
-
-- Asset manager
+Menu UI.
 
 
 ## Caveats
@@ -162,7 +161,7 @@ class YourSystem {
 
 ## Dependencies
 
-- [sinker](https://github.com/fal-works/sinker) v0.3.0 or compatible
+- [sinker](https://github.com/fal-works/sinker) v0.4.0 or compatible
 - [prayer](https://github.com/fal-works/prayer) v0.1.3 or compatible
 - [sneaker](https://github.com/fal-works/sneaker) v0.10.0 or compatible
 - [ripper](https://github.com/fal-works/ripper) v0.3.3 or compatible
