@@ -9,10 +9,11 @@ import broker.menu.internal.Types;
 @:structInit
 class MenuOption {
 	public final object: SceneObject;
-	public final onSelect: VoidFuncs;
-	public final onFocus: VoidFuncs;
-	public final onDefocus: VoidFuncs;
-	public final listenFocus: BoolFuncs;
+
+	final onSelect: VoidFuncs;
+	final onFocus: VoidFuncs;
+	final onDefocus: VoidFuncs;
+	final listenFocusCallbacks: BoolFuncs;
 
 	/**
 		Creates a `MenuOption` instance.
@@ -33,15 +34,18 @@ class MenuOption {
 		this.onSelect = Nulls.coalesce(onSelect, []);
 		this.onFocus = Nulls.coalesce(onFocus, []);
 		this.onDefocus = Nulls.coalesce(onDefocus, []);
-		this.listenFocus = Nulls.coalesce(listenFocus, []);
+		this.listenFocusCallbacks = Nulls.coalesce(listenFocus, []);
 	}
 
-	public inline function select(): Void
-		this.onSelect.runAll();
+	public function listenFocus(): Bool
+		return this.listenFocusCallbacks.logicalOr();
 
 	public inline function focus(): Void
 		this.onFocus.runAll();
 
 	public inline function defocus(): Void
 		this.onDefocus.runAll();
+
+	public inline function select(): Void
+		this.onSelect.runAll();
 }

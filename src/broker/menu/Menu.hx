@@ -158,7 +158,7 @@ abstract Menu(MenuData) to SceneObject {
 		}
 
 		for (i in 0...optionCount) {
-			if (options[i].listenFocus.logicalOr())
+			if (options[i].listenFocus())
 				return i;
 		}
 
