@@ -54,10 +54,18 @@ abstract Menu(MenuData) to SceneObject {
 	/**
 		@return The `MenuOption` that is currently focused.
 	**/
-	public function getFocused(): Maybe<MenuOption> {
+	public inline function getFocused(): Maybe<MenuOption> {
 		return if (this.index.isNone()) Maybe.none() else {
 			Maybe.from(this.options[this.index.unwrap()]);
 		};
+	}
+
+	/**
+		@return `true` if `option` is currently focused by `this` menu.
+	**/
+	public inline function focuses(option: MenuOption): Bool {
+		final focused = getFocused();
+		return if (focused.isNone()) false else focused.unwrap() == option;
 	}
 
 	/**
