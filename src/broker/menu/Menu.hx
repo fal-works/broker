@@ -86,6 +86,18 @@ abstract Menu(MenuData) to SceneObject {
 	}
 
 	/**
+		Selects the currently focused option.
+		No effect if none is focused.
+	**/
+	public function select(): Void {
+		final index = this.index;
+		if (index.isSome()) {
+			this.options[index.unwrap()].select();
+			if (this.deactivateOnSelect) deactivate();
+		}
+	}
+
+	/**
 		Gets index of `option` in `this` menu.
 
 		Throws error if `this` does not contain `option`.
@@ -119,9 +131,8 @@ abstract Menu(MenuData) to SceneObject {
 			return;
 		}
 
-		final index = this.index;
-		if (index.isSome() && this.listenSelect.logicalOr()) {
-			this.options[index.unwrap()].select();
+		if (this.index.isSome() && this.listenSelect.logicalOr()) {
+			select();
 			return;
 		}
 	}

@@ -15,6 +15,7 @@ class MenuData extends SceneObjectData {
 	final onActivate: Array<(menu: Menu) -> Void>;
 	final onDeactivate: Array<(menu: Menu) -> Void>;
 	final automaticFocus: Bool;
+	final deactivateOnSelect: Bool;
 
 	/**
 		Index of `MenuOption` currently focused.
@@ -39,6 +40,7 @@ class MenuData extends SceneObjectData {
 		this.onActivate = prm.onActivate.copy();
 		this.onDeactivate = prm.onDeactivate.copy();
 		this.automaticFocus = prm.automaticFocus;
+		this.deactivateOnSelect = prm.deactivateOnSelect;
 
 		final initialOptions = prm.initialOptions.copy();
 		final initialIndex = if (prm.initialIndex.int() < initialOptions.length)

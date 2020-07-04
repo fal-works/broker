@@ -18,18 +18,20 @@ class MenuParameters {
 	public final initialIndex: MaybeUInt;
 	public final isActive: Bool;
 	public final automaticFocus: Bool;
+	public final deactivateOnSelect: Bool;
 
 	/**
 		@param listenSelect Functions that return `true` if the currently focused option should be selected.
 		@param options Initial `MenuOption` instances.
 		@param listenFocusPrevious Functions that return `true` if the previous option should be focused.
 		@param listenFocusNext Functions that return `true` if the next option should be focused.
-		@param onAddOption Callback to be run when any `MenuOption` is added to `this` menu.
-		@param onActivate Callback to be run when `this` menu is activated.
-		@param onDeactivate Callback to be run when `this` menu is deactivated.
+		@param onAddOption Callback to be run when any `MenuOption` is added to the menu.
+		@param onActivate Callback to be run when the menu is activated.
+		@param onDeactivate Callback to be run when the menu is deactivated.
 		@param initialIndex The index of `MenuOption` initially focused (`onFocus()`/`onDefocus()` are not called when intantiating).
 		@param isActive Initial activation state (`onActivate()`/`onDeactivate()` are not called when intantiating).
 		@param automaticFocus If `true`, automatically focuses/defocuses options when instantiating `Menu` or calling `addOption()`.
+		@param deactivateOnSelect If `true`, automatically deactivates the menu when any option is selected.
 	**/
 	public function new(
 		listenSelect: BoolFuncs,
@@ -41,7 +43,8 @@ class MenuParameters {
 		?onDeactivate: Array<(menu: Menu) -> Void>,
 		initialIndex = MaybeUInt.none,
 		isActive = true,
-		automaticFocus = true
+		automaticFocus = true,
+		deactivateOnSelect = true
 	) {
 		this.listenSelect = listenSelect;
 
@@ -54,5 +57,6 @@ class MenuParameters {
 		this.initialIndex = initialIndex;
 		this.isActive = isActive;
 		this.automaticFocus = automaticFocus;
+		this.deactivateOnSelect = deactivateOnSelect;
 	}
 }
