@@ -8,7 +8,7 @@ import broker.menu.internal.Types;
 **/
 @:structInit
 class MenuParameters {
-	public final listenSubmit: BoolFuncs;
+	public final listenSelect: BoolFuncs;
 	public final initialOptions: Array<MenuOption>;
 	public final listenFocusPrevious: BoolFuncs;
 	public final listenFocusNext: BoolFuncs;
@@ -20,7 +20,7 @@ class MenuParameters {
 	public final automaticFocus: Bool;
 
 	/**
-		@param listenSubmit Functions that return `true` if the currently focused option should be selected.
+		@param listenSelect Functions that return `true` if the currently focused option should be selected.
 		@param options Initial `MenuOption` instances.
 		@param listenFocusPrevious Functions that return `true` if the previous option should be focused.
 		@param listenFocusNext Functions that return `true` if the next option should be focused.
@@ -32,7 +32,7 @@ class MenuParameters {
 		@param automaticFocus If `true`, automatically focuses/defocuses options when instantiating `Menu` or calling `addOption()`.
 	**/
 	public function new(
-		listenSubmit: BoolFuncs,
+		listenSelect: BoolFuncs,
 		?initialOptions: Array<MenuOption>,
 		?listenFocusPrevious: BoolFuncs,
 		?listenFocusNext: BoolFuncs,
@@ -43,7 +43,7 @@ class MenuParameters {
 		isActive = true,
 		automaticFocus = true
 	) {
-		this.listenSubmit = listenSubmit;
+		this.listenSelect = listenSelect;
 
 		this.initialOptions = initialOptions.orNew();
 		this.listenFocusPrevious = listenFocusPrevious.orNew();

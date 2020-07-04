@@ -10,7 +10,7 @@ class MenuData extends SceneObjectData {
 	final options: Array<MenuOption>;
 	final listenFocusPrevious: BoolFuncs;
 	final listenFocusNext: BoolFuncs;
-	final listenSubmit: BoolFuncs;
+	final listenSelect: BoolFuncs;
 	final onAddOption: Array<(object: SceneObject, index: UInt) -> Void>;
 	final onActivate: Array<(menu: Menu) -> Void>;
 	final onDeactivate: Array<(menu: Menu) -> Void>;
@@ -32,7 +32,7 @@ class MenuData extends SceneObjectData {
 		final prm = parameters;
 
 		this.options = [];
-		this.listenSubmit = prm.listenSubmit.copy();
+		this.listenSelect = prm.listenSelect.copy();
 		this.listenFocusPrevious = prm.listenFocusPrevious.copy();
 		this.listenFocusNext = prm.listenFocusNext.copy();
 		this.onAddOption = prm.onAddOption.copy();

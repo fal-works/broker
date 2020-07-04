@@ -120,7 +120,7 @@ abstract Menu(MenuData) to SceneObject {
 		}
 
 		final index = this.index;
-		if (index.isSome() && this.listenSubmit.logicalOr()) {
+		if (index.isSome() && this.listenSelect.logicalOr()) {
 			this.options[index.unwrap()].select();
 			return;
 		}
