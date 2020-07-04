@@ -5,6 +5,7 @@ package broker.timer;
 	Can be extended for your own purpose.
 **/
 @:using(broker.timer.Timer.TimerExtension)
+@:structInit
 class Timer {
 	static final dummyCallback = () -> {};
 
@@ -42,13 +43,19 @@ class Timer {
 	/**
 		Creates a `Timer` instance.
 	**/
-	function new() {
+	function new(
+		?duration: UInt,
+		?onStart: () -> Void,
+		?onComplete: () -> Void
+	) {
 		this.progress = 0.0;
 		this.progressChangeRate = 1.0;
-		this.onStartCallback = dummyCallback;
-		this.onCompleteCallback = dummyCallback;
+		this.onStartCallback = Nulls.coalesce(onStart, dummyCallback);
+		this.onCompleteCallback = Nulls.coalesce(onComplete, dummyCallback);
 		this.next = Maybe.none();
 		this.parent = Maybe.none();
+
+		if (duration != null) this.setDuration(duration);
 	}
 
 	/**
