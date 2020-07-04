@@ -63,13 +63,19 @@ class MenuData extends SceneObjectData {
 		if (this.automaticFocus) option.defocus();
 	}
 
-	inline function addObject(object: SceneObject): Void {
+	/**
+		Adds an object that is not a part of any `MenuOption`.
+	**/
+	public inline function addObject(object: SceneObject): Void {
 		#if heaps
 		this.addChild(object);
 		#end
 	}
 
-	inline function removeObject(object: SceneObject): Void {
+	/**
+		Removes `object` that has been added by `addObject()`.
+	**/
+	public inline function removeObject(object: SceneObject): Void {
 		#if heaps
 		this.removeChild(object);
 		#end
