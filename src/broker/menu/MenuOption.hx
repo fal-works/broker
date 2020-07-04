@@ -14,6 +14,7 @@ class MenuOption {
 	final onFocus: VoidFuncs;
 	final onDefocus: VoidFuncs;
 	final listenFocusCallbacks: BoolFuncs;
+	final listenDefocusCallbacks: BoolFuncs;
 	final listenSelectCallbacks: BoolFuncs;
 
 	/**
@@ -23,6 +24,7 @@ class MenuOption {
 		@param onFocus Callback to be run when `this` option is focused.
 		@param onDefocus Callback to be run when `this` option is defocused.
 		@param listenFocus Function that returns `true` if `this` option is to be focused.
+		@param listenDefocus Function that returns `true` if `this` option is to be defocused.
 		@param listenSelect Function that returns `true` if `this` option is to be selected.
 	**/
 	public function new(
@@ -31,6 +33,7 @@ class MenuOption {
 		?onFocus: VoidFuncs,
 		?onDefocus: VoidFuncs,
 		?listenFocus: BoolFuncs,
+		?listenDefocus: BoolFuncs,
 		?listenSelect: BoolFuncs
 	) {
 		this.object = object;
@@ -38,13 +41,17 @@ class MenuOption {
 		this.onFocus = Nulls.coalesce(onFocus, []);
 		this.onDefocus = Nulls.coalesce(onDefocus, []);
 		this.listenFocusCallbacks = Nulls.coalesce(listenFocus, []);
+		this.listenDefocusCallbacks = Nulls.coalesce(listenDefocus, []);
 		this.listenSelectCallbacks = Nulls.coalesce(listenSelect, []);
 	}
 
-	public function listenFocus(): Bool
+	public inline function listenFocus(): Bool
 		return this.listenFocusCallbacks.logicalOr();
 
-	public function listenSelect(): Bool
+	public inline function listenDefocus(): Bool
+		return this.listenDefocusCallbacks.logicalOr();
+
+	public inline function listenSelect(): Bool
 		return this.listenSelectCallbacks.logicalOr();
 
 	public inline function focus(): Void

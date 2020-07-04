@@ -31,11 +31,13 @@ package broker.menu {
     +getFocused(): MenuOption
     +listen()
     #listenFocus()
+    #listenDefocus()
     #listenSelect()
   }
 	class MenuOption {
     +object: SceneObject
     +listenFocus()
+    +listenDefocus()
     +listenSelect()
     +focus()
     +defocus()

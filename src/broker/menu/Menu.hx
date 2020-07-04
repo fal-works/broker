@@ -88,9 +88,7 @@ abstract Menu(MenuData) to SceneObject {
 	**/
 	public function defocus(): Void {
 		final focused = getFocused();
-		if (focused.isSome()) focused.unwrap().defocus();
-
-		this.index = MaybeUInt.none;
+		if (focused.isSome()) defocusOption(focused.unwrap());
 	}
 
 	/**
@@ -99,10 +97,7 @@ abstract Menu(MenuData) to SceneObject {
 	**/
 	public function select(): Void {
 		final focused = getFocused();
-		if (focused.isSome()) {
-			focused.unwrap().select();
-			if (this.deactivateOnSelect) deactivate();
-		}
+		if (focused.isSome()) selectOption(focused.unwrap());
 	}
 
 	/**
@@ -139,8 +134,17 @@ abstract Menu(MenuData) to SceneObject {
 			return;
 		}
 
-		if (listenSelect()) {
-			select();
+		final maybeFocused = getFocused();
+		if (maybeFocused.isNone()) return;
+		final focused = maybeFocused.unwrap();
+
+		if (listenDefocus(focused)) {
+			defocusOption(focused);
+			return;
+		}
+
+		if (listenSelect(focused)) {
+			selectOption(focused);
 			return;
 		}
 	}
@@ -175,14 +179,17 @@ abstract Menu(MenuData) to SceneObject {
 
 	/**
 		Called in `listen()`.
-		@return `true` if the currently focused option is to be selected.
+		@return `true` if the `focused` option is to be defocused.
 	**/
-	function listenSelect(): Bool {
-		final focused = getFocused();
-		return if (focused.isNone()) false else {
-			this.listenSelect.logicalOr() || focused.unwrap().listenSelect();
-		};
-	}
+	inline function listenDefocus(focused: MenuOption): Bool
+		return this.listenDefocus.logicalOr() || focused.listenDefocus();
+
+	/**
+		Called in `listen()`.
+		@return `true` if the `focused` option is to be selected.
+	**/
+	inline function listenSelect(focused: MenuOption): Bool
+		return this.listenSelect.logicalOr() || focused.listenSelect();
 
 	inline function new(data: MenuData) {
 		this = data;
@@ -195,5 +202,21 @@ abstract Menu(MenuData) to SceneObject {
 				else option.defocus();
 			}
 		}
+	}
+
+	/**
+		Defocuses the `focused` option.
+	**/
+	function defocusOption(focused: MenuOption): Void {
+		focused.defocus();
+		this.index = MaybeUInt.none;
+	}
+
+	/**
+		Selects the `focused` option.
+	**/
+	function selectOption(focused: MenuOption): Void {
+		focused.select();
+		if (this.deactivateOnSelect) deactivate();
 	}
 }

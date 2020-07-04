@@ -12,6 +12,7 @@ class MenuParameters {
 	public final initialOptions: Array<MenuOption>;
 	public final listenFocusPrevious: BoolFuncs;
 	public final listenFocusNext: BoolFuncs;
+	public final listenDefocus: BoolFuncs;
 	public final onAddOption: Array<(object: SceneObject, index: UInt) -> Void>;
 	public final onActivate: Array<(menu: Menu) -> Void>;
 	public final onDeactivate: Array<(menu: Menu) -> Void>;
@@ -21,10 +22,11 @@ class MenuParameters {
 	public final deactivateOnSelect: Bool;
 
 	/**
-		@param listenSelect Functions that return `true` if the currently focused option should be selected.
+		@param listenSelect Functions that return `true` if the currently focused option is to be selected.
 		@param options Initial `MenuOption` instances.
-		@param listenFocusPrevious Functions that return `true` if the previous option should be focused.
-		@param listenFocusNext Functions that return `true` if the next option should be focused.
+		@param listenFocusPrevious Functions that return `true` if the previous option is to be focused.
+		@param listenFocusNext Functions that return `true` if the next option is to be focused.
+		@param listenDefocus Functions that return `true` if the currently focused option is to be defocused.
 		@param onAddOption Callback to be run when any `MenuOption` is added to the menu.
 		@param onActivate Callback to be run when the menu is activated.
 		@param onDeactivate Callback to be run when the menu is deactivated.
@@ -38,6 +40,7 @@ class MenuParameters {
 		?initialOptions: Array<MenuOption>,
 		?listenFocusPrevious: BoolFuncs,
 		?listenFocusNext: BoolFuncs,
+		?listenDefocus: BoolFuncs,
 		?onAddOption: Array<(object: SceneObject, index: UInt) -> Void>,
 		?onActivate: Array<(menu: Menu) -> Void>,
 		?onDeactivate: Array<(menu: Menu) -> Void>,
@@ -51,6 +54,7 @@ class MenuParameters {
 		this.initialOptions = initialOptions.orNew();
 		this.listenFocusPrevious = listenFocusPrevious.orNew();
 		this.listenFocusNext = listenFocusNext.orNew();
+		this.listenDefocus = listenDefocus.orNew();
 		this.onAddOption = onAddOption.orNew();
 		this.onActivate = onActivate.orNew();
 		this.onDeactivate = onDeactivate.orNew();
