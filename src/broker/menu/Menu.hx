@@ -74,13 +74,9 @@ abstract Menu(MenuData) to SceneObject {
 		Also defocuses the currently focused option.
 	**/
 	public function focusAt(index: UInt): Void {
-		final options = this.options;
-		if (options.length <= index) return;
-
 		defocus();
 		this.index = index;
-
-		options[index].focus();
+		this.options[index].focus();
 	}
 
 	/**
