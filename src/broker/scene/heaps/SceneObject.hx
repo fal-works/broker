@@ -1,14 +1,27 @@
 package broker.scene.heaps;
 
 #if heaps
+import broker.scene.internal.SceneObjectData;
+
 @:forward(x, y, setPosition)
-abstract SceneObject(h2d.Object) from h2d.Object to h2d.Object {
+abstract SceneObject(SceneObjectData) from SceneObjectData to SceneObjectData {
+	/**
+		Creates a `SceneObject` from `image` bitmap.
+	**/
 	public static function fromImage(image: hxd.res.Image): SceneObject {
 		return new h2d.Bitmap(image.toTile());
 	}
 
+	/**
+		`this` as the underlying type.
+	**/
+	public var data(get, never): SceneObjectData;
+
 	public extern inline function new() {
-		this = new h2d.Object();
+		this = new SceneObjectData();
 	}
+
+	extern inline function get_data()
+		return this;
 }
 #end
