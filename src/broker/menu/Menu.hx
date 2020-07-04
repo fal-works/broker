@@ -131,7 +131,7 @@ abstract Menu(MenuData) to SceneObject {
 			return;
 		}
 
-		if (this.index.isSome() && this.listenSelect.logicalOr()) {
+		if (listenSelect()) {
 			select();
 			return;
 		}
@@ -163,6 +163,16 @@ abstract Menu(MenuData) to SceneObject {
 		}
 
 		return MaybeUInt.none;
+	}
+
+	/**
+		Called in `listen()`.
+		@return `true` if the currently focused option is to be selected.
+	**/
+	function listenSelect(): Bool {
+		return if (this.index.isNone()) false else {
+			this.listenSelect.logicalOr() || this.options[this.index.unwrap()].listenSelect();
+		};
 	}
 
 	inline function new(data: MenuData) {
