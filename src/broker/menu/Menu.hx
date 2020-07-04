@@ -85,6 +85,7 @@ abstract Menu(MenuData) to SceneObject {
 
 	/**
 		Defocuses the currently focused option.
+		No effect if none is focused.
 	**/
 	public function defocus(): Void {
 		final focused = getFocused();
