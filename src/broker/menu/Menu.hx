@@ -52,6 +52,15 @@ abstract Menu(MenuData) to SceneObject {
 		for (i in 0...this.options.length) callback(this.options[i]);
 
 	/**
+		@return The `MenuOption` that is currently focused.
+	**/
+	public function getFocused(): Maybe<MenuOption> {
+		return if (this.index.isNone()) Maybe.none() else {
+			Maybe.from(this.options[this.index.unwrap()]);
+		};
+	}
+
+	/**
 		Focuses on `option` in `this` menu.
 		Also defocuses the currently focused option.
 
@@ -78,9 +87,8 @@ abstract Menu(MenuData) to SceneObject {
 		Defocuses the currently focused option.
 	**/
 	public function defocus(): Void {
-		final currentIndex = this.index;
-		if (currentIndex.isSome())
-			this.options[currentIndex.unwrap()].defocus();
+		final focused = getFocused();
+		if (focused.isSome()) focused.unwrap().defocus();
 
 		this.index = MaybeUInt.none;
 	}
@@ -90,9 +98,9 @@ abstract Menu(MenuData) to SceneObject {
 		No effect if none is focused.
 	**/
 	public function select(): Void {
-		final index = this.index;
-		if (index.isSome()) {
-			this.options[index.unwrap()].select();
+		final focused = getFocused();
+		if (focused.isSome()) {
+			focused.unwrap().select();
 			if (this.deactivateOnSelect) deactivate();
 		}
 	}
@@ -170,8 +178,9 @@ abstract Menu(MenuData) to SceneObject {
 		@return `true` if the currently focused option is to be selected.
 	**/
 	function listenSelect(): Bool {
-		return if (this.index.isNone()) false else {
-			this.listenSelect.logicalOr() || this.options[this.index.unwrap()].listenSelect();
+		final focused = getFocused();
+		return if (focused.isNone()) false else {
+			this.listenSelect.logicalOr() || focused.unwrap().listenSelect();
 		};
 	}
 
