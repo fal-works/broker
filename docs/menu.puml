@@ -1,0 +1,48 @@
+@startuml menu
+
+' ---- (style) --------------------------------
+
+skinparam shadowing false
+skinparam backgroundColor White
+skinparam package {
+  BorderColor #A0A0A0
+  FontColor #A0A0A0
+}
+skinparam class {
+  BackgroundColor White
+  ArrowColor #202020
+  BorderColor #202020
+  FontColor #000000
+}
+skinparam note {
+  BackgroundColor White
+  FontColor #606060
+  BorderColor #C0C0C0
+}
+skinparam stereotypeIBackgroundColor Lavender
+hide empty members
+
+' ---- (diagram) ------------------------------
+
+package broker.menu {
+	class Menu {
+    +activate()
+    +deactivate()
+    +getFocused(): MenuOption
+    +listen()
+    #listenFocus()
+    #listenSelect()
+  }
+	class MenuOption {
+    +object: SceneObject
+    +listenFocus()
+    +listenSelect()
+    +focus()
+    +defocus()
+    +select()
+  }
+
+  Menu o-r- "n" MenuOption
+}
+
+@enduml

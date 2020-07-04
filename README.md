@@ -54,6 +54,8 @@ Some classes for abstracting sound features from heaps.
 
 Menu UI.
 
+![Class diagram. Visit GitHub repo for details.](docs/menu.svg)
+
 
 ## Caveats
 
