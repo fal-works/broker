@@ -5,6 +5,4 @@ package broker.image;
 **/
 #if heaps
 typedef Atlas = broker.image.heaps.Atlas;
-#else
-typedef Atlas = Dynamic;
 #end

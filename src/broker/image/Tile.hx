@@ -1,7 +1,7 @@
 package broker.image;
 
 #if heaps
-typedef Tile = h2d.Tile;
-#else
-typedef Tile = Dynamic;
+private typedef Data = h2d.Tile;
 #end
+
+abstract Tile(Data) from Data to Data {}

@@ -1,8 +1,7 @@
 package broker.image.heaps;
 
-import broker.image.common.FrameTiles as FrameTilesBase;
-
-class FrameTiles extends FrameTilesBase {
+@:notNull @:forward
+abstract FrameTiles(Vector<Tile>) from Vector<Tile> to Vector<Tile> {
 	/**
 		Creates a `FrameTiles` instance from `texture`.
 		@param x The left-top point of the source area in `texture`.
@@ -41,7 +40,7 @@ class FrameTiles extends FrameTilesBase {
 			}
 		}
 
-		return new FrameTiles(entire, Vector.fromArrayCopy(frames));
+		return Vector.fromArrayCopy(frames);
 	}
 
 	/**
@@ -63,4 +62,7 @@ class FrameTiles extends FrameTilesBase {
 			center
 		);
 	}
+
+	@:op([]) public extern inline function get(index: UInt): Tile
+		return this[index];
 }

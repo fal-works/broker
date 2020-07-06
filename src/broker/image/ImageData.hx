@@ -5,6 +5,4 @@ package broker.image;
 **/
 #if heaps
 typedef ImageData = broker.image.heaps.ImageData;
-#else
-typedef ImageData = broker.image.common.ImageData;
 #end

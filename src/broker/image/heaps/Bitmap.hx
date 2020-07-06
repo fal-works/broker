@@ -1,6 +1,9 @@
 package broker.image.heaps;
 
-abstract Bitmap(hxd.Pixels) from hxd.Pixels to hxd.Pixels {
+private typedef Data = hxd.Pixels;
+
+@:notNull
+abstract Bitmap(Data) from Data to Data {
 	/**
 		Blits pixels from `src` to `dest`.
 	**/
@@ -14,8 +17,25 @@ abstract Bitmap(hxd.Pixels) from hxd.Pixels to hxd.Pixels {
 		width: UInt,
 		height: UInt
 	): Void {
-		dest.toHeapsPixels().blit(destX, destY, src, srcX, srcY, width, height);
+		dest.data.blit(destX, destY, src, srcX, srcY, width, height);
 	}
+
+	/**
+		Blits the entire pixels of `src` to `dest`.
+	**/
+	public static inline function blitAll(
+		src: Bitmap,
+		dest: Bitmap,
+		destX: UInt,
+		destY: UInt
+	): Void {
+		blit(src, UInt.zero, UInt.zero, dest, destX, destY, src.width, src.height);
+	}
+
+	/**
+		`this` as the underlying type.
+	**/
+	public var data(get, never): Data;
 
 	public var width(get, never): UInt;
 	public var height(get, never): UInt;
@@ -26,10 +46,7 @@ abstract Bitmap(hxd.Pixels) from hxd.Pixels to hxd.Pixels {
 	public extern inline function dispose(): Void
 		this.dispose();
 
-	/**
-		Casts `this` to the underlying `hxd.Pixels`.
-	**/
-	public extern inline function toHeapsPixels(): hxd.Pixels
+	extern inline function get_data()
 		return this;
 
 	extern inline function get_width()

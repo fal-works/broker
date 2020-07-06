@@ -74,7 +74,7 @@ class Atlas extends AtlasBase {
 				final srcBitmap = data.bitmap;
 				final width = srcBitmap.width;
 				final height = srcBitmap.height;
-				Bitmap.blit(srcBitmap, 0, 0, entireBitmap, destX, destY, width, height);
+				Bitmap.blitAll(srcBitmap, entireBitmap, destX, destY);
 				srcBitmap.dispose();
 				frameTilesBuilderMap.set(
 					data.name,
