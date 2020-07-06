@@ -1,6 +1,5 @@
 package broker.menu;
 
-import broker.scene.SceneObject;
 import broker.menu.internal.Types;
 
 /**
@@ -8,7 +7,7 @@ import broker.menu.internal.Types;
 **/
 @:structInit
 class MenuOption {
-	public final object: SceneObject;
+	public final object: Object;
 
 	final onSelect: VoidFuncs;
 	final onFocus: VoidFuncs;
@@ -28,7 +27,7 @@ class MenuOption {
 		@param listenSelect Function that returns `true` if `this` option is to be selected.
 	**/
 	public function new(
-		object: SceneObject,
+		object: Object,
 		?onSelect: VoidFuncs,
 		?onFocus: VoidFuncs,
 		?onDefocus: VoidFuncs,

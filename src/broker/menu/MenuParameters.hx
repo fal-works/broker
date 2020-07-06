@@ -1,6 +1,5 @@
 package broker.menu;
 
-import broker.scene.SceneObject;
 import broker.menu.internal.Types;
 
 /**
@@ -13,7 +12,7 @@ class MenuParameters {
 	public final listenFocusPrevious: BoolFuncs;
 	public final listenFocusNext: BoolFuncs;
 	public final listenDefocus: BoolFuncs;
-	public final onAddOption: Array<(object: SceneObject, index: UInt) -> Void>;
+	public final onAddOption: Array<(object: Object, index: UInt) -> Void>;
 	public final onActivate: Array<(menu: Menu) -> Void>;
 	public final onDeactivate: Array<(menu: Menu) -> Void>;
 	public final initialIndex: MaybeUInt;
@@ -41,7 +40,7 @@ class MenuParameters {
 		?listenFocusPrevious: BoolFuncs,
 		?listenFocusNext: BoolFuncs,
 		?listenDefocus: BoolFuncs,
-		?onAddOption: Array<(object: SceneObject, index: UInt) -> Void>,
+		?onAddOption: Array<(object: Object, index: UInt) -> Void>,
 		?onActivate: Array<(menu: Menu) -> Void>,
 		?onDeactivate: Array<(menu: Menu) -> Void>,
 		initialIndex = MaybeUInt.none,

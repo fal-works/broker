@@ -1,6 +1,5 @@
 package broker.menu;
 
-import broker.scene.SceneObject;
 import broker.menu.internal.MenuData;
 
 /**
@@ -8,7 +7,7 @@ import broker.menu.internal.MenuData;
 	Use `Menu.create()` for instantiating.
 **/
 @:notNull @:forward(x, y, setPosition, addOption, addObject, removeObject)
-abstract Menu(MenuData) to SceneObject {
+abstract Menu(MenuData) to Object {
 	/**
 		Creates a `Menu` instance.
 		@see `broker.menu.MenuParameters`

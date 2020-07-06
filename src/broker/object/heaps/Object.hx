@@ -1,24 +1,24 @@
-package broker.scene.heaps;
+package broker.object.heaps;
 
 #if heaps
-import broker.scene.internal.SceneObjectData;
+import broker.object.internal.ObjectData;
 
 @:forward(x, y, setPosition, addChild, removeChild, removeChildren)
-abstract SceneObject(SceneObjectData) from SceneObjectData to SceneObjectData {
+abstract Object(ObjectData) from ObjectData to ObjectData {
 	/**
-		Creates a `SceneObject` from `image` bitmap.
+		Creates a `Object` from `image` bitmap.
 	**/
-	public static function fromImage(image: hxd.res.Image): SceneObject {
+	public static function fromImage(image: hxd.res.Image): Object {
 		return new h2d.Bitmap(image.toTile());
 	}
 
 	/**
 		`this` as the underlying type.
 	**/
-	public var data(get, never): SceneObjectData;
+	public var data(get, never): ObjectData;
 
 	public extern inline function new() {
-		this = new SceneObjectData();
+		this = new ObjectData();
 	}
 
 	/**

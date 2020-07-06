@@ -28,7 +28,7 @@ class Layers {
 	/**
 		Adds `this` layers to `object`.
 	**/
-	public function addTo(object: SceneObject): Void {
+	public function addTo(object: Object): Void {
 		object.addChild(this.background);
 		object.addChild(this.main);
 		object.addChild(this.surface);

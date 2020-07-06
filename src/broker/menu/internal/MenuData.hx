@@ -1,18 +1,17 @@
 package broker.menu.internal;
 
-import broker.scene.SceneObject;
-import broker.scene.internal.SceneObjectData;
+import broker.object.internal.ObjectData;
 import broker.menu.internal.Types;
 
 @:structInit
 @:allow(broker.menu.Menu)
-class MenuData extends SceneObjectData {
+class MenuData extends ObjectData {
 	final options: Array<MenuOption>;
 	final listenFocusPrevious: BoolFuncs;
 	final listenFocusNext: BoolFuncs;
 	final listenDefocus: BoolFuncs;
 	final listenSelect: BoolFuncs;
-	final onAddOption: Array<(object: SceneObject, index: UInt) -> Void>;
+	final onAddOption: Array<(object: Object, index: UInt) -> Void>;
 	final onActivate: Array<(menu: Menu) -> Void>;
 	final onDeactivate: Array<(menu: Menu) -> Void>;
 	final automaticFocus: Bool;
@@ -70,7 +69,7 @@ class MenuData extends SceneObjectData {
 	/**
 		Adds an object that is not a part of any `MenuOption`.
 	**/
-	public inline function addObject(object: SceneObject): Void {
+	public inline function addObject(object: Object): Void {
 		#if heaps
 		this.addChild(object);
 		#end
@@ -79,7 +78,7 @@ class MenuData extends SceneObjectData {
 	/**
 		Removes `object` that has been added by `addObject()`.
 	**/
-	public inline function removeObject(object: SceneObject): Void {
+	public inline function removeObject(object: Object): Void {
 		#if heaps
 		this.removeChild(object);
 		#end

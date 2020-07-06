@@ -32,6 +32,10 @@ and provides you an integrated virtual gamepad.
 
 ![Class diagram. Visit GitHub repo for details.](docs/gamepad.svg)
 
+### Object
+
+Elements of scene trees.
+
 ### Scene
 
 - Basic classes for game scenes.
