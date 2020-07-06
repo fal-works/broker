@@ -5,6 +5,4 @@ package broker.scene.internal;
 **/
 #if heaps
 typedef SceneObjectData = h2d.Object;
-#else
-typedef SceneObjectData = Dynamic;
 #end

@@ -19,9 +19,18 @@ class Layers {
 	**/
 	public final surface: Layer;
 
-	public function new(layerFactory: () -> Layer) {
-		this.background = layerFactory();
-		this.main = layerFactory();
-		this.surface = layerFactory();
+	public function new() {
+		this.background = new Layer();
+		this.main = new Layer();
+		this.surface = new Layer();
+	}
+
+	/**
+		Adds `this` layers to `object`.
+	**/
+	public function addTo(object: SceneObject): Void {
+		object.addChild(this.background);
+		object.addChild(this.main);
+		object.addChild(this.surface);
 	}
 }

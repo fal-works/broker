@@ -3,7 +3,7 @@ package broker.scene.heaps;
 #if heaps
 import broker.timer.Timer;
 import broker.color.ArgbColor;
-import broker.scene.common.Scene as SceneBase;
+import broker.scene.internal.Scene as SceneBase;
 
 /**
 	Base class for `broker.scene.Scene` that internally contains a `h2d.Scene` instance.
@@ -17,20 +17,15 @@ class Scene extends SceneBase {
 		SceneStatics.setApplication(app);
 
 	/**
-		`h2d.Scene` instance to be wrapped.
-	**/
-	final heapsScene: h2d.Scene;
-
-	/**
 		@param heapsScene If not provided, creates a new one.
 		@param timersCapacity The max number of `Timer` instances. Defaults to `16`.
 	**/
 	public function new(?heapsScene: h2d.Scene, ?timersCapacity: UInt) {
 		final hScene = if (heapsScene != null) heapsScene else new h2d.Scene();
+		final layers = new Layers();
+		layers.addTo(hScene);
 
-		super(new Layers(() -> new h2d.Object(hScene)), timersCapacity);
-
-		this.heapsScene = hScene;
+		super(hScene, layers, timersCapacity);
 	}
 
 	/**
@@ -39,7 +34,7 @@ class Scene extends SceneBase {
 	**/
 	override public function activate(): Void {
 		super.activate();
-		SceneStatics.heapsApp.setScene(this.heapsScene, false);
+		SceneStatics.heapsApp.setScene(this.data, false);
 	}
 
 	/**
@@ -48,7 +43,7 @@ class Scene extends SceneBase {
 	**/
 	override public function destroy(): Void {
 		super.destroy();
-		this.heapsScene.dispose();
+		this.data.dispose();
 	}
 
 	/**
@@ -127,7 +122,7 @@ class Scene extends SceneBase {
 		final tile = bitmap.tile;
 		tile.setTexture(texture);
 
-		final heapsScene = this.heapsScene;
+		final heapsScene = this.data;
 		tile.setSize(heapsScene.width, heapsScene.height);
 
 		return bitmap;

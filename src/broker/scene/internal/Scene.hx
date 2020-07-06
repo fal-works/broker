@@ -1,10 +1,11 @@
-package broker.scene.common;
+package broker.scene.internal;
 
 import sneaker.exception.NotOverriddenException;
 import broker.timer.Timer;
 import broker.timer.Timers;
 import broker.timer.builtin.SwitchSceneTimer;
 import broker.color.ArgbColor;
+import broker.scene.internal.SceneData;
 
 /**
 	Base class for `broker.scene.Scene`.
@@ -49,6 +50,11 @@ class Scene {
 		Callback function for running `this.isTransitioning = false`.
 	**/
 	public final unsetTransitionState: () -> Void;
+
+	/**
+		The underlying scene instance.
+	**/
+	public final data: SceneData;
 
 	/**
 		`true` if `this.initialize()` is already called.
@@ -168,7 +174,9 @@ class Scene {
 	/**
 		@param timersCapacity The max number of `Timer` instances. Defaults to `16`.
 	**/
-	function new(layers: Layers, timersCapacity: UInt = 16) {
+	function new(data: SceneData, layers: Layers, timersCapacity: UInt = 16) {
+		this.data = data;
+
 		this.isInitialized = false;
 		this.sceneStack = Maybe.none();
 

@@ -5,6 +5,4 @@ package broker.scene;
 **/
 #if heaps
 typedef Filter = h2d.filter.Filter;
-#else
-typedef Filter = Dynamic;
 #end
