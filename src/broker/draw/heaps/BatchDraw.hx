@@ -2,6 +2,10 @@ package broker.draw.heaps;
 
 import banker.vector.VectorReference;
 
+/**
+	Object that draws multiple tiles efficiently.
+	The tiles should be created from to the same texture.
+**/
 abstract BatchDraw(h2d.SpriteBatch) from h2d.SpriteBatch to h2d.SpriteBatch {
 	public extern inline function new(texture: Texture) {
 		this = new h2d.SpriteBatch(texture.getEntireTile());
@@ -32,9 +36,25 @@ abstract BatchDraw(h2d.SpriteBatch) from h2d.SpriteBatch to h2d.SpriteBatch {
 		this.delete(sprite); // sprite must belong to this batch
 	}
 
-	public function addElements(sprites: VectorReference<BatchSprite>, endIndex: UInt): Void
-		for (i in 0...endIndex) add(sprites[i]);
+	/**
+		Adds elements of `sprites` (from index `0` until but not including `endIndex`) to `this` batch.
+	**/
+	public function addElements(sprites: VectorReference<BatchSprite>, endIndex: UInt): Void {
+		var i = UInt.zero;
+		while (i < endIndex) {
+			add(sprites[i]);
+			++i;
+		}
+	}
 
-	public function removeElements(sprites: VectorReference<BatchSprite>, endIndex: UInt): Void
-		for (i in 0...endIndex) remove(sprites[i]);
+	/**
+		Removes elements of `sprites` (from index `0` until but not including `endIndex`) from `this` batch.
+	**/
+	public function removeElements(sprites: VectorReference<BatchSprite>, endIndex: UInt): Void {
+		var i = UInt.zero;
+		while (i < endIndex) {
+			remove(sprites[i]);
+			++i;
+		}
+	}
 }
