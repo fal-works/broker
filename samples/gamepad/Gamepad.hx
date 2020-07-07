@@ -2,6 +2,7 @@ package gamepad;
 
 import broker.input.GamepadBase;
 import broker.input.Stick;
+import broker.input.KeyCode;
 import broker.input.heaps.HeapsPadPort;
 import broker.input.heaps.HeapsPadMultitap;
 import broker.input.heaps.HeapsInputTools;
@@ -62,17 +63,17 @@ class Gamepad extends GamepadBase<Button, ButtonStatusMap, Stick> {
 
 class GamepadSettings {
 	/**
-		Mapping from virtual buttons to `hxd.Key` codes.
+		Mapping from virtual buttons to `KeyCode` values.
 	**/
-	public static final keyCodeMap: Map<Button, Array<Int>> = [
-		A => [hxd.Key.Z],
-		B => [hxd.Key.X],
-		X => [hxd.Key.SHIFT],
-		Y => [hxd.Key.ESCAPE],
-		D_LEFT => [hxd.Key.LEFT],
-		D_UP => [hxd.Key.UP],
-		D_RIGHT => [hxd.Key.RIGHT],
-		D_DOWN => [hxd.Key.DOWN]
+	public static final keyCodeMap: Map<Button, Array<KeyCode>> = [
+		A => [KeyCode.Z],
+		B => [KeyCode.X],
+		X => [KeyCode.SHIFT],
+		Y => [KeyCode.ESC],
+		D_LEFT => [KeyCode.LEFT],
+		D_UP => [KeyCode.UP],
+		D_RIGHT => [KeyCode.RIGHT],
+		D_DOWN => [KeyCode.DOWN]
 	];
 
 	/**

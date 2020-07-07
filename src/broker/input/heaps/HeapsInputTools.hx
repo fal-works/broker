@@ -12,7 +12,7 @@ class HeapsInputTools {
 		@return Function that generates another function for checking if a given `button` is down.
 	**/
 	public static inline function createButtonCheckerGenerator<T>(
-		keyCodeMap: Map<T, Array<Int>>,
+		keyCodeMap: Map<T, Array<KeyCode>>,
 		padButtonCodeMap: Map<T, Array<Int>>,
 		padPort: HeapsPadPort
 	) {
