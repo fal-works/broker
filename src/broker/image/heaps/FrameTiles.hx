@@ -17,7 +17,7 @@ abstract FrameTiles(Vector<Tile>) from Vector<Tile> to Vector<Tile> {
 		y: UInt,
 		width: UInt,
 		height: UInt,
-		tileSize: Maybe<PixelSize>,
+		tileSize: Maybe<PixelRegionSize>,
 		center = true
 	): FrameTiles {
 		var entire = texture.getEntireTile().getSubTile(x, y, width, height);

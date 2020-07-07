@@ -37,7 +37,7 @@ class Atlas {
 		destY: UInt,
 		entireBitmap: Bitmap,
 		frameTilesBuilderMap: StringMap<(texture: Texture) -> FrameTiles>
-	): PixelSize {
+	): PixelRegionSize {
 		switch imageDataList {
 			case Vertical(elements):
 				var width = UInt.zero;

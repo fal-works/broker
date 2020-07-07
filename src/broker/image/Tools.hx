@@ -14,12 +14,12 @@ class Tools {
 	**/
 	public static function parseImageFileName(
 		fileName: String
-	): { name: String, frameSize: Maybe<PixelSize> } {
+	): { name: String, frameSize: Maybe<PixelRegionSize> } {
 		if (frameSizeRegexp.match(fileName)) {
 			final dataName = fileName.substr(0, frameSizeRegexp.matchedPos().pos);
 			final frameSizeValue = Std.parseInt(frameSizeRegexp.matched(1));
 			if (frameSizeValue != null) {
-				final frameSize = new PixelSize(frameSizeValue, frameSizeValue);
+				final frameSize = new PixelRegionSize(frameSizeValue, frameSizeValue);
 				return { name: dataName, frameSize: Maybe.from(frameSize) };
 			}
 		}
@@ -29,7 +29,7 @@ class Tools {
 			final frameWidthValue = Std.parseInt(frameWHRegexp.matched(1));
 			final frameHeightValue = Std.parseInt(frameWHRegexp.matched(2));
 			if (frameWidthValue != null && frameHeightValue != null) {
-				final frameSize = new PixelSize(frameWidthValue, frameHeightValue);
+				final frameSize = new PixelRegionSize(frameWidthValue, frameHeightValue);
 				return { name: dataName, frameSize: Maybe.from(frameSize) };
 			}
 		}

@@ -11,7 +11,7 @@ enum ImageDataList {
 }
 
 class ImageDataListExtension {
-	public static function getBoundSize(list: ImageDataList): PixelSize {
+	public static function getBoundSize(list: ImageDataList): PixelRegionSize {
 		switch list {
 			case Vertical(elements):
 				var width = UInt.zero;

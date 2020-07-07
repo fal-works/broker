@@ -15,7 +15,7 @@ class ImageData implements ripper.Data {
 	/**
 		If specified, `this` image is interpreted as animation of graphics frames with a fixed size.
 	**/
-	public final frameSize: Maybe<PixelSize>;
+	public final frameSize: Maybe<PixelRegionSize>;
 
 	/**
 		`true` for applying `center()` to all sub-tiles.
