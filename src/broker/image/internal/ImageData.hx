@@ -1,4 +1,4 @@
-package broker.image.common;
+package broker.image.internal;
 
 @:structInit
 class ImageData implements ripper.Data {
