@@ -44,6 +44,22 @@ Elements of scene trees.
 ![Class diagram. Visit GitHub repo for details.](docs/scene.svg)
 ![Class diagram. Visit GitHub repo for details.](docs/scene-transition.svg)
 
+### Image
+
+Classes for loading image data.
+
+- `Tile`
+- `Atlas`
+- `FrameTiles`
+- etc.
+
+### Draw
+
+Classes for drawing graphics.
+
+- `TileDraw`
+- `BatchDraw`
+
 ### Timer
 
 Basic classes for pseudo-asynchronous processing.
@@ -59,6 +75,14 @@ Some classes for abstracting sound features from heaps.
 Menu UI.
 
 ![Class diagram. Visit GitHub repo for details.](docs/menu.svg)
+
+### Math
+
+Some math functions/constants.
+
+### Color
+
+Some abstract types for representing colors.
 
 
 ## Caveats
