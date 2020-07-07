@@ -2,6 +2,9 @@ package broker.draw.heaps;
 
 import h2d.SpriteBatch.BatchElement as Data;
 
+/**
+	Element that can be added to `BatchDraw`.
+**/
 @:notNull @:forward(x, y, scale, rotation, alpha, visible)
 abstract BatchSprite(Data) from Data to Data {
 	/**
