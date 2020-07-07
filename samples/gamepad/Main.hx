@@ -1,6 +1,6 @@
 package gamepad;
 
-import broker.input.heaps.HeapsKeyTools;
+import broker.input.Key;
 import broker.input.heaps.HeapsPadTools;
 
 class Main extends hxd.App {
@@ -8,7 +8,7 @@ class Main extends hxd.App {
 	var object: h2d.Object;
 
 	override function init() {
-		HeapsKeyTools.initialize();
+		Key.initialize();
 		HeapsPadTools.initialize();
 
 		final gamepadPortIndex = 0;

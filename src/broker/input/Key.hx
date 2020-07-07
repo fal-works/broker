@@ -1,31 +1,34 @@
-package broker.input.heaps;
-
-#if heaps
-using banker.type_extension.MapExtension;
+package broker.input;
 
 import banker.vector.VectorReference;
 import banker.vector.Vector;
+#if heaps
+import broker.input.heaps.HeapsKey as KeyImpl;
+#end
 
-@:access(hxd.Key)
-class HeapsKeyTools {
+using banker.type_extension.MapExtension;
+
+/**
+	Static functions for detecting keyboard input.
+**/
+class Key {
 	/**
 		Registers an event listener so that `hxd.Key` is updated for every window event.
 	**/
-	public static function initialize() {
-		hxd.Key.initialize();
-		hxd.Key.keyPressed.resize(256);
-	}
+	public static function initialize()
+		KeyImpl.initialize();
+
+	/**
+		@return `true` if the key of `keyCode` is down.
+	**/
+	public static inline function isDown(keyCode: KeyCode): Bool
+		return KeyImpl.isDown(keyCode);
 
 	/**
 		@return `true` if any key in `keyCodes` is down.
 	**/
-	public static function anyKeyIsDown(keyCodes: VectorReference<KeyCode>): Bool {
-		final keyPressed = hxd.Key.keyPressed;
-		for (i in 0...keyCodes.length) {
-			if (0 < keyPressed[keyCodes[i].code]) return true;
-		}
-		return false;
-	}
+	public static inline function anyKeyIsDown(keyCodes: VectorReference<KeyCode>): Bool
+		return KeyImpl.anyKeyIsDown(keyCodes);
 
 	/**
 		@return Function that returns `true` if any key of `keyCodeArray` is down.
@@ -48,7 +51,7 @@ class HeapsKeyTools {
 
 		@return Function that generates another function for checking if a given `button` is down.
 	**/
-	public static inline function createButtonCheckerGenerator<T>(
+	public static function createButtonCheckerGenerator<T>(
 		keyCodeMap: Map<T, Array<KeyCode>>
 	): (button: T) -> (() -> Bool) {
 		return function(button: T) {
@@ -57,4 +60,3 @@ class HeapsKeyTools {
 		};
 	}
 }
-#end

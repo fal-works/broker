@@ -16,7 +16,7 @@ class HeapsInputTools {
 		buttonCodeMap: Map<T, Array<ButtonCode>>,
 		padPort: PhysicalGamepadPort
 	) {
-		final generateCheckFromKey = HeapsKeyTools.createButtonCheckerGenerator(keyCodeMap);
+		final generateCheckFromKey = Key.createButtonCheckerGenerator(keyCodeMap);
 
 		final generateCheckFromPad = padPort.createButtonCheckerGenerator(buttonCodeMap);
 
