@@ -12,7 +12,7 @@ abstract FrameTiles(Vector<Tile>) from Vector<Tile> to Vector<Tile> {
 		@param center If `true`, applies `center()` to all sub-tiles.
 	**/
 	public static function fromData(
-		texture: h3d.mat.Texture,
+		texture: Texture,
 		x: UInt,
 		y: UInt,
 		width: UInt,
@@ -20,22 +20,24 @@ abstract FrameTiles(Vector<Tile>) from Vector<Tile> to Vector<Tile> {
 		tileSize: Maybe<PixelSize>,
 		center = true
 	): FrameTiles {
-		var entire = h2d.Tile.fromTexture(texture).sub(x, y, width, height);
+		var entire = texture.getEntireTile().getSubTile(x, y, width, height);
+		final entireWidth = entire.width;
+		final entireHeight = entire.height;
 		final frames: Array<Tile> = [];
 
 		if (tileSize.isSome()) {
-			final tileWidth: Float = tileSize.unwrap().width;
-			final tileHeight: Float = tileSize.unwrap().height;
-			var x = 0.0;
-			var y = 0.0;
-			while (y < entire.height) {
-				while (x < entire.width) {
-					var tile = entire.sub(x, y, tileWidth, tileHeight);
-					if (center) tile = tile.center();
+			final tileWidth = tileSize.unwrap().width;
+			final tileHeight = tileSize.unwrap().height;
+			var x = UInt.zero;
+			var y = UInt.zero;
+			while (y < entireHeight) {
+				while (x < entireWidth) {
+					var tile = entire.getSubTile(x, y, tileWidth, tileHeight);
+					if (center) tile = tile.toCentered();
 					frames.push(tile);
 					x += tileWidth;
 				}
-				x = 0.0;
+				x = UInt.zero;
 				y += tileHeight;
 			}
 		}
