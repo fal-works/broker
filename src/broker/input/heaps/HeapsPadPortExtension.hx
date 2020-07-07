@@ -14,11 +14,11 @@ class HeapsPadPortExtension {
 	**/
 	public static function anyButtonIsDown(
 		_this: HeapsPadPort,
-		buttonCodes: VectorReference<Int>
+		buttonCodes: VectorReference<ButtonCode>
 	): Bool {
 		final buttons = _this.get().buttons;
 		for (i in 0...buttonCodes.length) {
-			if (buttons[buttonCodes[i]]) return true;
+			if (buttons[buttonCodes[i].code]) return true;
 		}
 		return false;
 	}
@@ -28,7 +28,7 @@ class HeapsPadPortExtension {
 	**/
 	public static inline function createButtonCodesChecker<T>(
 		_this: HeapsPadPort,
-		buttonCodeArray: Array<Int>
+		buttonCodeArray: Array<ButtonCode>
 	): () -> Bool {
 		final buttonCodes = Vector.fromArrayCopy(buttonCodeArray);
 		return anyButtonIsDown.bind(_this, buttonCodes);
@@ -48,7 +48,7 @@ class HeapsPadPortExtension {
 	**/
 	public static inline function createButtonCheckerGenerator<T>(
 		_this: HeapsPadPort,
-		buttonCodeMap: Map<T, Array<Int>>
+		buttonCodeMap: Map<T, Array<ButtonCode>>
 	): (button: T) -> (() -> Bool) {
 		return function(button: T) {
 			final buttonCodeArray = buttonCodeMap.getOr(button, []);

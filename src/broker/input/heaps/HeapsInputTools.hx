@@ -13,7 +13,7 @@ class HeapsInputTools {
 	**/
 	public static inline function createButtonCheckerGenerator<T>(
 		keyCodeMap: Map<T, Array<KeyCode>>,
-		padButtonCodeMap: Map<T, Array<Int>>,
+		padButtonCodeMap: Map<T, Array<ButtonCode>>,
 		padPort: HeapsPadPort
 	) {
 		final generateCheckFromKey = HeapsKeyTools.createButtonCheckerGenerator(keyCodeMap);

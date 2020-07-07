@@ -3,6 +3,7 @@ package gamepad;
 import broker.input.GamepadBase;
 import broker.input.Stick;
 import broker.input.KeyCode;
+import broker.input.ButtonCode;
 import broker.input.heaps.HeapsPadPort;
 import broker.input.heaps.HeapsPadMultitap;
 import broker.input.heaps.HeapsInputTools;
@@ -79,14 +80,14 @@ class GamepadSettings {
 	/**
 		Mapping from virtual buttons to `hxd.Pad` button codes.
 	**/
-	public static final padButtonCodeMap: Map<Button, Array<Int>> = [
-		A => [hxd.Pad.DEFAULT_CONFIG.A],
-		B => [hxd.Pad.DEFAULT_CONFIG.B],
-		X => [hxd.Pad.DEFAULT_CONFIG.X],
-		Y => [hxd.Pad.DEFAULT_CONFIG.Y],
-		D_LEFT => [hxd.Pad.DEFAULT_CONFIG.dpadLeft],
-		D_UP => [hxd.Pad.DEFAULT_CONFIG.dpadUp],
-		D_RIGHT => [hxd.Pad.DEFAULT_CONFIG.dpadRight],
-		D_DOWN => [hxd.Pad.DEFAULT_CONFIG.dpadDown]
+	public static final padButtonCodeMap: Map<Button, Array<ButtonCode>> = [
+		A => [ButtonCode.A],
+		B => [ButtonCode.B],
+		X => [ButtonCode.X],
+		Y => [ButtonCode.Y],
+		D_LEFT => [ButtonCode.LEFT],
+		D_UP => [ButtonCode.UP],
+		D_RIGHT => [ButtonCode.RIGHT],
+		D_DOWN => [ButtonCode.DOWN]
 	];
 }
