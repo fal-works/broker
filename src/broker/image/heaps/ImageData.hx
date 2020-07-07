@@ -9,7 +9,7 @@ abstract ImageData(ImageDataBase) from ImageDataBase {
 		final parsed = Tools.parseImageFileName(image.name);
 
 		return {
-			bitmap: pixels,
+			pixels: pixels,
 			name: parsed.name,
 			frameSize: parsed.frameSize,
 			centerPivot: true

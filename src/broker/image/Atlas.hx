@@ -12,18 +12,18 @@ class Atlas {
 	**/
 	public static function from(imageDataList: ImageDataList): Atlas {
 		final entireSize = imageDataList.getBoundSize();
-		final entireBitmap = new Bitmap(entireSize.width, entireSize.height);
+		final entirePixels = new Pixels(entireSize.width, entireSize.height);
 		final frameTilesBuilderMap = new StringMap<(texture: Texture) -> FrameTiles>();
 
 		processImageDataList(
 			imageDataList,
 			UInt.zero,
 			UInt.zero,
-			entireBitmap,
+			entirePixels,
 			frameTilesBuilderMap
 		);
 
-		final texture = Texture.fromPixels(entireBitmap);
+		final texture = Texture.fromPixels(entirePixels);
 		final frameTilesMap = new StringMap<FrameTiles>();
 		for (name => build in frameTilesBuilderMap)
 			frameTilesMap.set(name, build(texture));
@@ -35,7 +35,7 @@ class Atlas {
 		imageDataList: ImageDataList,
 		destX: UInt,
 		destY: UInt,
-		entireBitmap: Bitmap,
+		entirePixels: Pixels,
 		frameTilesBuilderMap: StringMap<(texture: Texture) -> FrameTiles>
 	): PixelRegionSize {
 		switch imageDataList {
@@ -47,7 +47,7 @@ class Atlas {
 						element,
 						destX,
 						destY,
-						entireBitmap,
+						entirePixels,
 						frameTilesBuilderMap
 					);
 					if (width < size.width) width = size.width;
@@ -63,7 +63,7 @@ class Atlas {
 						element,
 						destX,
 						destY,
-						entireBitmap,
+						entirePixels,
 						frameTilesBuilderMap
 					);
 					width += size.width;
@@ -72,11 +72,11 @@ class Atlas {
 				}
 				return { width: width, height: height };
 			case Unit(data):
-				final srcBitmap = data.bitmap;
-				final width = srcBitmap.width;
-				final height = srcBitmap.height;
-				Bitmap.blitAll(srcBitmap, entireBitmap, destX, destY);
-				srcBitmap.dispose();
+				final srcPixels = data.pixels;
+				final width = srcPixels.width;
+				final height = srcPixels.height;
+				Pixels.blitAll(srcPixels, entirePixels, destX, destY);
+				srcPixels.dispose();
 				frameTilesBuilderMap.set(
 					data.name,
 					(texture) -> broker.image.heaps.FrameTiles.fromData(

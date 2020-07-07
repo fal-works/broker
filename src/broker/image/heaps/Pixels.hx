@@ -3,15 +3,15 @@ package broker.image.heaps;
 private typedef Data = hxd.Pixels;
 
 @:notNull
-abstract Bitmap(Data) from Data to Data {
+abstract Pixels(Data) from Data to Data {
 	/**
 		Blits pixels from `src` to `dest`.
 	**/
 	public static inline function blit(
-		src: Bitmap,
+		src: Pixels,
 		srcX: UInt,
 		srcY: UInt,
-		dest: Bitmap,
+		dest: Pixels,
 		destX: UInt,
 		destY: UInt,
 		width: UInt,
@@ -24,8 +24,8 @@ abstract Bitmap(Data) from Data to Data {
 		Blits the entire pixels of `src` to `dest`.
 	**/
 	public static inline function blitAll(
-		src: Bitmap,
-		dest: Bitmap,
+		src: Pixels,
+		dest: Pixels,
 		destX: UInt,
 		destY: UInt
 	): Void {

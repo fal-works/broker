@@ -5,7 +5,7 @@ class ImageData implements ripper.Data {
 	/**
 		Pixels data.
 	**/
-	public final bitmap: Bitmap;
+	public final pixels: Pixels;
 
 	/**
 		The name of `this` image.

@@ -1,7 +1,7 @@
 package broker.image;
 
 /**
-	Image data including bitmap and some additional information.
+	Image data including pixels and some additional information.
 **/
 #if heaps
 typedef ImageData = broker.image.heaps.ImageData;
