@@ -5,6 +5,4 @@ package broker.image;
 **/
 #if heaps
 typedef Pixels = broker.image.heaps.Pixels;
-#else
-typedef Pixels = Dynamic;
 #end
