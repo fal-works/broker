@@ -1,11 +1,12 @@
 package broker.draw.heaps;
 
+import broker.color.Alpha;
 import h2d.SpriteBatch.BatchElement as Data;
 
 /**
 	Element that can be added to `BatchDraw`.
 **/
-@:notNull @:forward(x, y, scale, rotation, alpha, visible)
+@:notNull @:forward(x, y, scale, rotation, visible)
 abstract BatchSprite(Data) from Data to Data {
 	/**
 		`this` as the underlying type.
@@ -16,6 +17,11 @@ abstract BatchSprite(Data) from Data to Data {
 		Current `Tile` to be drawn.
 	**/
 	public var tile(get, set): Tile;
+
+	/**
+		Current alpha value of `this` sprite.
+	**/
+	public var alpha(get, set): Alpha;
 
 	/**
 		@param tile The initial `Tile` to be set.
@@ -31,4 +37,10 @@ abstract BatchSprite(Data) from Data to Data {
 
 	extern inline function set_tile(tile: Tile)
 		return this.t = tile;
+
+	extern inline function get_alpha()
+		return Alpha.fromUnsafe(this.alpha);
+
+	extern inline function set_alpha(v: Alpha)
+		return Alpha.fromUnsafe(this.alpha = v.float());
 }
