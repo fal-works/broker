@@ -19,7 +19,10 @@ class SceneStatics {
 		Object pool for `Bitmap`.
 	**/
 	@:nullSafety(Off)
-	public static var bitmapPool(default, null): SafeObjectPool<h2d.Bitmap> = null;
+	public static var bitmapPool(
+		default,
+		null
+	): SafeObjectPool<h2d.Bitmap> = null;
 
 	/**
 		Object pool for `FadeInTimer<Bitmap>`.

@@ -14,9 +14,13 @@ abstract SoundChannel(Dynamic) from Dynamic to Dynamic {
 		return this;
 
 	public extern inline function stop(): Void {}
+
 	public extern inline function pause(): Void {}
+
 	public extern inline function resume(): Void {}
+
 	public extern inline function fadeIn(duration: Float, ?onEnd: () -> Void): Void {}
+
 	public extern inline function fadeOut(duration: Float, ?onEnd: () -> Void): Void {}
 
 	extern inline function get_data()

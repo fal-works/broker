@@ -93,7 +93,11 @@ class Atlas {
 		}
 	}
 
+	/**
+		The entire texture.
+	**/
 	public final texture: Texture;
+
 	final frameTilesMap: StringMap<FrameTiles>;
 
 	public function new(texture: Texture, frameTilesMap: StringMap<FrameTiles>) {

@@ -11,7 +11,7 @@ class EasyTimer extends Timer {
 	/**
 		Function called in `this.onProgress()`.
 	**/
-	var onProgressCallback: Float -> Void;
+	var onProgressCallback: Float->Void;
 
 	public function new(
 		?duration: UInt,

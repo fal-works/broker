@@ -191,10 +191,7 @@ class TimerExtension {
 		Resets variables of `this`.
 		@return `this`.
 	**/
-	public static function reset(
-		_this: Timer,
-		duration: UInt
-	): Timer {
+	public static function reset(_this: Timer, duration: UInt): Timer {
 		_this.setDuration(duration);
 		_this.clearCallbacks();
 		_this.clearNext();

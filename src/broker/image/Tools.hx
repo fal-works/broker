@@ -29,7 +29,10 @@ class Tools {
 			final frameWidthValue = Std.parseInt(frameWHRegexp.matched(1));
 			final frameHeightValue = Std.parseInt(frameWHRegexp.matched(2));
 			if (frameWidthValue != null && frameHeightValue != null) {
-				final frameSize = new PixelRegionSize(frameWidthValue, frameHeightValue);
+				final frameSize = new PixelRegionSize(
+					frameWidthValue,
+					frameHeightValue
+				);
 				return { name: dataName, frameSize: Maybe.from(frameSize) };
 			}
 		}

@@ -6,10 +6,10 @@ import broker.timer.Timer;
 /**
 	`Timer` that works on any `h2d.Object` instance.
 **/
-#if !broker_generic_disable
-@:generic
-#end
-class ObjectTimer<T: h2d.Object> extends Timer {
+	#if !broker_generic_disable
+	@:generic
+	#end
+class ObjectTimer<T:h2d.Object> extends Timer {
 	/**
 		The object to which `this` timer refers.
 	**/
@@ -56,9 +56,7 @@ class ObjectTimer<T: h2d.Object> extends Timer {
 		Sets `onCompleteObject` callback function.
 		@return `this`.
 	**/
-	public function setOnCompleteObject(
-		callback: (object: T) -> Void
-	): ObjectTimer<T> {
+	public function setOnCompleteObject(callback: (object: T) -> Void): ObjectTimer<T> {
 		this.onCompleteObjectCallback = callback;
 		return this;
 	}

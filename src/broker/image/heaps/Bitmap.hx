@@ -29,7 +29,16 @@ abstract Bitmap(Data) from Data to Data {
 		destX: UInt,
 		destY: UInt
 	): Void {
-		blit(src, UInt.zero, UInt.zero, dest, destX, destY, src.width, src.height);
+		blit(
+			src,
+			UInt.zero,
+			UInt.zero,
+			dest,
+			destX,
+			destY,
+			src.width,
+			src.height
+		);
 	}
 
 	/**

@@ -174,7 +174,11 @@ class Scene {
 	/**
 		@param timersCapacity The max number of `Timer` instances. Defaults to `16`.
 	**/
-	function new(data: SceneData, layers: Layers, timersCapacity: UInt = 16) {
+	function new(
+		data: SceneData,
+		layers: Layers,
+		timersCapacity: UInt = 16
+	) {
 		this.data = data;
 
 		this.isInitialized = false;

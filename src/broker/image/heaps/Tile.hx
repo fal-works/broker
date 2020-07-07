@@ -9,9 +9,14 @@ abstract Tile(h2d.Tile) from h2d.Tile to h2d.Tile {
 	public var height(get, never): UInt;
 
 	/**
-		@return A sub-tile from `this`.
+		@return Sub-tile from `this` as a new `Tile` instance.
 	**/
-	public extern inline function getSubTile(x: UInt, y: UInt, width: UInt, height: UInt): Tile
+	public extern inline function getSubTile(
+		x: UInt,
+		y: UInt,
+		width: UInt,
+		height: UInt
+	): Tile
 		return this.sub(x, y, width, height);
 
 	/**

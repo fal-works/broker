@@ -8,10 +8,10 @@ import broker.timer.Timer;
 /**
 	`Timer` that applies fade-out effect on any `h2d.Object` instance.
 **/
-#if !broker_generic_disable
-@:generic
-#end
-class FadeOutTimer<T: h2d.Object> extends ObjectTimer<T> {
+	#if !broker_generic_disable
+	@:generic
+	#end
+class FadeOutTimer<T:h2d.Object> extends ObjectTimer<T> {
 	/**
 		If `true`, calls `object.remove()` when completing.
 	**/
@@ -39,10 +39,10 @@ class FadeOutTimer<T: h2d.Object> extends ObjectTimer<T> {
 /**
 	Extended `FadeOutTimer` that is automatically recycled when completed.
 **/
-#if !broker_generic_disable
-@:generic
-#end
-final class PooledFadeOutTimer<T: h2d.Object> extends FadeOutTimer<T> {
+	#if !broker_generic_disable
+	@:generic
+	#end
+final class PooledFadeOutTimer<T:h2d.Object> extends FadeOutTimer<T> {
 	/**
 		The object pool to which `this` belongs.
 	**/
@@ -59,11 +59,11 @@ final class PooledFadeOutTimer<T: h2d.Object> extends FadeOutTimer<T> {
 	}
 }
 
-#if !broker_generic_disable
-@:generic
-#end
+	#if !broker_generic_disable
+	@:generic
+	#end
 @:ripper_verified
-class FadeOutTimerPool<T: h2d.Object> extends SafeObjectPool<PooledFadeOutTimer<T>> {
+class FadeOutTimerPool<T:h2d.Object> extends SafeObjectPool<PooledFadeOutTimer<T>> {
 	public function new(capacity: UInt) {
 		super(capacity, () -> new PooledFadeOutTimer(this));
 	}
