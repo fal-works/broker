@@ -3,7 +3,7 @@ package broker.draw.heaps;
 import banker.vector.VectorReference;
 
 /**
-	Object that draws multiple tiles efficiently.
+	Object that draws multiple elements efficiently.
 	The tiles should be created from to the same texture.
 **/
 abstract BatchDraw(h2d.SpriteBatch) from h2d.SpriteBatch to h2d.SpriteBatch {

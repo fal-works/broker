@@ -1,7 +1,7 @@
 package broker.draw;
 
 /**
-	Object that draws multiple tiles efficiently.
+	Object that draws multiple elements efficiently.
 	The tiles should be created from to the same texture.
 **/
 #if heaps
