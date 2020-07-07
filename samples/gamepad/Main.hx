@@ -1,15 +1,13 @@
 package gamepad;
 
-import broker.input.Key;
-import broker.input.PhysicalGamepad;
+import broker.input.physical.PhysicalInput;
 
 class Main extends hxd.App {
 	var gamepad: Gamepad;
 	var object: h2d.Object;
 
 	override function init() {
-		Key.initialize();
-		PhysicalGamepad.initialize();
+		PhysicalInput.initialize();
 
 		final gamepadPortIndex = 0;
 		final dpadMoveSpeed = 10;

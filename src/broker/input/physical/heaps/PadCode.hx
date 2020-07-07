@@ -1,11 +1,12 @@
-package broker.input.heaps;
+package broker.input.physical.heaps;
 
+#if heaps
 import hxd.Pad;
 
 /**
 	Value that specifies a button of physical gamepad.
 **/
-abstract ButtonCode(Int) {
+abstract PadCode(Int) {
 	public static var A = from(Pad.DEFAULT_CONFIG.A);
 	public static var B = from(Pad.DEFAULT_CONFIG.B);
 	public static var X = from(Pad.DEFAULT_CONFIG.X);
@@ -20,10 +21,10 @@ abstract ButtonCode(Int) {
 	public static var START = from(Pad.DEFAULT_CONFIG.start);
 
 	/**
-		Casts `code` to `ButtonCode`.
+		Casts `code` to `PadCode`.
 	**/
-	public static extern inline function from(code: Int): ButtonCode
-		return new ButtonCode(code);
+	public static extern inline function from(code: Int): PadCode
+		return new PadCode(code);
 
 	/**
 		The integer value of `this` keycode.
@@ -36,3 +37,4 @@ abstract ButtonCode(Int) {
 	extern inline function get_code()
 		return this;
 }
+#end

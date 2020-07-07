@@ -1,12 +1,12 @@
-package broker.input;
+package broker.input.physical;
 
 import sneaker.log.Logger.*;
 import banker.vector.Vector;
 
 /**
-	Virtual multitap for managing multiple `PhysicalGamepad` instances.
+	Virtual multitap for managing multiple `Pad` instances.
 **/
-class PhysicalGamepadMultitap {
+class PadMultitap {
 	/**
 		Default length of `ports`.
 	**/
@@ -21,18 +21,18 @@ class PhysicalGamepadMultitap {
 		Function called when a new physical gamepad is connected.
 		Can be replaced with any custom function.
 	**/
-	public static var onConnect = (pad: PhysicalGamepad, portIndex: UInt) -> return;
+	public static var onConnect = (pad: Pad, portIndex: UInt) -> return;
 
 	/**
 		Function called when a new physical gamepad is disconnected.
 		Can be replaced with any custom function.
 	**/
-	public static var onDisconnect = (pad: PhysicalGamepad, portIndex: UInt) -> return;
+	public static var onDisconnect = (pad: Pad, portIndex: UInt) -> return;
 
 	/**
 		Callback function for connecting a new physical gamepad to any available port.
 	**/
-	public static final connect = function(pad: PhysicalGamepad) {
+	public static final connect = function(pad: Pad) {
 		final maybeIndex = ports.ref.findFirstIndex(portIsEmpty);
 		if (maybeIndex.isNone()) {
 			debug('New gamepad recognized but the ports are already full.');
@@ -44,27 +44,27 @@ class PhysicalGamepadMultitap {
 		onConnect(pad, index);
 		pad.setOnDisconnect(() -> {
 			onDisconnect(pad, index);
-			ports[index].set(PhysicalGamepad.NULL);
+			ports[index].set(Pad.NULL);
 			info('Gamepad disconnected. Port index: $index');
 		});
 	};
 
 	/**
 		@param capacity The number of ports (`ports.length`), i.e. the max number of
-			physical gamepads that can be managed by `PhysicalGamepadMultitap`.
+			physical gamepads that can be managed by `PadMultitap`.
 	**/
 	public static function resetPorts(capacity: UInt) {
 		ports = createPorts(capacity);
 	}
 
-	static final portIsEmpty = (port: PhysicalGamepadPort) -> {
-		return port.get() == PhysicalGamepad.NULL;
+	static final portIsEmpty = (port: PadPort) -> {
+		return port.get() == Pad.NULL;
 	}
 
-	static function createPorts(capacity: UInt): Vector<PhysicalGamepadPort> {
+	static function createPorts(capacity: UInt): Vector<PadPort> {
 		return Vector.createPopulated(
 			capacity,
-			() -> new PhysicalGamepadPort(PhysicalGamepad.NULL)
+			() -> new PadPort(Pad.NULL)
 		);
 	}
 }

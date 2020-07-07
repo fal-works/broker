@@ -2,11 +2,7 @@ package gamepad;
 
 import broker.input.GamepadBase;
 import broker.input.Stick;
-import broker.input.KeyCode;
-import broker.input.ButtonCode;
-import broker.input.PhysicalGamepadPort;
-import broker.input.PhysicalGamepadMultitap;
-import broker.input.PhysicalInput;
+import broker.input.physical.*;
 import broker.input.builtin.simple.Button;
 import broker.input.builtin.simple.ButtonStatusMap;
 
@@ -16,18 +12,18 @@ import broker.input.builtin.simple.ButtonStatusMap;
 class Gamepad extends GamepadBase<Button, ButtonStatusMap, Stick> {
 	static inline final analogStickThreshold = 0.1;
 
-	final port: PhysicalGamepadPort;
+	final port: PadPort;
 	final updateButtonStatus: () -> Void;
 	final moveSpeed: Float;
 
 	public function new(padPortIndex: Int, moveSpeed: Float) {
 		super(new ButtonStatusMap(), new Stick());
 
-		this.port = PhysicalGamepadMultitap.ports[padPortIndex];
+		this.port = PadMultitap.ports[padPortIndex];
 
 		final getButtonChecker = PhysicalInput.createButtonCheckerGenerator(
 			GamepadSettings.keyCodeMap,
-			GamepadSettings.padButtonCodeMap,
+			GamepadSettings.padPadCodeMap,
 			this.port
 		);
 		this.updateButtonStatus = this.buttons.createUpdater(getButtonChecker);
@@ -80,14 +76,14 @@ class GamepadSettings {
 	/**
 		Mapping from virtual buttons to `hxd.Pad` button codes.
 	**/
-	public static final padButtonCodeMap: Map<Button, Array<ButtonCode>> = [
-		A => [ButtonCode.A],
-		B => [ButtonCode.B],
-		X => [ButtonCode.X],
-		Y => [ButtonCode.Y],
-		D_LEFT => [ButtonCode.LEFT],
-		D_UP => [ButtonCode.UP],
-		D_RIGHT => [ButtonCode.RIGHT],
-		D_DOWN => [ButtonCode.DOWN]
+	public static final padPadCodeMap: Map<Button, Array<PadCode>> = [
+		A => [PadCode.A],
+		B => [PadCode.B],
+		X => [PadCode.X],
+		Y => [PadCode.Y],
+		D_LEFT => [PadCode.LEFT],
+		D_UP => [PadCode.UP],
+		D_RIGHT => [PadCode.RIGHT],
+		D_DOWN => [PadCode.DOWN]
 	];
 }

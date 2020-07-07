@@ -1,9 +1,9 @@
-package broker.input;
+package broker.input.physical;
 
 import banker.vector.VectorReference;
 import banker.vector.Vector;
 #if heaps
-import broker.input.heaps.HeapsKey as KeyImpl;
+import broker.input.physical.heaps.Key as KeyImpl;
 #end
 
 using banker.type_extension.MapExtension;

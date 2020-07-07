@@ -1,4 +1,4 @@
-package broker.input;
+package broker.input.physical;
 
 import banker.types.Reference;
 import banker.vector.Vector;
@@ -8,28 +8,28 @@ import broker.input.interfaces.ButtonStatusMapWithDpad as ButtonsWithDpad;
 
 using banker.type_extension.MapExtension;
 
-private typedef Data = Reference<PhysicalGamepad>;
+private typedef Data = Reference<Pad>;
 
 /**
-	Virtual port for connecting `PhysicalGamepad`.
+	Virtual port for connecting `Pad`.
 **/
 @:forward(get, set)
-abstract PhysicalGamepadPort(Data) from Data {
-	public extern inline function new(pad: Reference<PhysicalGamepad>)
+abstract PadPort(Data) from Data {
+	public extern inline function new(pad: Reference<Pad>)
 		this = pad;
 
 	/**
 		@return `true` if any button in `buttonCodes` is down.
 	**/
-	public function anyButtonIsDown(buttonCodes: VectorReference<ButtonCode>): Bool {
+	public function anyButtonIsDown(buttonCodes: VectorReference<PadCode>): Bool {
 		return this.get().anyButtonIsDown(buttonCodes);
 	}
 
 	/**
 		@return Function that returns `true` if any button of `buttonCodeArray` is down.
 	**/
-	public inline function createButtonCodesChecker<T>(
-		buttonCodeArray: Array<ButtonCode>
+	public inline function createPadCodesChecker<T>(
+		buttonCodeArray: Array<PadCode>
 	): () -> Bool {
 		final buttonCodes = Vector.fromArrayCopy(buttonCodeArray);
 		return anyButtonIsDown.bind(buttonCodes);
@@ -39,7 +39,7 @@ abstract PhysicalGamepadPort(Data) from Data {
 		Usage:
 
 		```
-		final generateChecker = createButtonCheckerGenerator(anyPort, anyButtonCodeMap);
+		final generateChecker = createButtonCheckerGenerator(anyPort, anyPadCodeMap);
 		final checkerX = generateChecker(buttonX);
 		final xIsDown = checkerX(); // true if buttonX is down
 		```
@@ -48,11 +48,11 @@ abstract PhysicalGamepadPort(Data) from Data {
 		@return Function that generates another function for checking if a given `button` is down.
 	**/
 	public inline function createButtonCheckerGenerator<T>(
-		buttonCodeMap: Map<T, Array<ButtonCode>>
+		buttonCodeMap: Map<T, Array<PadCode>>
 	): (button: T) -> (() -> Bool) {
 		return function(button: T) {
 			final buttonCodeArray = buttonCodeMap.getOr(button, []);
-			return createButtonCodesChecker(buttonCodeArray);
+			return createPadCodesChecker(buttonCodeArray);
 		};
 	}
 

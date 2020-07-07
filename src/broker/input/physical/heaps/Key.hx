@@ -1,10 +1,10 @@
-package broker.input.heaps;
+package broker.input.physical.heaps;
 
 #if heaps
 import banker.vector.VectorReference;
 
 @:access(hxd.Key)
-class HeapsKey {
+class Key {
 	/**
 		Registers an event listener so that `hxd.Key` is updated for every window event.
 	**/

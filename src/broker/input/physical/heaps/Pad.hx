@@ -1,5 +1,6 @@
-package broker.input.heaps;
+package broker.input.physical.heaps;
 
+#if heaps
 import banker.vector.VectorReference;
 import broker.input.interfaces.FullGamepad;
 import broker.input.interfaces.ButtonStatusMapWithDpad as ButtonsWithDpad;
@@ -7,23 +8,23 @@ import broker.input.interfaces.ButtonStatusMapWithDpad as ButtonsWithDpad;
 /**
 	An object that represents a physical gamepad.
 **/
-abstract PhysicalGamepad(hxd.Pad) from hxd.Pad to hxd.Pad {
+abstract Pad(hxd.Pad) from hxd.Pad to hxd.Pad {
 	/**
-		Null object for `PhysicalGamepad`.
+		Null object for `Pad`.
 	**/
-	public static final NULL: PhysicalGamepad = hxd.Pad.createDummy();
+	public static final NULL: Pad = hxd.Pad.createDummy();
 
 	/**
-		Registers an event listener so that every new `PhysicalGamepad` is connected to `PhysicalGamepadMultitap`.
+		Registers an event listener so that every new `Pad` is connected to `PadMultitap`.
 	**/
 	public static function initialize(): Void {
-		hxd.Pad.wait(PhysicalGamepadMultitap.connect);
+		hxd.Pad.wait(PadMultitap.connect);
 	}
 
 	/**
 		@return `true` if the button of `buttonCode` is down.
 	**/
-	public function isDown(buttonCode: ButtonCode): Bool
+	public function isDown(buttonCode: PadCode): Bool
 		return this.buttons[buttonCode.code];
 
 	/**
@@ -35,7 +36,7 @@ abstract PhysicalGamepad(hxd.Pad) from hxd.Pad to hxd.Pad {
 	/**
 		@return `true` if any button in `buttonCodes` is down.
 	**/
-	public function anyButtonIsDown(buttonCodes: VectorReference<ButtonCode>): Bool {
+	public function anyButtonIsDown(buttonCodes: VectorReference<PadCode>): Bool {
 		final buttons = this.buttons;
 		for (i in 0...buttonCodes.length) {
 			if (buttons[buttonCodes[i].code]) return true;
@@ -101,3 +102,4 @@ abstract PhysicalGamepad(hxd.Pad) from hxd.Pad to hxd.Pad {
 		gamepad.reflectTriggers(padValues[config.LT], padValues[config.RT]);
 	}
 }
+#end
