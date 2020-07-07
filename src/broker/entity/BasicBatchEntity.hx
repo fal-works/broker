@@ -1,20 +1,19 @@
-package broker.entity.heaps;
+package broker.entity;
 
-#if heaps
 /**
-	Basic entity class using `SpriteBatch` of heaps.
+	Basic entity class using `broker.draw.BatchDraw`.
 	Implements `banker.aosoa.Structure`.
 **/
 @:banker_verified
-class BasicEntity extends broker.entity.BasicEntity {
+class BasicBatchEntity extends broker.entity.BasicEntity {
 	/**
 		Factory function used in initialization of chunks.
 	**/
 	@:banker_hidden
 	static function spriteVectorFactory(
 		chunkCapacity: Int
-	): banker.vector.WritableVector<h2d.SpriteBatch.BatchElement> {
-		return new banker.vector.WritableVector<h2d.SpriteBatch.BatchElement>(chunkCapacity);
+	): banker.vector.WritableVector<broker.draw.BatchSprite> {
+		return new banker.vector.WritableVector<broker.draw.BatchSprite>(chunkCapacity);
 	}
 
 	/**
@@ -22,8 +21,8 @@ class BasicEntity extends broker.entity.BasicEntity {
 	**/
 	@:nullSafety(Off)
 	@:banker_chunkLevelFinal
-	@:banker_chunkLevelFactory(broker.entity.heaps.BasicEntity.spriteVectorFactory)
-	var usedSprites: banker.vector.WritableVector<h2d.SpriteBatch.BatchElement>;
+	@:banker_chunkLevelFactory(broker.entity.BasicBatchEntity.spriteVectorFactory)
+	var usedSprites: banker.vector.WritableVector<broker.draw.BatchSprite>;
 
 	/**
 		Number of valid elements in `usedSprites`.
@@ -36,8 +35,8 @@ class BasicEntity extends broker.entity.BasicEntity {
 	**/
 	@:nullSafety(Off)
 	@:banker_chunkLevelFinal
-	@:banker_chunkLevelFactory(broker.entity.heaps.BasicEntity.spriteVectorFactory)
-	var disusedSprites: banker.vector.WritableVector<h2d.SpriteBatch.BatchElement>;
+	@:banker_chunkLevelFactory(broker.entity.BasicBatchEntity.spriteVectorFactory)
+	var disusedSprites: banker.vector.WritableVector<broker.draw.BatchSprite>;
 
 	/**
 		Number of valid elements in `disusedSprites`.
@@ -46,14 +45,14 @@ class BasicEntity extends broker.entity.BasicEntity {
 	var disusedCount: Int = 0;
 
 	/**
-		`SpriteBatch` instance responsible for this entity.
+		`BatchDraw` instance responsible for this entity.
 	**/
 	@:nullSafety(Off)
 	@:banker_chunkLevelFinal
-	var batch: h2d.SpriteBatch;
+	var batch: broker.draw.BatchDraw;
 
 	/**
-		Reflects `usedSprites` and `disusedSprites` to the `SpriteBatch`.
+		Reflects `usedSprites` and `disusedSprites` to the `BatchDraw`.
 		Then logically clears `usedSprites` and `disusedSprites`.
 	**/
 	@:banker_chunkLevel
@@ -61,36 +60,27 @@ class BasicEntity extends broker.entity.BasicEntity {
 	function synchronizeBatch() {
 		final batch = this.batch;
 
-		final disusedSprites = this.disusedSprites;
-		for (i in 0...this.disusedCount) {
-			@:privateAccess batch.delete(disusedSprites[i]);
-		}
+		batch.removeElements(this.disusedSprites, this.disusedCount);
 		this.disusedCount = 0;
 
-		final usedSprites = this.usedSprites;
-		for (i in 0...this.usedCount) {
-			batch.add(usedSprites[i]);
-		}
+		batch.addElements(this.usedSprites, this.usedCount);
 		this.usedCount = 0;
 	}
 
 	/**
-		`BatchElement` instance associated to the entity.
-
-		*Note: We're using the name "sprite" for `SpriteBatch.BatchElement` instances
-		and it's not related to the deprecated type `h2d.Sprite`*.
+		`BatchSprite` instance associated to the entity.
 	**/
 	@:nullSafety(Off)
 	@:banker_externalFactory
 	@:banker_swap
-	var sprite: h2d.SpriteBatch.BatchElement;
+	var sprite: broker.draw.BatchSprite;
 
 	/**
 		Reflects position to sprite.
 	**/
 	@:banker_onCompleteSynchronize
 	static function synchronizeSprite(
-		sprite: h2d.SpriteBatch.BatchElement,
+		sprite: broker.draw.BatchSprite,
 		x: Float,
 		y: Float
 	): Void {
@@ -107,13 +97,13 @@ class BasicEntity extends broker.entity.BasicEntity {
 	**/
 	@:banker_useEntity
 	static function use(
-		sprite: h2d.SpriteBatch.BatchElement,
+		sprite: broker.draw.BatchSprite,
 		x: banker.vector.WritableVector<Float>,
 		y: banker.vector.WritableVector<Float>,
 		vx: banker.vector.WritableVector<Float>,
 		vy: banker.vector.WritableVector<Float>,
 		i: Int,
-		usedSprites: banker.vector.WritableVector<h2d.SpriteBatch.BatchElement>,
+		usedSprites: banker.vector.WritableVector<broker.draw.BatchSprite>,
 		usedCount: Int,
 		initialX: Float,
 		initialY: Float,
@@ -137,13 +127,13 @@ class BasicEntity extends broker.entity.BasicEntity {
 	**/
 	@:banker_useEntity
 	static function emit(
-		sprite: h2d.SpriteBatch.BatchElement,
+		sprite: broker.draw.BatchSprite,
 		x: banker.vector.WritableVector<Float>,
 		y: banker.vector.WritableVector<Float>,
 		vx: banker.vector.WritableVector<Float>,
 		vy: banker.vector.WritableVector<Float>,
 		i: Int,
-		usedSprites: banker.vector.WritableVector<h2d.SpriteBatch.BatchElement>,
+		usedSprites: banker.vector.WritableVector<broker.draw.BatchSprite>,
 		usedCount: Int,
 		initialX: Float,
 		initialY: Float,
@@ -162,10 +152,10 @@ class BasicEntity extends broker.entity.BasicEntity {
 		Disuses all entities currently in use.
 	**/
 	static function disuseAll(
-		sprite: h2d.SpriteBatch.BatchElement,
+		sprite: broker.draw.BatchSprite,
 		i: Int,
 		disuse: Bool,
-		disusedSprites: banker.vector.WritableVector<h2d.SpriteBatch.BatchElement>,
+		disusedSprites: banker.vector.WritableVector<broker.draw.BatchSprite>,
 		disusedCount: Int
 	): Void {
 		disuse = true;
@@ -173,4 +163,3 @@ class BasicEntity extends broker.entity.BasicEntity {
 		++disusedCount;
 	}
 }
-#end
