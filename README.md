@@ -2,7 +2,7 @@
 
 Utility library for game programming.
 
-Mainly intended for use with [heaps](http://heaps.io/), but can also be used with any other engines (maybe).
+Currently works only with [heaps](http://heaps.io/).
 
 **Requires Haxe 4** (developed with v4.1.1).
 
