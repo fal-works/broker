@@ -1,9 +1,9 @@
-package broker.input.heaps;
+package broker.input;
 
 /**
-	Functions related to both `hxd.Key` and `hxd.Pad`.
+	Functions related to both `Key` and `PhysicalGamepad`.
 **/
-class HeapsInputTools {
+class PhysicalInput {
 	/**
 		Creates a button checker function that checks both `KeyCode` and `ButtonCode`.
 		@param keyCodeMap Mapping from virtual buttons to `KeyCode`.

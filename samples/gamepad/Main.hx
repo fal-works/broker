@@ -1,7 +1,7 @@
 package gamepad;
 
 import broker.input.Key;
-import broker.input.heaps.HeapsPadTools;
+import broker.input.PhysicalGamepad;
 
 class Main extends hxd.App {
 	var gamepad: Gamepad;
@@ -9,7 +9,7 @@ class Main extends hxd.App {
 
 	override function init() {
 		Key.initialize();
-		HeapsPadTools.initialize();
+		PhysicalGamepad.initialize();
 
 		final gamepadPortIndex = 0;
 		final dpadMoveSpeed = 10;

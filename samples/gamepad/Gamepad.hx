@@ -6,7 +6,7 @@ import broker.input.KeyCode;
 import broker.input.ButtonCode;
 import broker.input.PhysicalGamepadPort;
 import broker.input.PhysicalGamepadMultitap;
-import broker.input.heaps.HeapsInputTools;
+import broker.input.PhysicalInput;
 import broker.input.builtin.simple.Button;
 import broker.input.builtin.simple.ButtonStatusMap;
 
@@ -25,7 +25,7 @@ class Gamepad extends GamepadBase<Button, ButtonStatusMap, Stick> {
 
 		this.port = PhysicalGamepadMultitap.ports[padPortIndex];
 
-		final getButtonChecker = HeapsInputTools.createButtonCheckerGenerator(
+		final getButtonChecker = PhysicalInput.createButtonCheckerGenerator(
 			GamepadSettings.keyCodeMap,
 			GamepadSettings.padButtonCodeMap,
 			this.port

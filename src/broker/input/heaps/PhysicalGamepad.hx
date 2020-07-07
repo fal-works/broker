@@ -14,6 +14,13 @@ abstract PhysicalGamepad(hxd.Pad) from hxd.Pad to hxd.Pad {
 	public static final NULL: PhysicalGamepad = hxd.Pad.createDummy();
 
 	/**
+		Registers an event listener so that every new `PhysicalGamepad` is connected to `PhysicalGamepadMultitap`.
+	**/
+	public static function initialize(): Void {
+		hxd.Pad.wait(PhysicalGamepadMultitap.connect);
+	}
+
+	/**
 		@return `true` if the button of `buttonCode` is down.
 	**/
 	public function isDown(buttonCode: ButtonCode): Bool
