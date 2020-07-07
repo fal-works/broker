@@ -5,15 +5,10 @@ import hxd.Pad;
 
 class HeapsPadTools {
 	/**
-		Null object for `hxd.Pad`.
-	**/
-	public static final dummyPad = Pad.createDummy();
-
-	/**
-		Registers an event listener so that every new `hxd.Pad` is connected to `HeapsPadMultitap`.
+		Registers an event listener so that every new `PhysicalGamepad` is connected to `PhysicalGamepadMultitap`.
 	**/
 	public static function initialize(): Void {
-		Pad.wait(HeapsPadMultitap.connect);
+		Pad.wait(PhysicalGamepadMultitap.connect);
 	}
 }
 #end

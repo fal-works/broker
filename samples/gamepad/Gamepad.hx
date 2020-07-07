@@ -4,8 +4,8 @@ import broker.input.GamepadBase;
 import broker.input.Stick;
 import broker.input.KeyCode;
 import broker.input.ButtonCode;
-import broker.input.heaps.HeapsPadPort;
-import broker.input.heaps.HeapsPadMultitap;
+import broker.input.PhysicalGamepadPort;
+import broker.input.PhysicalGamepadMultitap;
 import broker.input.heaps.HeapsInputTools;
 import broker.input.builtin.simple.Button;
 import broker.input.builtin.simple.ButtonStatusMap;
@@ -16,14 +16,14 @@ import broker.input.builtin.simple.ButtonStatusMap;
 class Gamepad extends GamepadBase<Button, ButtonStatusMap, Stick> {
 	static inline final analogStickThreshold = 0.1;
 
-	final port: HeapsPadPort;
+	final port: PhysicalGamepadPort;
 	final updateButtonStatus: () -> Void;
 	final moveSpeed: Float;
 
 	public function new(padPortIndex: Int, moveSpeed: Float) {
 		super(new ButtonStatusMap(), new Stick());
 
-		this.port = HeapsPadMultitap.ports[padPortIndex];
+		this.port = PhysicalGamepadMultitap.ports[padPortIndex];
 
 		final getButtonChecker = HeapsInputTools.createButtonCheckerGenerator(
 			GamepadSettings.keyCodeMap,

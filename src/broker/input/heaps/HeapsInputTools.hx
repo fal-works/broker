@@ -5,20 +5,20 @@ package broker.input.heaps;
 **/
 class HeapsInputTools {
 	/**
-		Creates a button checker function that checks both `hxd.Key` and `hxd.Pad`.
-		@param keyCodeMap Mapping from virtual buttons to key codes in `hxd.Key`.
-		@param padButtonCodeMap Mapping from virtual buttons to button codes used in `hxd.Pad`.
-		@param padPort Any element of `HeapsPadMultitap.ports`.
+		Creates a button checker function that checks both `KeyCode` and `ButtonCode`.
+		@param keyCodeMap Mapping from virtual buttons to `KeyCode`.
+		@param buttonCodeMap Mapping from virtual buttons to `ButtonCode`.
+		@param padPort Any element of `PhysicalGamepadMultitap.ports`.
 		@return Function that generates another function for checking if a given `button` is down.
 	**/
 	public static inline function createButtonCheckerGenerator<T>(
 		keyCodeMap: Map<T, Array<KeyCode>>,
-		padButtonCodeMap: Map<T, Array<ButtonCode>>,
-		padPort: HeapsPadPort
+		buttonCodeMap: Map<T, Array<ButtonCode>>,
+		padPort: PhysicalGamepadPort
 	) {
 		final generateCheckFromKey = HeapsKeyTools.createButtonCheckerGenerator(keyCodeMap);
 
-		final generateCheckFromPad = padPort.createButtonCheckerGenerator(padButtonCodeMap);
+		final generateCheckFromPad = padPort.createButtonCheckerGenerator(buttonCodeMap);
 
 		return function(button: T) {
 			final checkFromKey = generateCheckFromKey(button);
