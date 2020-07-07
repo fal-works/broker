@@ -39,7 +39,7 @@ abstract BatchDraw(h2d.SpriteBatch) from h2d.SpriteBatch to h2d.SpriteBatch {
 	/**
 		Adds elements of `sprites` (from index `0` until but not including `endIndex`) to `this` batch.
 	**/
-	public function addElements(sprites: VectorReference<BatchSprite>, endIndex: UInt): Void {
+	public function addSprites(sprites: VectorReference<BatchSprite>, endIndex: UInt): Void {
 		var i = UInt.zero;
 		while (i < endIndex) {
 			add(sprites[i]);
@@ -50,7 +50,7 @@ abstract BatchDraw(h2d.SpriteBatch) from h2d.SpriteBatch to h2d.SpriteBatch {
 	/**
 		Removes elements of `sprites` (from index `0` until but not including `endIndex`) from `this` batch.
 	**/
-	public function removeElements(sprites: VectorReference<BatchSprite>, endIndex: UInt): Void {
+	public function removeSprites(sprites: VectorReference<BatchSprite>, endIndex: UInt): Void {
 		var i = UInt.zero;
 		while (i < endIndex) {
 			remove(sprites[i]);

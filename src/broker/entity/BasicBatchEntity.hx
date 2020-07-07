@@ -60,10 +60,10 @@ class BasicBatchEntity extends broker.entity.BasicEntity {
 	function synchronizeBatch() {
 		final batch = this.batch;
 
-		batch.removeElements(this.disusedSprites, this.disusedCount);
+		batch.removeSprites(this.disusedSprites, this.disusedCount);
 		this.disusedCount = 0;
 
-		batch.addElements(this.usedSprites, this.usedCount);
+		batch.addSprites(this.usedSprites, this.usedCount);
 		this.usedCount = 0;
 	}
 
