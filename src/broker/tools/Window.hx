@@ -8,7 +8,9 @@ import broker.sound.SoundManager;
 **/
 class Window {
 	/**
-		`true` if the window is currently fullscreen.
+		Flag for toggling fullscreen/windowed.
+
+		Note: Changing the window state manually via the underlying engine (or ALT+ENTER) does not reflect to this value.
 	**/
 	public static var fullscreen(default, set): Bool = false;
 
