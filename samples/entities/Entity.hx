@@ -1,10 +1,11 @@
 package entities;
 
-import broker.entity.heaps.BasicEntity;
+import broker.App;
+import broker.entity.BasicBatchEntity;
 import banker.vector.WritableVector as Vec;
 import h2d.SpriteBatch.BatchElement;
 
-class Entity extends BasicEntity {
+class Entity extends BasicBatchEntity {
 	static function killOutOfWindow(
 		sprite: BatchElement,
 		x: Float,
@@ -14,7 +15,7 @@ class Entity extends BasicEntity {
 		disusedSprites: Vec<BatchElement>,
 		disusedCount: Int
 	): Void {
-		if (x < 0 || x > Constants.width || y < 0 || y > Constants.height) {
+		if (x < 0 || x > App.width.int() || y < 0 || y > App.height.int()) {
 			disuse = true;
 			disusedSprites[disusedCount] = sprite;
 			++disusedCount;

@@ -5,7 +5,7 @@ class Main extends hxd.App {
 	var frameCount = 0;
 
 	override function init() {
-		Constants.initialize(hxd.Window.getInstance());
+		broker.App.initialize(800, 600);
 
 		final tile = h2d.Tile.fromColor(0xFFFFFF, 16, 16).center();
 		entities = createEntities(tile);
@@ -34,8 +34,8 @@ class Main extends hxd.App {
 		final radius = 150;
 		final angle = 0.05 * frameCount;
 
-		final x = Constants.width / 2 + radius * Math.cos(angle);
-		final y = Constants.height / 2 + radius * Math.sin(angle);
+		final x = broker.App.width / 2 + radius * Math.cos(angle);
+		final y = broker.App.height / 2 + radius * Math.sin(angle);
 		final speed = 5;
 		final direction = -1.5 * angle;
 

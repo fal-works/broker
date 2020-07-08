@@ -68,7 +68,9 @@ class Main extends hxd.App {
 	}
 
 	override function init() {
-		Constants.initialize(hxd.Window.getInstance());
+		final window = hxd.Window.getInstance();
+		broker.App.initialize(window.width, window.height);
+		Constants.initialize(window);
 
 		final leftGroupEntityCount = 3 * Settings.entityCountPerEmit;
 
@@ -90,8 +92,8 @@ class Main extends hxd.App {
 			final chunk = entities.getChunk(id);
 			final index = chunk.getReadIndex(id);
 			final sprite = chunk.sprite[index];
-			sprite.g = 0;
-			sprite.b = 0.25;
+			sprite.data.g = 0;
+			sprite.data.b = 0.25;
 		};
 
 		if (Settings.interGroup)

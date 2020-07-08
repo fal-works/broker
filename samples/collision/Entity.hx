@@ -1,12 +1,12 @@
 package collision;
 
-import h2d.SpriteBatch.BatchElement;
 import banker.vector.WritableVector as Vec;
 import banker.aosoa.ChunkEntityId;
-import broker.entity.heaps.BasicEntity;
+import broker.entity.BasicBatchEntity;
+import broker.draw.BatchSprite;
 import broker.collision.*;
 
-class Entity extends BasicEntity {
+class Entity extends BasicBatchEntity {
 	@:nullSafety(Off)
 	@:banker_chunkLevelFinal
 	var halfTileWidth: Float;
@@ -43,16 +43,18 @@ class Entity extends BasicEntity {
 		}
 	}
 
-	static function resetColor(sprite: BatchElement): Void {
-		sprite.r = 1.0;
-		sprite.g = 1.0;
-		sprite.b = 1.0;
+	static function resetColor(sprite: BatchSprite): Void {
+		final spr = sprite.data;
+		spr.r = 1.0;
+		spr.g = 1.0;
+		spr.b = 1.0;
 	}
 
-	static function coolDown(sprite: BatchElement): Void {
-		sprite.r += 0.2 * (1.0 - sprite.r);
-		sprite.g += 0.2 * (1.0 - sprite.g);
-		sprite.b += 0.2 * (1.0 - sprite.b);
+	static function coolDown(sprite: BatchSprite): Void {
+		final spr = sprite.data;
+		spr.r += 0.2 * (1.0 - spr.r);
+		spr.g += 0.2 * (1.0 - spr.g);
+		spr.b += 0.2 * (1.0 - spr.b);
 	}
 
 	/**
