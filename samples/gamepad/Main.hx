@@ -1,13 +1,11 @@
 package gamepad;
 
-import broker.input.physical.PhysicalInput;
-
 class Main extends hxd.App {
 	var gamepad: Gamepad;
 	var object: h2d.Object;
 
 	override function init() {
-		PhysicalInput.initialize();
+		broker.App.initialize(800, 600);
 
 		final gamepadPortIndex = 0;
 		final dpadMoveSpeed = 10;
@@ -16,8 +14,7 @@ class Main extends hxd.App {
 		final tile = h2d.Tile.fromColor(0xFFFFFF, 64, 64).center();
 		object = new h2d.Bitmap(tile, s2d);
 
-		final window = hxd.Window.getInstance();
-		object.setPosition(window.width / 2, window.height / 2);
+		object.setPosition(broker.App.width / 2, broker.App.height / 2);
 	}
 
 	override function update(dt: Float) {
