@@ -1,7 +1,9 @@
 package broker.image.heaps;
 
+// Note: StringMap<Vector<Tile>> emits "JIT error 12" if -hl and --debug. Hence Array here.
+
 @:notNull @:forward
-abstract FrameTiles(Vector<Tile>) from Vector<Tile> to Vector<Tile> {
+abstract FrameTiles(Array<Tile>) from Array<Tile> to Array<Tile> {
 	/**
 		Creates a `FrameTiles` instance from `texture`.
 		@param x The left-top point of the source area in `texture`.
@@ -42,7 +44,7 @@ abstract FrameTiles(Vector<Tile>) from Vector<Tile> to Vector<Tile> {
 			}
 		}
 
-		return Vector.fromArrayCopy(frames);
+		return frames;
 	}
 
 	/**
@@ -65,6 +67,15 @@ abstract FrameTiles(Vector<Tile>) from Vector<Tile> to Vector<Tile> {
 		);
 	}
 
+	/**
+		@return The `Tile` at `index`.
+	**/
 	@:op([]) public extern inline function get(index: UInt): Tile
 		return this[index];
+
+	/**
+		Converts `this` to `Vector<Tile>`.
+	**/
+	public extern inline function toVector(): Vector<Tile>
+		return Vector.fromArrayCopy(this);
 }
