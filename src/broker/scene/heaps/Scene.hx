@@ -22,6 +22,9 @@ class Scene extends SceneBase {
 	**/
 	public function new(?heapsScene: h2d.Scene, ?timersCapacity: UInt) {
 		final hScene = if (heapsScene != null) heapsScene else new h2d.Scene();
+		hScene.defaultSmooth = true;
+		hScene.scaleMode = LetterBox(App.width, App.height);
+
 		final layers = new Layers();
 		layers.addTo(hScene);
 
