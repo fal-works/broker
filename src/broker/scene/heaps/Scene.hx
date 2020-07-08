@@ -1,6 +1,7 @@
 package broker.scene.heaps;
 
 #if heaps
+import broker.App;
 import broker.timer.Timer;
 import broker.color.ArgbColor;
 import broker.scene.internal.Scene as SceneBase;
@@ -26,9 +27,11 @@ class Scene extends SceneBase {
 		hScene.scaleMode = LetterBox(App.width, App.height);
 
 		final layers = new Layers();
-		layers.addTo(hScene);
 
 		super(hScene, layers, timersCapacity);
+
+		final mask = new h2d.Mask(App.width, App.height, hScene);
+		layers.addTo(mask);
 	}
 
 	/**
