@@ -20,7 +20,9 @@ class App {
 	public static var height(default, null): UInt = 0;
 
 	/**
-		Initializes all `broker` features.
+		Initializes `broker` features.
+
+		If using Heaps, you should call `initializeHeaps()` as well.
 	**/
 	public static function initialize(width: UInt, height: UInt): Void {
 		App.width = width;
@@ -29,6 +31,15 @@ class App {
 		broker.tools.Window.initialize();
 		broker.input.physical.PhysicalInput.initialize();
 	}
+
+	#if heaps
+	/**
+		Initializes heaps-related features.
+	**/
+	public static function initializeHeaps(app: hxd.App): Void {
+		broker.scene.heaps.Scene.setApplication(app);
+	}
+	#end
 
 	/**
 		Increments `frameCount`.
