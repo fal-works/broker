@@ -28,12 +28,32 @@ class App {
 	public static var data: #if heaps hxd.App #else Dynamic #end;
 
 	/**
+		Called if `broker.App` catches any `haxe.Exception`.
+		The exception will be rethrown unless you quits the application.
+	**/
+	public static var onException = (e: haxe.Exception) -> {};
+
+	/**
+		Called if `broker.App` catches any exception other than `haxe.Exception`.
+		The exception will be rethrown unless you quits the application.
+	**/
+	public static var onUnknownException = (e: Dynamic) -> {};
+
+	/**
 		Adds `object` to the current scene.
 	**/
 	public static function addRootObject(object: broker.object.Object): Void {
 		#if heaps
 		data.s2d.addChild(object);
 		#end
+	}
+
+	/**
+		Automatically called if `broker.App` catches any exception (whether or not `haxe.Exception`).
+	**/
+	static function onAnyExceptionInternal(): Void {
+		broker.tools.Window.fullscreen = false;
+		broker.sound.SoundManager.disposeAll();
 	}
 
 	/**
@@ -108,8 +128,13 @@ class HeapsApp extends hxd.App {
 
 		try {
 			app.initialize();
+		} catch(e: haxe.Exception) {
+			App.onAnyExceptionInternal();
+			App.onException(e);
+			throw e;
 		} catch(e: Dynamic) {
-			broker.tools.Window.fullscreen = false;
+			App.onAnyExceptionInternal();
+			App.onUnknownException(e);
 			throw e;
 		}
 	}
@@ -117,8 +142,13 @@ class HeapsApp extends hxd.App {
 	override function update(dt: Float) {
 		try {
 			app.update();
-		}	catch(e: Dynamic) {
-			broker.tools.Window.fullscreen = false;
+		}	catch(e: haxe.Exception) {
+			App.onAnyExceptionInternal();
+			App.onException(e);
+			throw e;
+		} catch(e: Dynamic) {
+			App.onAnyExceptionInternal();
+			App.onUnknownException(e);
 			throw e;
 		}
 
