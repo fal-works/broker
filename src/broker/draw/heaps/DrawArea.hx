@@ -6,7 +6,8 @@ import broker.object.Object;
 /**
 	Rendering area.
 **/
-@:notNull @:forward(x, y, setPosition, addChild, removeChild, removeChildren)
+@:notNull @:forward(x, y, setPosition)
+@:using(broker.object.ObjectExtension)
 abstract DrawArea(Mask) to Object {
 	public var width(get, set): UInt;
 	public var height(get, set): UInt;
@@ -14,6 +15,21 @@ abstract DrawArea(Mask) to Object {
 	public extern inline function new(width: UInt, height: UInt) {
 		this = new Mask(width, height);
 	}
+
+	/**
+		Sets `this` position centered at `(x, y)`.
+	**/
+	public extern inline function setCenterPosition(x: Float, y: Float): Void
+		this.setPosition(x - 0.5 * this.width, y - 0.5 * this.height);
+
+	public extern inline function add(object: Object): Void
+		this.addChild(object);
+
+	public extern inline function remove(object: Object): Void
+		this.removeChild(object);
+
+	public extern inline function clear(): Void
+		this.removeChildren();
 
 	extern inline function get_width()
 		return this.width;
