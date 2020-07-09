@@ -12,9 +12,16 @@ abstract BatchDraw(h2d.SpriteBatch) from h2d.SpriteBatch to h2d.SpriteBatch to O
 		@param texture Tiles added to `this` batch should be made from this texture.
 		@param width The rendering area width. No effect `#if heaps` (Use `DrawArea` for clipping).
 		@param height The rendering area height. No effect `#if heaps` (Use `DrawArea` for clipping).
+		@param hasRotationScale `true` (default) for enabling rotation and scaling.
 	**/
-	public extern inline function new(texture: Texture, width: UInt, height: UInt) {
+	public extern inline function new(
+		texture: Texture,
+		width: UInt,
+		height: UInt,
+		hasRotationScale = true
+	) {
 		this = new h2d.SpriteBatch(texture.getEntireTile());
+		this.hasRotationScale = hasRotationScale;
 	}
 
 	public extern inline function add(sprite: BatchSprite): Void {
