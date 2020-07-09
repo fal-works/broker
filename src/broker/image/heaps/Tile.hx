@@ -14,11 +14,31 @@ abstract Tile(h2d.Tile) from h2d.Tile to h2d.Tile {
 	/**
 		Creates a new `Tile` instance from `color`.
 	**/
-	public static extern inline function fromColor(color: ArgbColor, width: UInt, height: UInt): Tile
-		return h2d.Tile.fromColor(color.getRGB().int(), width, height, color.getAlpha().float());
+	public static extern inline function fromColor(
+		color: ArgbColor,
+		width: UInt,
+		height: UInt
+	): Tile {
+		return h2d.Tile.fromColor(
+			color.getRGB().int(),
+			width,
+			height,
+			color.getAlpha().float()
+		);
+	}
 
 	public var width(get, never): UInt;
 	public var height(get, never): UInt;
+
+	public extern inline function new(texture: Texture) {
+		this = h2d.Tile.fromTexture(texture);
+	}
+
+	/**
+		@return The texture from which `this` tile is created.
+	**/
+	public extern inline function getTexture(): Texture
+		return this.getTexture();
 
 	/**
 		@return Sub-tile from `this` as a new `Tile` instance.
