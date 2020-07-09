@@ -6,7 +6,7 @@ import broker.menu.internal.MenuData;
 	A menu UI object.
 	Use `Menu.create()` for instantiating.
 **/
-@:notNull @:forward(x, y, setPosition, visible, addOption, addObject, removeObject)
+@:notNull @:forward(x, y, setPosition, visible, addOption, addChild, removeChild)
 abstract Menu(MenuData) to Object {
 	/**
 		Creates a `Menu` instance.

@@ -5,6 +5,7 @@ import broker.menu.internal.Types;
 
 @:structInit
 @:allow(broker.menu.Menu)
+@:forward(addChild, removeChild)
 class MenuData extends ObjectData {
 	final options: Array<MenuOption>;
 	final listenFocusPrevious: BoolFuncs;
@@ -61,26 +62,8 @@ class MenuData extends ObjectData {
 		for (i in 0...onAdd.length) onAdd[i](option.object, this.options.length);
 
 		this.options.push(option);
-		this.addObject(option.object);
+		this.addChild(option.object);
 
 		if (this.automaticFocus) option.defocus();
-	}
-
-	/**
-		Adds an object that is not a part of any `MenuOption`.
-	**/
-	public inline function addObject(object: Object): Void {
-		#if heaps
-		this.addChild(object);
-		#end
-	}
-
-	/**
-		Removes `object` that has been added by `addObject()`.
-	**/
-	public inline function removeObject(object: Object): Void {
-		#if heaps
-		this.removeChild(object);
-		#end
 	}
 }
