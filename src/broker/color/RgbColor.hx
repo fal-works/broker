@@ -21,6 +21,11 @@ abstract RgbColor(Int) {
 		return new RgbColor(v);
 	}
 
+	@:access(broker.color.ArgbColor)
+	public extern inline function toArgb(alpha: Alpha): ArgbColor {
+		return new ArgbColor(this & (Math.round(alpha.float() * 0xFF) << 24));
+	}
+
 	public extern inline function int(): Int
 		return this;
 }
