@@ -6,7 +6,7 @@ import h2d.SpriteBatch.BatchElement as Data;
 /**
 	Element that can be added to `BatchDraw`.
 **/
-@:notNull @:forward(x, y, rotation, scaleX, scaleY, setScale, visible)
+@:notNull @:forward(x, y, visible, rotation, scaleX, scaleY)
 abstract BatchSprite(Data) from Data to Data {
 	/**
 		`this` as the underlying type.
@@ -28,6 +28,22 @@ abstract BatchSprite(Data) from Data to Data {
 	**/
 	public extern inline function new(tile: Tile)
 		this = new Data(tile);
+
+	/**
+		Multiplies the current scale factor by `factor`.
+	**/
+	public extern inline function scale(factor: Float): Void {
+		this.scaleX *= factor;
+		this.scaleY *= factor;
+	}
+
+	/**
+		Sets scale factor to `factor`.
+	**/
+	public extern inline function setScale(factor: Float): Void {
+		this.scaleX = factor;
+		this.scaleY = factor;
+	}
 
 	extern inline function get_data()
 		return this;
