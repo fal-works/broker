@@ -4,9 +4,9 @@ class Constants {
 	public static var width(default, null): Int;
 	public static var height(default, null): Int;
 
-	public static function initialize(window: hxd.Window) {
-		width = window.width;
-		height = window.height;
+	public static function initialize() {
+		width = broker.App.width;
+		height = broker.App.height;
 
 		final spaceWidth = Std.int(Space.width);
 		final spaceHeight = Std.int(Space.height);

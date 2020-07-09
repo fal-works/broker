@@ -1,17 +1,24 @@
 package entities;
 
-class Main extends hxd.App {
+import broker.App;
+import broker.image.Tile;
+import broker.draw.BatchDraw;
+import broker.draw.BatchSprite;
+
+class Main extends broker.App {
 	var entities: EntityAosoa;
 	var frameCount = 0;
 
-	override function init() {
-		broker.App.initialize(800, 600);
+	public function new() {
+		super(800, 600, false);
+	}
 
-		final tile = h2d.Tile.fromColor(0xFFFFFF, 16, 16).center();
+	override function initialize() {
+		final tile = Tile.fromRgb(0xFFFFFF, 16, 16).toCentered();
 		entities = createEntities(tile);
 	}
 
-	override function update(dt: Float) {
+	override function update() {
 		emitEntity();
 
 		entities.updatePosition();
@@ -21,11 +28,12 @@ class Main extends hxd.App {
 		++frameCount;
 	}
 
-	function createEntities(tile: h2d.Tile) {
+	function createEntities(tile: Tile) {
 		final chunkCapacity = 128;
 		final chunkCount = 16;
-		final spriteFactory = () -> new h2d.SpriteBatch.BatchElement(tile);
-		final batch = new h2d.SpriteBatch(tile, s2d);
+		final spriteFactory = () -> new BatchSprite(tile);
+		final batch = new BatchDraw(tile.getTexture(), App.width, App.height);
+		App.addRootObject(batch);
 
 		return new EntityAosoa(chunkCapacity, chunkCount, batch, spriteFactory);
 	}
@@ -34,8 +42,8 @@ class Main extends hxd.App {
 		final radius = 150;
 		final angle = 0.05 * frameCount;
 
-		final x = broker.App.width / 2 + radius * Math.cos(angle);
-		final y = broker.App.height / 2 + radius * Math.sin(angle);
+		final x = App.width / 2 + radius * Math.cos(angle);
+		final y = App.height / 2 + radius * Math.sin(angle);
 		final speed = 5;
 		final direction = -1.5 * angle;
 

@@ -12,7 +12,7 @@ class Window {
 
 		Note: Changing the window state manually via the underlying engine (or ALT+ENTER) does not reflect to this value.
 	**/
-	public static var fullscreen(default, set): Bool = false;
+	public static var fullscreen(default, set): Bool = true;
 
 	/**
 		Function called when the window is closed.
@@ -22,13 +22,15 @@ class Window {
 	/**
 		Initializes window.
 	**/
-	public static function initialize(): Void {
+	public static function initialize(fullscreen: Bool): Void {
 		#if heaps
 		hxd.Window.getInstance().onClose = () -> {
 			prepareClose();
 			return true;
 		};
 		#end
+
+		set_fullscreen(fullscreen);
 	}
 
 	/**

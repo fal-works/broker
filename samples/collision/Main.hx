@@ -1,8 +1,12 @@
 package collision;
 
+import broker.image.Tile;
+import broker.App;
+import broker.draw.BatchDraw;
+import banker.aosoa.ChunkEntityId;
 import broker.collision.CollisionDetector;
 import broker.collision.Collider;
-import banker.aosoa.ChunkEntityId;
+import broker.draw.BatchSprite;
 
 class Settings {
 	/**
@@ -18,11 +22,15 @@ class Settings {
 	public static inline final speedFactor: Float = 1.0;
 }
 
-class Main extends hxd.App {
+class Main extends broker.App {
 	var entities: EntityAosoa;
 	var collisionDetector: CollisionDetector;
 	var loadQuadtree: () -> Void;
 	var onOverlap: (a: Collider, b: Collider) -> Void;
+
+	public function new() {
+		super(800, 600, false);
+	}
 
 	function initializeIntraGroupCollision(
 		processColliderOnOverlap: Collider->Void,
@@ -67,19 +75,16 @@ class Main extends hxd.App {
 		this.collisionDetector.rightQuadtree.loadAt(cellIndex, rightCollider);
 	}
 
-	override function init() {
-		final window = hxd.Window.getInstance();
-		broker.App.initialize(window.width, window.height);
-		Constants.initialize(window);
+	override function initialize() {
+		Constants.initialize();
 
 		final leftGroupEntityCount = 3 * Settings.entityCountPerEmit;
 
-		final baseTile = h2d.Tile.fromColor(
+		final tile = Tile.fromRgb(
 			0xFFFFFF,
 			Settings.tileSize,
 			Settings.tileSize
-		);
-		final tile = baseTile.center();
+		).toCentered();
 		this.entities = createEntities(tile, leftGroupEntityCount);
 
 		emitEntities(1);
@@ -114,7 +119,7 @@ class Main extends hxd.App {
 		}
 	}
 
-	override function update(dt: Float) {
+	override function update() {
 		final entities = this.entities;
 		entities.updatePosition();
 		entities.bounce();
@@ -126,15 +131,19 @@ class Main extends hxd.App {
 		this.collisionDetector.detect(this.onOverlap);
 	}
 
-	function createEntities(tile: h2d.Tile, capacity: UInt): EntityAosoa
+	function createEntities(tile: Tile, capacity: UInt): EntityAosoa {
+		final batch = new BatchDraw(tile.getTexture(), App.width, App.height, false);
+		App.addRootObject(batch);
+
 		return {
 			chunkCapacity: 128,
 			chunkCount: Math.ceil(capacity / 128),
-			batchValue: new h2d.SpriteBatch(tile, s2d),
-			spriteFactory: () -> new h2d.SpriteBatch.BatchElement(tile),
+			batchValue: batch,
+			spriteFactory: () -> new BatchSprite(tile),
 			halfTileWidthValue: tile.width / 2,
 			halfTileHeightValue: tile.height / 2
 		}
+	}
 
 	function emitEntities(speed: Float): Void {
 		final x = Constants.width / 2;

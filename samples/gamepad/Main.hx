@@ -1,31 +1,38 @@
 package gamepad;
 
-class Main extends hxd.App {
+import broker.App;
+import broker.object.Object;
+import broker.image.Tile;
+import broker.draw.TileDraw;
+
+class Main extends App {
 	var gamepad: Gamepad;
-	var object: h2d.Object;
+	var object: Object;
 
-	override function init() {
-		broker.App.initialize(800, 600);
+	public function new() {
+		super(800, 600, false);
+	}
 
+	override function initialize() {
 		final gamepadPortIndex = 0;
 		final dpadMoveSpeed = 10;
 		gamepad = new Gamepad(gamepadPortIndex, dpadMoveSpeed);
 
-		final tile = h2d.Tile.fromColor(0xFFFFFF, 64, 64).center();
-		object = new h2d.Bitmap(tile, s2d);
+		final tile = Tile.fromRgb(0xFFFFFF, 64, 64).toCentered();
+		object = new TileDraw(tile);
+		App.addRootObject(object);
 
-		object.setPosition(broker.App.width / 2, broker.App.height / 2);
+		object.setPosition(App.width / 2, App.height / 2);
 	}
 
-	override function update(dt: Float) {
+	override function update() {
 		gamepad.update();
 
 		final stick = gamepad.stick;
 		object.x += stick.x;
 		object.y += stick.y;
 
-		final buttonA = gamepad.buttons.A;
-		final scale = if (buttonA.isPressed) 2.0 else 1.0;
+		final scale = if (gamepad.buttons.A.isPressed) 2.0 else 1.0;
 		object.setScale(scale);
 
 		// Exit by ESC key
