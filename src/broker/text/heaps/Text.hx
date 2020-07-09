@@ -6,7 +6,7 @@ import broker.color.ArgbColor;
 import broker.color.RgbColor;
 import broker.color.Alpha;
 
-@:notNull @:forward(x, y, visible, rotation, scaleX, scaleY, setScale, setPosition)
+@:notNull @:forward(x, y, visible, rotation, scaleX, scaleY, scale, setScale, setPosition)
 @:using(broker.object.ObjectExtension)
 abstract Text(h2d.Text) from h2d.Text to h2d.Text to Object {
 	static var defaultFont: Maybe<Font> = Maybe.none();
