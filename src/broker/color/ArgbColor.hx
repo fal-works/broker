@@ -16,7 +16,7 @@ abstract ArgbColor(Int) {
 	public extern inline function int(): Int
 		return this;
 
-	public extern inline function getRGB(): RgbColor
+	public extern inline function getRgb(): RgbColor
 		return this & 0xFFFFFF;
 
 	public extern inline function getAlpha(): Alpha {

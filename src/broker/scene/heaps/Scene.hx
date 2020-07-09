@@ -121,7 +121,7 @@ class Scene extends SceneBase {
 	function resetCoverBitmap(bitmap: h2d.Bitmap, color: ArgbColor): h2d.Bitmap {
 		@:nullSafety(Off)
 		final texture: h3d.mat.Texture = h3d.mat.Texture.fromColor(
-			color.getRGB().int(),
+			color.getRgb().int(),
 			color.getAlpha().float()
 		);
 
