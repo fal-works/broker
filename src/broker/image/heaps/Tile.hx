@@ -1,5 +1,6 @@
 package broker.image.heaps;
 
+import broker.color.RgbColor;
 import broker.color.ArgbColor;
 
 @:notNull
@@ -14,13 +15,28 @@ abstract Tile(h2d.Tile) from h2d.Tile to h2d.Tile {
 	/**
 		Creates a new `Tile` instance from `color`.
 	**/
-	public static extern inline function fromColor(
+	public static extern inline function fromRgb(
+		color: RgbColor,
+		width: UInt,
+		height: UInt
+	): Tile {
+		return h2d.Tile.fromColor(
+			color.int(),
+			width,
+			height
+		);
+	}
+
+	/**
+		Creates a new `Tile` instance from `color`.
+	**/
+	public static extern inline function fromArgb(
 		color: ArgbColor,
 		width: UInt,
 		height: UInt
 	): Tile {
 		return h2d.Tile.fromColor(
-			color.getRGB().int(),
+			color.getRgb().int(),
 			width,
 			height,
 			color.getAlpha().float()
