@@ -18,10 +18,12 @@ class ButtonStatusMapExtension {
 	#if !broker_generic_disable
 	@:generic
 	#end
-	public static function createUpdater<T>(
+	public static extern inline function createUpdater<T>(
 		_this: broker.input.interfaces.GenericButtonStatusMap<T>,
 		getButtonChecker: (button: T) -> (() -> Bool)
 	) {
+		// Causes "Command failed with error -1073741819" if not inlined
+
 		final tickers = _this.exportKeys().ref.map(button -> {
 			final buttonIsDown = getButtonChecker(button);
 			final status = _this.get(button);
