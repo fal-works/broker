@@ -6,7 +6,7 @@ import broker.object.Object;
 /**
 	Rendering area.
 **/
-@:notNull @:forward(x, y, setPosition, visible)
+@:notNull @:forward(x, y, scaleX, scaleY, setScale, setPosition, visible)
 @:using(broker.object.ObjectExtension)
 abstract DrawArea(Mask) to Object {
 	public var width(get, set): UInt;

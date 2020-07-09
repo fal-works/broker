@@ -6,7 +6,7 @@ import h2d.SpriteBatch.BatchElement as Data;
 /**
 	Element that can be added to `BatchDraw`.
 **/
-@:notNull @:forward(x, y, scale, rotation, visible)
+@:notNull @:forward(x, y, rotation, scaleX, scaleY, setScale, visible)
 abstract BatchSprite(Data) from Data to Data {
 	/**
 		`this` as the underlying type.
