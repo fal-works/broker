@@ -78,16 +78,6 @@ class SoundManager {
 	};
 
 	/**
-		Updates `SoundManager`.
-		Call this method every frame if you use `Sound` class.
-	**/
-	public static function update(): Void {
-		masterVolumeChangeTimer.step();
-		queuedSounds.removeAll(updateQueues); // Remove if queue count is decreased to zero.
-		++frameCount;
-	}
-
-	/**
 		Sets `masterVolume` to `defaultMasterVolume`.
 	**/
 	public static function resetMasterVolume(): Void
@@ -153,6 +143,15 @@ class SoundManager {
 	**/
 	public static extern inline function disposeAll(): Void
 		SoundManagerData.disposeAll();
+
+	/**
+		Updates `SoundManager` (automatically called by `broker.App` every frame).
+	**/
+	static function update(): Void {
+		masterVolumeChangeTimer.step();
+		queuedSounds.removeAll(updateQueues); // Remove if queue count is decreased to zero.
+		++frameCount;
+	}
 
 	static extern inline function get_masterVolume()
 		return SoundManagerData.getMasterVolume();

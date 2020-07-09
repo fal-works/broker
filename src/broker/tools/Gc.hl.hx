@@ -12,13 +12,6 @@ using sinker.Floats;
 class Gc {
 	static var logger: Maybe<GcLogger>;
 
-	/**
-		Updates GC logger.
-		No effect if not logging.
-	**/
-	public static function update(): Void
-		logger.may(GcLogger.update);
-
 	public static function startProfile(): Void
 		profile(true);
 
@@ -46,6 +39,12 @@ class Gc {
 		logger.unwrap().forceFlush();
 		logger = Maybe.none();
 	}
+
+	/**
+		Updates GC logger. Automatically called by `broker.App` every frame.
+	**/
+	static function update(): Void
+		logger.may(GcLogger.update);
 
 	static function profile(on: Bool): Void {
 		final gcFlags = hl.Gc.flags;

@@ -5,14 +5,6 @@ package broker.input.physical;
 **/
 class PhysicalInput {
 	/**
-		Initializes both `broker.input.physical.Key` and `broker.input.physical.Pad`.
-	**/
-	public static function initialize(): Void {
-		Key.initialize();
-		Pad.initialize();
-	}
-
-	/**
 		Creates a button checker function that checks both `KeyCode` and `PadCode`.
 		@param keyCodeMap Mapping from virtual buttons to `KeyCode`.
 		@param buttonCodeMap Mapping from virtual buttons to `PadCode`.

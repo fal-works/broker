@@ -13,12 +13,6 @@ using banker.type_extension.MapExtension;
 **/
 class Key {
 	/**
-		Registers an event listener so that `hxd.Key` is updated for every window event.
-	**/
-	public static function initialize()
-		KeyImpl.initialize();
-
-	/**
 		@return `true` if the key of `keyCode` is down.
 	**/
 	public static inline function isDown(keyCode: KeyCode): Bool
@@ -59,4 +53,11 @@ class Key {
 			return createKeyCodesChecker(keyCodeArray);
 		};
 	}
+
+	/**
+		Initializes keyboard event handler.
+		Automatically called by `broker.App`.
+	**/
+	static function initialize()
+		KeyImpl.initialize();
 }

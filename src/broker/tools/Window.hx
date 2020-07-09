@@ -20,20 +20,6 @@ class Window {
 	public static var onClose = () -> {};
 
 	/**
-		Initializes window.
-	**/
-	public static function initialize(fullscreen: Bool): Void {
-		#if heaps
-		hxd.Window.getInstance().onClose = () -> {
-			prepareClose();
-			return true;
-		};
-		#end
-
-		set_fullscreen(fullscreen);
-	}
-
-	/**
 		Toggles the value of `fullscreen`.
 		@return The value of `fullscreen` after toggled.
 	**/
@@ -51,6 +37,20 @@ class Window {
 		#else
 		Sys.exit(0);
 		#end
+	}
+
+	/**
+		Initializes the window. Automatically called by `broker.App`.
+	**/
+	static function initialize(fullscreen: Bool): Void {
+		#if heaps
+		hxd.Window.getInstance().onClose = () -> {
+			prepareClose();
+			return true;
+		};
+		#end
+
+		set_fullscreen(fullscreen);
 	}
 
 	static function prepareClose(): Void {

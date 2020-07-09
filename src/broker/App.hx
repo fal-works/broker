@@ -68,9 +68,13 @@ class App {
 	/**
 		Automatically called before `initialize()`.
 	**/
+	@:access(broker.tools.Window)
+	@:access(broker.input.physical.Key)
+	@:access(broker.input.physical.Pad)
 	inline function initializeInternal(): Void {
 		broker.tools.Window.initialize(this.startFullscreen);
-		broker.input.physical.PhysicalInput.initialize();
+		broker.input.physical.Key.initialize();
+		broker.input.physical.Pad.initialize();
 
 		#if heaps
 		broker.scene.heaps.Scene.setApplication(data);
@@ -80,6 +84,8 @@ class App {
 	/**
 		Automatically called after `update()`.
 	**/
+	@:access(broker.sound.SoundManager)
+	@:access(broker.tools.Gc)
 	inline function updateInternal(): Void {
 		++frameCount;
 		broker.sound.SoundManager.update();
