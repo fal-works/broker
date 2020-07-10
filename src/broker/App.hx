@@ -99,6 +99,8 @@ class App {
 		#if heaps
 		broker.scene.heaps.Scene.setApplication(data);
 		#end
+
+		new broker.scene.Scene().activate();
 	}
 
 	/**
