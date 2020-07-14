@@ -58,7 +58,8 @@ Classes for loading image data.
 Classes for drawing graphics.
 
 - `TileDraw`
-- `BatchDraw`
+- `BatchDraw`, `BatchSprite`
+- `DrawArea`
 
 ### Timer
 
