@@ -13,7 +13,7 @@ class Gc {
 
 	public static inline function startLogging(
 		logIntervalDuration: UInt,
-		flushIntervalDuration: MaybeUInt
+		flushIntervalDuration: MaybeUInt = MaybeUInt.none
 	): Void {}
 
 	public static inline function stopLogging(): Void {}
