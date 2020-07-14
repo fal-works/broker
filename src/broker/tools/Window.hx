@@ -34,7 +34,7 @@ class Window {
 
 		#if heaps
 		hxd.System.exit();
-		#else
+		#elseif sys
 		Sys.exit(0);
 		#end
 	}
@@ -58,6 +58,10 @@ class Window {
 		onClose();
 	}
 
+	#if js
+	static extern inline function set_fullscreen(flag: Bool): Bool
+		return flag;
+	#else
 	static extern inline function set_fullscreen(flag: Bool): Bool {
 		#if heaps
 		final window = hxd.Window.getInstance();
@@ -73,4 +77,5 @@ class Window {
 
 		return fullscreen = flag;
 	}
+	#end
 }
