@@ -3,10 +3,10 @@
 	"url": "https://github.com/fal-works/broker/",
 	"license": "MIT",
 	"tags": ["game"],
-	"description": "Utility for game programming. Currently provides: Basic entity class, 2D AABB collision detection, gamepad input abstraction, game scenes and timers.",
-	"version": "0.4.0-alpha",
+	"description": "Utility for game programming. Basic entity class, 2D AABB collision detection, gamepad input abstraction, game scenes, timers and some more. Currently works only with Heaps.",
+	"version": "0.4.0",
 	"classPath": "src/",
-	"releasenote": "Add packages: sound, tools",
+	"releasenote": "Add packages: sound, tools, image, draw, text, menu",
 	"contributors": [
 		"fal-works"
 	],
