@@ -105,9 +105,9 @@ class CollisionSpaceMacro {
 					final cellPositionX = int((x - leftX) * leafCellPositionFactorX);
 					final cellPositionY = int((y - topY) * leafCellPositionFactorY);
 
-					final indexValue = banker.types.Bits.zip(
-						banker.types.Bits.from(cellPositionX),
-						banker.types.Bits.from(cellPositionY)
+					final indexValue = banker.binary.Bits.zip(
+						banker.binary.Bits.from(cellPositionX),
+						banker.binary.Bits.from(cellPositionY)
 					);
 
 					new broker.collision.cell.LocalCellIndex(indexValue.int());
