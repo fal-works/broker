@@ -1,5 +1,7 @@
 package broker;
 
+import broker.tools.PerformanceProfiler;
+
 /**
 	The whole application.
 **/
@@ -54,6 +56,7 @@ class App {
 	static function onAnyExceptionInternal(): Void {
 		broker.tools.Window.fullscreen = false;
 		broker.sound.SoundManager.disposeAll();
+		broker.tools.PerformanceProfiler.stop();
 	}
 
 	/**
@@ -65,7 +68,11 @@ class App {
 		@param width The logical width of the screen.
 		@param height The logical height of the screen.
 	**/
-	public function new(width: UInt, height: UInt, fullscreen = true) {
+	public function new(
+		width: UInt,
+		height: UInt,
+		fullscreen = true
+	) {
 		App.width = width;
 		App.height = height;
 		this.startFullscreen = fullscreen;
@@ -109,9 +116,9 @@ class App {
 	@:access(broker.sound.SoundManager)
 	@:access(broker.tools.Gc)
 	inline function updateInternal(): Void {
-		++frameCount;
 		broker.sound.SoundManager.update();
 		broker.tools.Gc.update();
+		++frameCount;
 	}
 }
 
@@ -133,11 +140,11 @@ class HeapsApp extends hxd.App {
 		#else
 		try {
 			app.initialize();
-		} catch(e: haxe.Exception) {
+		} catch (e:haxe.Exception) {
 			App.onAnyExceptionInternal();
 			App.onException(e);
 			throw e;
-		} catch(e: Dynamic) {
+		} catch (e:Dynamic) {
 			App.onAnyExceptionInternal();
 			App.onUnknownException(e);
 			throw e;
@@ -145,17 +152,20 @@ class HeapsApp extends hxd.App {
 		#end
 	}
 
+	@:access(broker.tools.PerformanceProfiler)
 	override function update(dt: Float) {
+		PerformanceProfiler.preUpdate();
+
 		#if broker_catch_disable
 		app.update();
 		#else
 		try {
 			app.update();
-		}	catch(e: haxe.Exception) {
+		} catch (e:haxe.Exception) {
 			App.onAnyExceptionInternal();
 			App.onException(e);
 			throw e;
-		} catch(e: Dynamic) {
+		} catch (e:Dynamic) {
 			App.onAnyExceptionInternal();
 			App.onUnknownException(e);
 			throw e;
@@ -163,6 +173,15 @@ class HeapsApp extends hxd.App {
 		#end
 
 		app.updateInternal();
+
+		PerformanceProfiler.postUpdate(App.frameCount);
+	}
+
+	@:access(broker.tools.PerformanceProfiler)
+	override function render(e: h3d.Engine) {
+		super.render(e);
+		PerformanceProfiler.postRender();
+		PerformanceProfiler.writeLog(App.frameCount);
 	}
 }
 #end

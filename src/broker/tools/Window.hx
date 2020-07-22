@@ -1,7 +1,6 @@
 package broker.tools;
 
 import sneaker.log.Logger;
-import broker.sound.SoundManager;
 
 /**
 	Static fields related to the window.
@@ -54,7 +53,8 @@ class Window {
 	}
 
 	static function prepareClose(): Void {
-		SoundManager.disposeAll();
+		broker.sound.SoundManager.disposeAll();
+		broker.tools.PerformanceProfiler.stop();
 		onClose();
 	}
 
