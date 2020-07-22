@@ -188,6 +188,7 @@ class YourSystem {
 |library|flag|description|
 |---|---|---|
 |broker|broker_generic_disable|Disables `@:generic` meta.|
+|broker|broker_catch_disable|Disables `try-catch` in `App` class.|
 
 
 ## Dependencies

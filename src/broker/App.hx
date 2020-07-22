@@ -128,6 +128,9 @@ class HeapsApp extends hxd.App {
 	override function init() {
 		app.initializeInternal();
 
+		#if broker_catch_disable
+		app.initialize();
+		#else
 		try {
 			app.initialize();
 		} catch(e: haxe.Exception) {
@@ -139,9 +142,13 @@ class HeapsApp extends hxd.App {
 			App.onUnknownException(e);
 			throw e;
 		}
+		#end
 	}
 
 	override function update(dt: Float) {
+		#if broker_catch_disable
+		app.update();
+		#else
 		try {
 			app.update();
 		}	catch(e: haxe.Exception) {
@@ -153,6 +160,7 @@ class HeapsApp extends hxd.App {
 			App.onUnknownException(e);
 			throw e;
 		}
+		#end
 
 		app.updateInternal();
 	}
