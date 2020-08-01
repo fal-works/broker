@@ -5,10 +5,16 @@ package broker.math;
 **/
 class Random {
 	/**
+		@return Random value from `0` up to (but not including) `1`.
+	**/
+	public static extern inline function random(): Float
+		return RandomCore.random();
+
+	/**
 		@return Random value from `0` up to (but not including) `max`.
 	**/
 	public static extern inline function value(max: Float): Float
-		return max * Math.random();
+		return max * random();
 
 	/**
 		@return Random value from `min` up to (but not including) `max`.
@@ -37,10 +43,14 @@ class Random {
 		return Math.random() < probability;
 
 	/**
-		@return A positive or negative value randomly with a magnitude from `0` up to (but not including) `maxMagnitude`.
+		@return Random value in range `[-maxMagnitude, maxMagnitude)`.
 	**/
 	public static extern inline function signed(maxMagnitude: Float): Float {
-		return (if (bool(0.5)) 1.0 else -1.0) * value(maxMagnitude);
+		#if broker_use_xorshift32
+		return maxMagnitude * RandomCore.randomSigned();
+		#else
+		return maxMagnitude * (-1.0 + random() * 2.0);
+		#end
 	}
 
 	/**
@@ -52,6 +62,11 @@ class Random {
 	/**
 		@return Random value from `-PI` up to (but not including) `+PI`.
 	**/
-	public static extern inline function signedAngle(): Float
+	public static extern inline function signedAngle(): Float {
+		#if broker_use_xorshift32
+		return signed(Constants.PI);
+		#else
 		return Constants.MINUS_PI + angle();
+		#end
+	}
 }
