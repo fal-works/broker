@@ -77,10 +77,6 @@ Menu UI.
 
 ![Class diagram. Visit GitHub repo for details.](docs/menu.svg)
 
-### Math
-
-Some math functions/constants.
-
 ### Color
 
 Some abstract types for representing colors.
@@ -189,7 +185,6 @@ class YourSystem {
 |---|---|---|
 |broker|broker_generic_disable|Disables `@:generic` meta.|
 |broker|broker_catch_disable|Disables `try-catch` in `App` class.|
-|broker|broker_use_xorshift32|Uses Xorshift 32-bit algorithm instead of `Math.random()`.|
 
 
 ## Dependencies
