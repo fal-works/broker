@@ -4,7 +4,7 @@
 	"license": "MIT",
 	"tags": ["game"],
 	"description": "Utility for game programming. Basic entity class, 2D AABB collision detection, gamepad input abstraction, game scenes, timers and some more. Currently works only with Heaps.",
-	"version": "0.5.0-alpha",
+	"version": "0.5.0",
 	"classPath": "src/",
 	"releasenote": "Added PerformanceProfiler. Separated package math to another library (reckoner).",
 	"contributors": [
