@@ -7,21 +7,25 @@ import broker.object.Object;
 	Object that draws multiple elements efficiently.
 	The tiles should be created from to the same texture.
 **/
+@:notNull
 abstract BatchDraw(h2d.SpriteBatch) from h2d.SpriteBatch to h2d.SpriteBatch to Object {
 	/**
 		@param texture Tiles added to `this` batch should be made from this texture.
 		@param width The rendering area width. No effect `#if heaps` (Use `DrawArea` for clipping).
 		@param height The rendering area height. No effect `#if heaps` (Use `DrawArea` for clipping).
-		@param hasRotationScale `true` (default) for enabling rotation and scaling.
+		@param hasRotationScale `true` (default) to enable rotation and scaling.
+		@param smooth `true` to enable smoothing.
 	**/
 	public extern inline function new(
 		texture: Texture,
 		width: UInt,
 		height: UInt,
-		hasRotationScale = true
+		hasRotationScale = true,
+		?smooth: Bool
 	) {
 		this = new h2d.SpriteBatch(texture.getEntireTile());
 		this.hasRotationScale = hasRotationScale;
+		if (smooth != null) this.smooth = smooth;
 	}
 
 	public extern inline function add(sprite: BatchSprite): Void {
