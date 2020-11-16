@@ -18,6 +18,11 @@ class Scene extends SceneBase {
 		SceneStatics.setApplication(app);
 
 	/**
+		A Bitmap that is currently added to the surface layer.
+	**/
+	var surfaceBitmap: Maybe<h2d.Bitmap> = Maybe.none();
+
+	/**
 		@param heapsScene If not provided, creates a new one.
 		@param timersCapacity The max number of `Timer` instances. Defaults to `16`.
 	**/
@@ -50,6 +55,10 @@ class Scene extends SceneBase {
 	override public function destroy(): Void {
 		super.destroy();
 		this.data.dispose();
+
+		SceneStatics.bitmapPool.clearPhysical();
+		SceneStatics.bitmapFadeInTimerPool.clearPhysical();
+		SceneStatics.bitmapFadeOutTimerPool.clearPhysical();
 	}
 
 	/**
@@ -65,7 +74,7 @@ class Scene extends SceneBase {
 		startNow: Bool
 	): Timer {
 		final bitmap = this.useSurfaceBitmap(color);
-		bitmap.alpha = 0.0;
+		bitmap.alpha = if (startNow) 1.0 else 0.0;
 
 		// (fade-in the scene) = (fade-out the surface)
 		final timer = SceneStatics.bitmapFadeOutTimerPool.use(
@@ -73,7 +82,10 @@ class Scene extends SceneBase {
 			duration,
 			true
 		);
-		timer.setOnCompleteObject(SceneStatics.bitmapPool.putCallback);
+		timer.setOnCompleteObject(bitmap -> {
+			this.surfaceBitmap = Maybe.none();
+			SceneStatics.bitmapPool.put(bitmap);
+		});
 
 		if (startNow) this.timers.push(timer);
 
@@ -97,7 +109,6 @@ class Scene extends SceneBase {
 
 		// (fade-out the scene) = (fade-in the surface)
 		final timer = SceneStatics.bitmapFadeInTimerPool.use(bitmap, duration);
-		timer.setOnCompleteObject(SceneStatics.bitmapPool.putCallback);
 
 		if (startNow) this.timers.push(timer);
 
@@ -106,12 +117,19 @@ class Scene extends SceneBase {
 
 	/**
 		Uses a bitmap from `bitmapPool`, resets it with `color` and adds it to the surface layer.
+		If any bitmap is already added to surface, just resets it.
 		@return `h2d.Bitmap` instance.
 	**/
 	function useSurfaceBitmap(color: ArgbColor): h2d.Bitmap {
-		final bitmap = this.resetCoverBitmap(SceneStatics.bitmapPool.get(), color);
-		this.layers.surface.add(bitmap);
-		return bitmap;
+		if (this.surfaceBitmap.isNone()) {
+			final bitmap = SceneStatics.bitmapPool.get();
+			this.resetCoverBitmap(bitmap, color);
+			this.layers.surface.add(bitmap);
+			this.surfaceBitmap = Maybe.from(bitmap);
+			return bitmap;
+		} else {
+			return this.resetCoverBitmap(this.surfaceBitmap.unwrap(), color);
+		}
 	}
 
 	/**
