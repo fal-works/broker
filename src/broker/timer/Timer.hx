@@ -169,6 +169,7 @@ class Timer {
 	/**
 		Called in `this.step()` if this timer is not completed.
 		Override this method for your own purpose.
+		@param progress The progress ratio in range `[0, 1)`.
 	**/
 	function onProgress(progress: Float): Void {}
 
