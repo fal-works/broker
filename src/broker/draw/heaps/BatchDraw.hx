@@ -8,6 +8,7 @@ import broker.object.Object;
 	The tiles should be created from to the same texture.
 **/
 @:notNull
+@:forward(clear)
 abstract BatchDraw(h2d.SpriteBatch) from h2d.SpriteBatch to h2d.SpriteBatch to Object {
 	/**
 		@param texture Tiles added to `this` batch should be made from this texture.
