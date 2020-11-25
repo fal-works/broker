@@ -28,6 +28,12 @@ abstract BatchDraw(h2d.SpriteBatch) from h2d.SpriteBatch to h2d.SpriteBatch to O
 		if (smooth != null) this.smooth = smooth;
 	}
 
+	/**
+		@return `true` if any sprite is added to `this`.
+	**/
+	public extern inline function hasAnySprite(): Bool
+		return @:privateAccess this.first != null;
+
 	public extern inline function add(sprite: BatchSprite): Void {
 		// skip (before == true) instead of this.add(sprite, false);
 		final e = sprite.data;
