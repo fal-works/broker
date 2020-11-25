@@ -1,5 +1,7 @@
 package broker.timer;
 
+import broker.timer.builtin.DelayTimer;
+
 /**
 	Basic timer class.
 	Can be extended for your own purpose.
@@ -156,6 +158,24 @@ class Timer {
 		this.progress = 0.0;
 		this.progressChangeRate = if (duration.isZero()) 0.0 else 1.0 / duration;
 		return this;
+	}
+
+	/**
+		Returns a `DelayTimer` that precedes `this`.
+
+		*Note that this does not return `this` itself.*
+		@param pool If not provided, creates a new `DelayTimer` instance.
+	**/
+	public function delay(duration: UInt, ?pool: DelayTimerPool): DelayTimer {
+		var delay: DelayTimer;
+		if (pool != null) {
+			delay = pool.use(duration);
+		} else {
+			delay = new DelayTimer();
+			delay.setDuration(duration);
+		}
+		delay.setNext(this);
+		return delay;
 	}
 
 	/**
