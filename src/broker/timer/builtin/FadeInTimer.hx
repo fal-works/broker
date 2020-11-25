@@ -1,20 +1,19 @@
-package broker.timer.builtin.heaps;
+package broker.timer.builtin;
 
-#if heaps
 import banker.pool.interfaces.ObjectPool;
 import banker.pool.SafeObjectPool;
+import broker.object.Object;
 import broker.timer.Timer;
-import broker.timer.builtin.heaps.ObjectTimer;
 
 /**
-	A generic version of `FadeInTimer` with types extending `h2d.Object`.
+	`Timer` that applies fade-in effect on any `Object` instance.
 **/
-	#if !broker_generic_disable
-	@:generic
-	#end
-class FadeInTimer<T:h2d.Object> extends ObjectTimer<T> {
-	public function new() {
-		super();
+#if !broker_generic_disable
+@:generic
+#end
+class FadeInTimer extends ObjectTimer {
+	public function new(object: Object) {
+		super(object);
 	}
 
 	override function onProgress(progress: Float): Void {
@@ -30,17 +29,17 @@ class FadeInTimer<T:h2d.Object> extends ObjectTimer<T> {
 /**
 	Extended `FadeInTimer` that is automatically recycled when completed.
 **/
-	#if !broker_generic_disable
-	@:generic
-	#end
-final class PooledFadeInTimer<T:h2d.Object> extends FadeInTimer<T> {
+#if !broker_generic_disable
+@:generic
+#end
+final class PooledFadeInTimer extends FadeInTimer {
 	/**
 		The object pool to which `this` belongs.
 	**/
-	var pool: ObjectPool<PooledFadeInTimer<T>>;
+	var pool: ObjectPool<PooledFadeInTimer>;
 
-	public function new(pool: ObjectPool<PooledFadeInTimer<T>>) {
-		super();
+	public function new(pool: ObjectPool<PooledFadeInTimer>) {
+		super(cast null);
 		this.pool = pool;
 	}
 
@@ -50,11 +49,11 @@ final class PooledFadeInTimer<T:h2d.Object> extends FadeInTimer<T> {
 	}
 }
 
-	#if !broker_generic_disable
-	@:generic
-	#end
+#if !broker_generic_disable
+@:generic
+#end
 @:ripper_verified
-class FadeInTimerPool<T:h2d.Object> extends SafeObjectPool<PooledFadeInTimer<T>> {
+class FadeInTimerPool extends SafeObjectPool<PooledFadeInTimer> {
 	public function new(capacity: UInt) {
 		super(capacity, () -> new PooledFadeInTimer(this));
 	}
@@ -62,7 +61,7 @@ class FadeInTimerPool<T:h2d.Object> extends SafeObjectPool<PooledFadeInTimer<T>>
 	/**
 		This operation is not supported. Call `use()` instead.
 	**/
-	override public function get(): PooledFadeInTimer<T> {
+	override public function get(): PooledFadeInTimer {
 		throw "Not implemented. Call use() instead of get().";
 	}
 
@@ -77,8 +76,8 @@ class FadeInTimerPool<T:h2d.Object> extends SafeObjectPool<PooledFadeInTimer<T>>
 		@param duration
 		@return A `PooledFadeInTimer` instance.
 	**/
-	@:access(broker.timer.builtin.heaps.PooledFadeInTimer)
-	public function use(object: T, duration: UInt): PooledFadeInTimer<T> {
+	@:access(broker.timer.builtin.PooledFadeInTimer)
+	public function use(object: Object, duration: UInt): PooledFadeInTimer {
 		final timer = super.get();
 		TimerExtension.reset(timer, duration);
 		timer.object = object;
@@ -86,4 +85,3 @@ class FadeInTimerPool<T:h2d.Object> extends SafeObjectPool<PooledFadeInTimer<T>>
 		return timer;
 	}
 }
-#end

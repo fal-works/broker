@@ -1,24 +1,19 @@
-package broker.timer.builtin.heaps;
+package broker.timer.builtin;
 
-#if heaps
 import banker.pool.interfaces.ObjectPool;
 import banker.pool.SafeObjectPool;
+import broker.object.Object;
 import broker.timer.Timer;
 
 /**
-	A generic version of `FadeOutTimer` with types extending `h2d.Object`.
+	`Timer` that applies fade-out effect on any `Object` instance.
 **/
-	#if !broker_generic_disable
-	@:generic
-	#end
-class FadeOutTimer<T:h2d.Object> extends ObjectTimer<T> {
-	/**
-		If `true`, calls `object.remove()` when completing.
-	**/
-	public var removeOnComplete: Bool = false;
-
-	public function new()
-		super();
+#if !broker_generic_disable
+@:generic
+#end
+class FadeOutTimer extends ObjectTimer {
+	public function new(object: Object)
+		super(object);
 
 	override function onProgress(progress: Float): Void {
 		this.object.alpha = 1.0 - progress;
@@ -26,30 +21,24 @@ class FadeOutTimer<T:h2d.Object> extends ObjectTimer<T> {
 
 	override function onComplete(): Void {
 		super.onComplete();
-
-		final object = this.object;
-
-		if (this.removeOnComplete)
-			object.remove();
-		else
-			object.alpha = 0.0;
+		this.object.alpha = 0.0;
 	}
 }
 
 /**
 	Extended `FadeOutTimer` that is automatically recycled when completed.
 **/
-	#if !broker_generic_disable
-	@:generic
-	#end
-final class PooledFadeOutTimer<T:h2d.Object> extends FadeOutTimer<T> {
+#if !broker_generic_disable
+@:generic
+#end
+final class PooledFadeOutTimer extends FadeOutTimer {
 	/**
 		The object pool to which `this` belongs.
 	**/
-	var pool: ObjectPool<PooledFadeOutTimer<T>>;
+	var pool: ObjectPool<PooledFadeOutTimer>;
 
-	public function new(pool: ObjectPool<PooledFadeOutTimer<T>>) {
-		super();
+	public function new(pool: ObjectPool<PooledFadeOutTimer>) {
+		super(cast null);
 		this.pool = pool;
 	}
 
@@ -59,11 +48,11 @@ final class PooledFadeOutTimer<T:h2d.Object> extends FadeOutTimer<T> {
 	}
 }
 
-	#if !broker_generic_disable
-	@:generic
-	#end
+#if !broker_generic_disable
+@:generic
+#end
 @:ripper_verified
-class FadeOutTimerPool<T:h2d.Object> extends SafeObjectPool<PooledFadeOutTimer<T>> {
+class FadeOutTimerPool extends SafeObjectPool<PooledFadeOutTimer> {
 	public function new(capacity: UInt) {
 		super(capacity, () -> new PooledFadeOutTimer(this));
 	}
@@ -71,7 +60,7 @@ class FadeOutTimerPool<T:h2d.Object> extends SafeObjectPool<PooledFadeOutTimer<T
 	/**
 		This operation is not supported. Call `use()` instead.
 	**/
-	override public function get(): PooledFadeOutTimer<T> {
+	override public function get(): PooledFadeOutTimer {
 		throw "Not implemented. Call use() instead of get().";
 	}
 
@@ -87,18 +76,15 @@ class FadeOutTimerPool<T:h2d.Object> extends SafeObjectPool<PooledFadeOutTimer<T
 		@param removeOnComplete If `true`, calls `object.remove()` when completing.
 		@return A `PooledFadeOutTimer` instance.
 	**/
-	@:access(broker.timer.builtin.heaps.PooledFadeOutTimer)
+	@:access(broker.timer.builtin.PooledFadeOutTimer)
 	public function use(
-		object: T,
-		duration: UInt,
-		removeOnComplete = false
-	): PooledFadeOutTimer<T> {
+		object: Object,
+		duration: UInt
+	): PooledFadeOutTimer {
 		final timer = super.get();
 		TimerExtension.reset(timer, duration);
 		timer.object = object;
 		timer.pool = this;
-		timer.removeOnComplete = removeOnComplete;
 		return timer;
 	}
 }
-#end

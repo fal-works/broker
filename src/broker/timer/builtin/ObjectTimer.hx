@@ -1,35 +1,40 @@
-package broker.timer.builtin.heaps;
+package broker.timer.builtin;
 
-#if heaps
 import broker.timer.Timer;
+import broker.object.Object;
 
 /**
-	A generic version of `ObjectTimer` with types extending `h2d.Object`.
+	`Timer` that works on any `Object` instance.
 **/
-	#if !broker_generic_disable
-	@:generic
-	#end
-class ObjectTimer<T:h2d.Object> extends Timer {
+#if !broker_generic_disable
+@:generic
+#end
+class ObjectTimer extends Timer {
 	/**
 		The object to which `this` timer refers.
 	**/
-	@:nullSafety(Off)
-	public var object(default, null): T = null;
+	public var object(default, null): Object;
 
 	/**
 		Function called on `this.object` in `this.onStart()`.
 	**/
-	var onStartObjectCallback: (object: T) -> Void;
+	var onStartObjectCallback: (object: Object) -> Void;
 
 	/**
 		Function called on `this.object` in `this.onComplete()`.
 	**/
-	var onCompleteObjectCallback: (object: T) -> Void;
+	var onCompleteObjectCallback: (object: Object) -> Void;
 
-	function new() {
+	function new(object: Object) {
 		super();
+		this.object = object;
 		this.onStartObjectCallback = ObjectTimerStatics.dummyObjectCallback;
 		this.onCompleteObjectCallback = ObjectTimerStatics.dummyObjectCallback;
+	}
+
+	public function setObject(object: Object): ObjectTimer {
+		this.object = object;
+		return this;
 	}
 
 	/**
@@ -47,7 +52,7 @@ class ObjectTimer<T:h2d.Object> extends Timer {
 		Sets `onStartObject` callback function.
 		@return `this`.
 	**/
-	public function setOnStartObject(callback: (object: T) -> Void): ObjectTimer<T> {
+	public function setOnStartObject(callback: (object: Object) -> Void): ObjectTimer {
 		this.onStartObjectCallback = callback;
 		return this;
 	}
@@ -56,7 +61,7 @@ class ObjectTimer<T:h2d.Object> extends Timer {
 		Sets `onCompleteObject` callback function.
 		@return `this`.
 	**/
-	public function setOnCompleteObject(callback: (object: T) -> Void): ObjectTimer<T> {
+	public function setOnCompleteObject(callback: (object: Object) -> Void): ObjectTimer {
 		this.onCompleteObjectCallback = callback;
 		return this;
 	}
@@ -73,6 +78,5 @@ class ObjectTimer<T:h2d.Object> extends Timer {
 }
 
 private class ObjectTimerStatics {
-	public static final dummyObjectCallback = function(object: Dynamic) {};
+	public static final dummyObjectCallback = function(object: Object) {};
 }
-#end
