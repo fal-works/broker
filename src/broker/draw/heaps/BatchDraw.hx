@@ -29,6 +29,9 @@ abstract BatchDraw(h2d.SpriteBatch) from h2d.SpriteBatch to h2d.SpriteBatch to O
 		if (smooth != null) this.smooth = smooth;
 	}
 
+	public extern inline function asObject(): Object
+		return this;
+
 	/**
 		@return `true` if any sprite is added to `this`.
 	**/

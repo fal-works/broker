@@ -19,6 +19,9 @@ abstract TileDraw(h2d.Bitmap) from h2d.Bitmap to h2d.Bitmap to Object {
 		this = new h2d.Bitmap(tile);
 	}
 
+	public extern inline function asObject(): Object
+		return this;
+
 	extern inline function get_tile()
 		return this.tile;
 }

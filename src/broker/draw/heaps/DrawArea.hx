@@ -16,6 +16,9 @@ abstract DrawArea(Mask) to Object {
 		this = new Mask(width, height);
 	}
 
+	public extern inline function asObject(): Object
+		return this;
+
 	/**
 		Sets `this` position centered at `(x, y)`.
 	**/
