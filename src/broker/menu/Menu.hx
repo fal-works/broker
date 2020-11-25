@@ -20,6 +20,9 @@ abstract Menu(MenuData) to Object {
 		return new Menu(data);
 	}
 
+	public extern inline function asObject(): Object
+		return this;
+
 	/**
 		Activates `this` menu.
 	**/
