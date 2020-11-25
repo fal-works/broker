@@ -3,7 +3,21 @@ package broker.object.heaps;
 #if heaps
 import broker.object.internal.ObjectData;
 
-@:forward(x, y, setPosition, visible, rotation, scaleX, scaleY, scale, setScale, addChild, removeChild, removeChildren)
+@:forward(
+	x,
+	y,
+	setPosition,
+	visible,
+	rotation,
+	scaleX,
+	scaleY,
+	scale,
+	setScale,
+	alpha,
+	addChild,
+	removeChild,
+	removeChildren
+)
 @:using(broker.object.heaps.ObjectExtension)
 abstract Object(ObjectData) from ObjectData to ObjectData {
 	/**
