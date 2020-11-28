@@ -19,14 +19,14 @@ class MenuData extends ObjectData {
 	final deactivateOnSelect: Bool;
 
 	/**
+		`true` to listen user input.
+	**/
+	public var isActive(default, null): Bool;
+
+	/**
 		Index of `MenuOption` currently focused.
 	**/
 	var index: MaybeUInt;
-
-	/**
-		`true` to listen user input.
-	**/
-	var isActive: Bool;
 
 	public function new(parameters: MenuParameters) {
 		super();
