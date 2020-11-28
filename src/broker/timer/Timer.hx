@@ -179,6 +179,15 @@ class Timer {
 	}
 
 	/**
+		Sets `this.progress` to `1.0` so that `this` can be removed from `Timers` to which `this` belongs.
+	**/
+	public function forceComplete(clearCallbacks = true, clearNext = true): Void {
+		this.progress = 1.0;
+		if (clearCallbacks) this.clearCallbacks();
+		if (clearNext) this.clearNext();
+	}
+
+	/**
 		Called once when `this.step()` is called for the first time.
 		Override this method for your own purpose.
 	**/
